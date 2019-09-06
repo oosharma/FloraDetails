@@ -18,10 +18,7 @@ const dbRoute =
   "  mongodb+srv://sharma1:r4vkrGErFFClbk99@plantbase-ogvmk.mongodb.net/test?retryWrites=true&w=majority";
 // "mongodb+srv://sharma1:PlantBase%238@cluster0-ogvmk.mongodb.net/test?retryWrites=true&w=majority";
 // connects our back end code with the database
-mongoose
-  .connect(db)
-  .then(() => console.log("MongoDB Connected..."))
-  .catch(err => console.log(err));
+mongoose.connect(process.env.MONGODB_URI || dbRoute, { useNewUrlParser: true });
 
 // let db = mongoose.connection;
 
