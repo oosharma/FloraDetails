@@ -221,7 +221,7 @@ class App extends Component {
 
           <Container className="mt-5">
             <Row>
-              <Display4>Use Search to Find Plants and Pin them here</Display4>
+              {/* <Display4>Use Search to Find Plants and Pin them here</Display4> */}
             </Row>
           </Container>
         </>

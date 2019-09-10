@@ -12,10 +12,6 @@ const options = [
   },
 
   {
-    value: "African Daisy",
-    label: "African Daisy"
-  },
-  {
     value: "African Iris",
     label: "African Iris"
   },
@@ -1140,10 +1136,6 @@ const options = [
     label: "Franciscan Paintbrush"
   },
   {
-    value: "Fremont's Cottonwood",
-    label: "Fremont's Cottonwood"
-  },
-  {
     value: "French Lavender",
     label: "French Lavender"
   },
@@ -1267,22 +1259,22 @@ const options = [
     value: "Hebe",
     label: "Hebe"
   },
-  {
-    value: "Hens and Chicks",
-    label: "Hens and Chicks"
-  },
-  {
-    value: "Hens and Chicks",
-    label: "Hens and Chicks"
-  },
-  {
-    value: "Hens and Chicks",
-    label: "Hens and Chicks"
-  },
-  {
-    value: "Hens and Chicks",
-    label: "Hens and Chicks"
-  },
+  // {
+  //   value: "Hens and Chicks",
+  //   label: "Hens and Chicks"
+  // },
+  // {
+  //   value: "Hens and Chicks",
+  //   label: "Hens and Chicks"
+  // },
+  // {
+  //   value: "Hens and Chicks",
+  //   label: "Hens and Chicks"
+  // },
+  // {
+  //   value: "Hens and Chicks",
+  //   label: "Hens and Chicks"
+  // },
   {
     value: "Hoary Nettle",
     label: "Hoary Nettle"
