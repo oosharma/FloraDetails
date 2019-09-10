@@ -10,10 +10,7 @@ const options = [
     value: "Accolade Elm",
     label: "Accolade Elm"
   },
-  {
-    value: "African Daisy",
-    label: "African Daisy"
-  },
+
   {
     value: "African Daisy",
     label: "African Daisy"
@@ -2925,6 +2922,7 @@ class SearchBar extends Component {
         >
           <thead>
             <tr>
+              <th>Action</th>
               <th className="head-1">Name</th>
               <th>Apt. Location</th>
               <th>Bloom Time</th>
@@ -2936,10 +2934,6 @@ class SearchBar extends Component {
               return (
                 <>
                   <tr>
-                    <td>{result.common_name} </td>
-                    <td>{result.appropriate_location} </td>
-                    <td>{result.bloom_time} </td>
-                    <td>{result.plant_type} </td>
                     <td
                       onClick={() => {
                         this.handleAdd(result);
@@ -2947,6 +2941,10 @@ class SearchBar extends Component {
                     >
                       Add
                     </td>
+                    <td>{result.common_name} </td>
+                    <td>{result.appropriate_location} </td>
+                    <td>{result.bloom_time} </td>
+                    <td>{result.plant_type} </td>
                   </tr>
                 </>
               );

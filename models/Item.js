@@ -10,6 +10,7 @@ const ItemSchema = new Schema(
     plant_type: String,
     appropriate_location: String
   },
+
   { timestamps: true }
 );
 

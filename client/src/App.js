@@ -70,6 +70,7 @@ class App extends Component {
   // fetch data from our data base
   getDataFromDb = () => {
     axios.get("/api/items").then(res => this.setState({ data: res.data }));
+    console.log(this.state.data);
   };
 
   // getDataFromDb = () => {
@@ -86,14 +87,22 @@ class App extends Component {
     while (currentIds.includes(idToBeAdded)) {
       ++idToBeAdded;
     }
+    var dataSet = new Set();
 
-    axios.post("/api/items", {
-      id: idToBeAdded,
-      message: message,
-      bloom_time: this.state.addBloom_time,
-      plant_type: this.state.addPlant_type,
-      appropriate_location: this.state.addAppropriate_location
+    this.state.data.forEach(arrayItem => {
+      dataSet.add(arrayItem.message);
     });
+    if (dataSet.has(message)) {
+      window.alert("item already in pinned section");
+    } else {
+      axios.post("/api/items", {
+        id: idToBeAdded,
+        message: message,
+        bloom_time: this.state.addBloom_time,
+        plant_type: this.state.addPlant_type,
+        appropriate_location: this.state.addAppropriate_location
+      });
+    }
   };
 
   // our delete method that uses our backend api
@@ -165,6 +174,8 @@ class App extends Component {
             <Table className striped bordered hover>
               <thead>
                 <tr>
+                  <th>Action</th>
+
                   <th className="head-1">Name</th>
                   <th>Bloom Time</th>
                   <th>Plant Type</th>
@@ -178,11 +189,6 @@ class App extends Component {
                       return (
                         <>
                           <tr key={data.message}>
-                            <td>{dat.message}</td>
-                            <td>{dat.bloom_time} </td>
-                            <td>{dat.plant_type} </td>
-                            <td>{dat.appropriate_location} </td>
-
                             <td
                               onClick={() =>
                                 this.setState({ idToDelete: dat._id }, () =>
@@ -192,6 +198,10 @@ class App extends Component {
                             >
                               Delete
                             </td>
+                            <td>{dat.message}</td>
+                            <td>{dat.bloom_time} </td>
+                            <td>{dat.plant_type} </td>
+                            <td>{dat.appropriate_location} </td>
                           </tr>
                         </>
                       );

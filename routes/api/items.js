@@ -9,7 +9,9 @@ const Item = require("../../models/Item");
 // @desc GET All items
 // @access public
 router.get("/", (req, res) => {
-  Item.find().then(items => res.json(items));
+  Item.find()
+    .sort({ createdAt: -1 })
+    .then(items => res.json(items));
 });
 
 // @route POST api/items
