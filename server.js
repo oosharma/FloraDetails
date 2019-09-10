@@ -71,13 +71,7 @@ router.delete("/deleteData", (req, res) => {
 router.post("/putData", (req, res) => {
   let data = new Data();
 
-  const {
-    id,
-    message,
-    bloom_time,
-    plant_type,
-    appropriate_location
-  } = req.body;
+  const { message, bloom_time, plant_type, appropriate_location } = req.body;
 
   if ((!id && id !== 0) || !message) {
     return res.json({

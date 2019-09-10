@@ -69,10 +69,14 @@ class App extends Component {
   // our first get method that uses our backend api to
   // fetch data from our data base
   getDataFromDb = () => {
-    fetch("http://localhost:3001/api/getData")
-      .then(data => data.json())
-      .then(res => this.setState({ data: res.data }));
+    axios.get("/api/items").then(res => this.setState({ data: res.data }));
   };
+
+  // getDataFromDb = () => {
+  //   fetch("http://localhost:3001/api/getData")
+  //     .then(data => data.json())
+  //     .then(res => this.setState({ data: res.data }));
+  // };
 
   // our put method that uses our backend api
   // to create new query into our data base
@@ -83,7 +87,7 @@ class App extends Component {
       ++idToBeAdded;
     }
 
-    axios.post("http://localhost:3001/api/putData", {
+    axios.post("/api/items", {
       id: idToBeAdded,
       message: message,
       bloom_time: this.state.addBloom_time,
@@ -103,11 +107,7 @@ class App extends Component {
       }
     });
 
-    axios.delete("http://localhost:3001/api/deleteData", {
-      data: {
-        id: objIdToDelete
-      }
-    });
+    axios.delete(`/api/items/${idTodelete}`);
   };
 
   // our update method that uses our backend api
@@ -185,7 +185,7 @@ class App extends Component {
 
                             <td
                               onClick={() =>
-                                this.setState({ idToDelete: dat.id }, () =>
+                                this.setState({ idToDelete: dat._id }, () =>
                                   this.deleteFromDB(this.state.idToDelete)
                                 )
                               }
