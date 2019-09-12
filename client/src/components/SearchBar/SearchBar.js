@@ -2814,7 +2814,7 @@ class SearchBar extends Component {
     super(props);
 
     this.state = {
-      heading: "Search a Plant",
+      heading: "Select a Plant to Search",
       term: "",
       placeholder: "Ex: Rose, Palm, California, etc.",
       results: [],
@@ -2905,9 +2905,15 @@ class SearchBar extends Component {
           <Col className="colHead">Bloom Time</Col>
           <Col className="colHead">Plant Type</Col>
         </Row> */}
-
+        <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
+          Search results are being pulled from{" "}
+          <a href="http://www.datasf.org" target="_blank">
+            {" "}
+            www.DataSF.org
+          </a>
+        </p>
         <Table
-          className={`table-primary-1 ${this.state.classTable}`}
+          className={`table-primary-1 ${this.state.classTable} mt-1`}
           striped
           bordered
           hover
@@ -2985,7 +2991,7 @@ class SearchBar extends Component {
             }
           }
         });
-      this.setState({ heading: "Enter another plant name" });
+      this.setState({ heading: "Select Another Plant to Search" });
       this.forceUpdate();
 
       this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
