@@ -2814,7 +2814,7 @@ class SearchBar extends Component {
     super(props);
 
     this.state = {
-      heading: "Select a Plant to Search",
+      heading: "Select a Plant and Click on Search",
       term: "",
       placeholder: "Ex: Rose, Palm, California, etc.",
       results: [],
@@ -2844,8 +2844,8 @@ class SearchBar extends Component {
     const { selectedOption } = this.state;
 
     return (
-      <Container>
-        <Row className="pt-5">
+      <>
+        <Row className="pt-2">
           <Display4>{this.state.heading}</Display4>
         </Row>
         <Row>
@@ -2938,6 +2938,47 @@ class SearchBar extends Component {
           </thead>
           <tbody>
             {this.state.results.map(result => {
+              console.log(result);
+              // result.common_name = result["common_name"].replace(";", ", ");
+              // result.bloom_time = result["bloom_time"].replace(";", ", ");
+              // result.plant_type = result["plant_type"].replace(";", ", ");
+              var common_name = result.common_name || "-";
+              common_name = common_name.replace(/;/g, ", ");
+
+              var bloom_time = result.bloom_time || "-";
+              bloom_time = bloom_time.replace(/;/g, ", ");
+
+              var plant_type = result.plant_type || "-";
+              plant_type = plant_type.replace(/;/g, ", ");
+
+              var water_needs = result.water_needs || "-";
+              water_needs = water_needs.replace(/;/g, ", ");
+
+              var size_at_maturity = result.size_at_maturity || "-";
+              size_at_maturity = size_at_maturity.replace(/;/g, ", ");
+
+              var appropriate_location = result.appropriate_location || "-";
+              appropriate_location = appropriate_location.replace(/;/g, ", ");
+
+              var suitable_site_conditions =
+                result.suitable_site_conditions || "-";
+              suitable_site_conditions = suitable_site_conditions.replace(
+                /;/g,
+                ", "
+              );
+              // result.water_needs;
+              // var updated_water_needs = water_needss.replace(";", ", ");
+              // result.size_at_maturity = result["size_at_maturity"].replace(
+              //   ";",
+              //   ", "
+              // );
+              // result.appropriate_location = result[
+              //   "appropriate_location"
+              // ].replace(";", ", ");
+              // result.suitable_site_conditions = result[
+              //   "suitable_site_conditions"
+              // ].replace(";", ", ");
+
               return (
                 <>
                   <tr>
@@ -2948,13 +2989,13 @@ class SearchBar extends Component {
                     >
                       Add
                     </td>
-                    <td>{result.common_name} </td>
-                    <td>{result.bloom_time} </td>
-                    <td>{result.plant_type} </td>
-                    <td>{result.water_needs} </td>
-                    <td>{result.size_at_maturity} </td>
-                    <td>{result.appropriate_location} </td>
-                    <td>{result.suitable_site_conditions} </td>
+                    <td>{common_name} </td>
+                    <td>{bloom_time} </td>
+                    <td>{plant_type} </td>
+                    <td>{water_needs} </td>
+                    <td>{size_at_maturity} </td>
+                    <td>{appropriate_location} </td>
+                    <td>{suitable_site_conditions} </td>
                   </tr>
                 </>
               );
@@ -2974,7 +3015,7 @@ class SearchBar extends Component {
             </>
           );
         })} */}
-      </Container>
+      </>
     );
   }
 

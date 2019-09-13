@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import axios from "axios";
 import { Table, Container, Display4, Row } from "bootstrap-4-react";
+import style from "./App.css";
 
 class App extends Component {
   // initialize our state
@@ -35,15 +36,36 @@ class App extends Component {
     this.putDataToDB(this.state.addName);
   };
   changeAddItem = result => {
+    var common_name = result.common_name || "-";
+    common_name = common_name.replace(/;/g, ", ");
+
+    var bloom_time = result.bloom_time || "-";
+    bloom_time = bloom_time.replace(/;/g, ", ");
+
+    var plant_type = result.plant_type || "-";
+    plant_type = plant_type.replace(/;/g, ", ");
+
+    var water_needs = result.water_needs || "-";
+    water_needs = water_needs.replace(/;/g, ", ");
+
+    var size_at_maturity = result.size_at_maturity || "-";
+    size_at_maturity = size_at_maturity.replace(/;/g, ", ");
+
+    var appropriate_location = result.appropriate_location || "-";
+    appropriate_location = appropriate_location.replace(/;/g, ", ");
+
+    var suitable_site_conditions = result.suitable_site_conditions || "-";
+    suitable_site_conditions = suitable_site_conditions.replace(/;/g, ", ");
+
     this.setState(
       {
-        addName: result.common_name,
-        addBloom_time: result.bloom_time,
-        addPlant_type: result.plant_type,
-        addAppropriate_location: result.appropriate_location,
-        addWater_needs: result.water_needs,
-        addSize_at_maturity: result.size_at_maturity,
-        addSuitable_site_conditions: result.suitable_site_conditions
+        addName: common_name,
+        addBloom_time: bloom_time,
+        addPlant_type: plant_type,
+        addAppropriate_location: appropriate_location,
+        addWater_needs: water_needs,
+        addSize_at_maturity: size_at_maturity,
+        addSuitable_site_conditions: suitable_site_conditions
       },
       () => {
         console.log("setState completed", this.state);
@@ -175,19 +197,19 @@ class App extends Component {
     if (this.state.data.length) {
       return (
         <>
-          <SearchBar
-            changeAddItem={this.changeAddItem.bind(this)}
-            addToDB={this.addToDB.bind(this)}
-          />
+          <Container className="m-3 m-md-5 mt-0  ">
+            <SearchBar
+              changeAddItem={this.changeAddItem.bind(this)}
+              addToDB={this.addToDB.bind(this)}
+            />
 
-          <Container className="mt-5">
             <Row>
-              <Display4>Pinned Results</Display4>
+              <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
-            <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
+            <p className={`mt-0 pb-0 mb-0 `}>
               <em> Pinned results are being pulled from connected database</em>
             </p>
-            <Table className={`table-primary-1 mt-1`} striped bordered hover>
+            <Table className={`table-primary-1 mt-1 `} striped bordered hover>
               <thead>
                 <tr>
                   <th>Action</th>
@@ -236,12 +258,12 @@ class App extends Component {
     } else {
       return (
         <>
-          <SearchBar
-            changeAddItem={this.changeAddItem.bind(this)}
-            addToDB={this.addToDB.bind(this)}
-          />
+          <Container className="m-4">
+            <SearchBar
+              changeAddItem={this.changeAddItem.bind(this)}
+              addToDB={this.addToDB.bind(this)}
+            />
 
-          <Container className="mt-5">
             <Row>
               {/* <Display4>Use Search to Find Plants and Pin them here</Display4> */}
             </Row>
