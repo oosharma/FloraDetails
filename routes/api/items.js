@@ -23,7 +23,10 @@ router.post("/", (req, res) => {
     message: req.body.message,
     bloom_time: req.body.bloom_time,
     plant_type: req.body.plant_type,
-    appropriate_location: req.body.appropriate_location
+    appropriate_location: req.body.appropriate_location,
+    water_needs: req.body.water_needs,
+    size_at_maturity: req.body.size_at_maturity,
+    suitable_site_conditions: req.body.suitable_site_conditions
   });
 
   newItem.save().then(item => res.json(item));

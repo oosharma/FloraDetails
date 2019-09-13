@@ -2821,6 +2821,9 @@ class SearchBar extends Component {
       latin_name: "",
       bloom_time: "",
       plant_type: "",
+      water_needs: "",
+      size_at_maturity: "",
+      suitable_site_conditions: "",
       appropriate_location: "",
       classN: "hideButton",
       classTable: "hideButton",
@@ -2906,11 +2909,14 @@ class SearchBar extends Component {
           <Col className="colHead">Plant Type</Col>
         </Row> */}
         <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
-          Search results are being pulled from{" "}
-          <a href="http://www.datasf.org" target="_blank">
+          <em>
             {" "}
-            www.DataSF.org
-          </a>
+            Search results are being pulled from{" "}
+            <a href="http://www.datasf.org" target="_blank">
+              {" "}
+              www.DataSF.org
+            </a>
+          </em>
         </p>
         <Table
           className={`table-primary-1 ${this.state.classTable} mt-1`}
@@ -2922,9 +2928,12 @@ class SearchBar extends Component {
             <tr>
               <th>Action</th>
               <th className="head-1">Name</th>
-              <th>Apt. Location</th>
               <th>Bloom Time</th>
               <th>Plant Type</th>
+              <th>Water Needs</th>
+              <th>Size at Maturity</th>
+              <th>Appropriate Location</th>
+              <th>Suitable Site Conditions</th>
             </tr>
           </thead>
           <tbody>
@@ -2940,9 +2949,12 @@ class SearchBar extends Component {
                       Add
                     </td>
                     <td>{result.common_name} </td>
-                    <td>{result.appropriate_location} </td>
                     <td>{result.bloom_time} </td>
                     <td>{result.plant_type} </td>
+                    <td>{result.water_needs} </td>
+                    <td>{result.size_at_maturity} </td>
+                    <td>{result.appropriate_location} </td>
+                    <td>{result.suitable_site_conditions} </td>
                   </tr>
                 </>
               );

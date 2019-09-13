@@ -12,6 +12,9 @@ class App extends Component {
     bloom_time: null,
     plant_type: null,
     appropriate_location: null,
+    water_needs: null,
+    size_at_maturity: null,
+    suitable_site_conditions: null,
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
@@ -20,6 +23,10 @@ class App extends Component {
     addBloom_time: "",
     addPlant_type: "",
     addAppropriate_location: "",
+    addWater_needs: "",
+    addSize_at_maturity: "",
+    addSuitable_site_conditions: "",
+
     emptyDB: 0,
     showPinned: true
   };
@@ -33,7 +40,10 @@ class App extends Component {
         addName: result.common_name,
         addBloom_time: result.bloom_time,
         addPlant_type: result.plant_type,
-        addAppropriate_location: result.appropriate_location
+        addAppropriate_location: result.appropriate_location,
+        addWater_needs: result.water_needs,
+        addSize_at_maturity: result.size_at_maturity,
+        addSuitable_site_conditions: result.suitable_site_conditions
       },
       () => {
         console.log("setState completed", this.state);
@@ -100,7 +110,10 @@ class App extends Component {
         message: message,
         bloom_time: this.state.addBloom_time,
         plant_type: this.state.addPlant_type,
-        appropriate_location: this.state.addAppropriate_location
+        appropriate_location: this.state.addAppropriate_location,
+        water_needs: this.state.addWater_needs,
+        size_at_maturity: this.state.addSize_at_maturity,
+        suitable_site_conditions: this.state.addSuitable_site_conditions
       });
     }
   };
@@ -171,7 +184,10 @@ class App extends Component {
             <Row>
               <Display4>Pinned Results</Display4>
             </Row>
-            <Table className striped bordered hover>
+            <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
+              <em> Pinned results are being pulled from connected database</em>
+            </p>
+            <Table className={`table-primary-1 mt-1`} striped bordered hover>
               <thead>
                 <tr>
                   <th>Action</th>
@@ -179,7 +195,10 @@ class App extends Component {
                   <th className="head-1">Name</th>
                   <th>Bloom Time</th>
                   <th>Plant Type</th>
+                  <th>Water Needs</th>
+                  <th>Size at Maturity</th>
                   <th>Appropriate Location</th>
+                  <th>Suitable Site Conditions</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,7 +220,10 @@ class App extends Component {
                             <td>{dat.message}</td>
                             <td>{dat.bloom_time} </td>
                             <td>{dat.plant_type} </td>
+                            <td>{dat.water_needs} </td>
+                            <td>{dat.size_at_maturity} </td>
                             <td>{dat.appropriate_location} </td>
+                            <td>{dat.suitable_site_conditions} </td>
                           </tr>
                         </>
                       );

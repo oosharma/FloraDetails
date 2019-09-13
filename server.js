@@ -71,7 +71,15 @@ router.delete("/deleteData", (req, res) => {
 router.post("/putData", (req, res) => {
   let data = new Data();
 
-  const { message, bloom_time, plant_type, appropriate_location } = req.body;
+  const {
+    message,
+    bloom_time,
+    plant_type,
+    appropriate_location,
+    water_needs,
+    size_at_maturity,
+    suitable_site_conditions
+  } = req.body;
 
   if ((!id && id !== 0) || !message) {
     return res.json({
@@ -84,6 +92,9 @@ router.post("/putData", (req, res) => {
   data.bloom_time = bloom_time;
   data.plant_type = plant_type;
   data.appropriate_location = appropriate_location;
+  data.water_needs = water_needs;
+  data.size_at_maturity = size_at_maturity;
+  data.suitable_site_conditions = suitable_site_conditions;
   data.save(err => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
