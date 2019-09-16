@@ -1,14 +1,6 @@
-# React Express Starter Pack
-
-> Create full stack apps with React and Express. Run your client and server with a single command. 
-
-### Redux Version
-This version does not include Redux
-[Click Here For Redux Version](https://github.com/bradtraversy/react_redux_express_starter) 
-
 ## Quick Start
 
-``` bash
+```bash
 # Install dependencies for server
 npm install
 
@@ -24,19 +16,17 @@ npm run server
 # Run the React client only
 npm run client
 
-# Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
 
 ## App Info
 
+A responsive full stack web-app where users can query and store plant details
+API calls are made to http://datasf.org and to the connected database for fetching plant data
+The web-app is built using MongoDB, Express JS, React JS, and Node JS
+
 ### Author
 
-Brad Traversy
-[Traversy Media](http://www.traversymedia.com)
-
-### Version
-
-1.0.0
+Abhishek Sharma
 
 ### License
 
