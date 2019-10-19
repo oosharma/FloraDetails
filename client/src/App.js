@@ -32,8 +32,8 @@ class App extends Component {
     showPinned: true
   };
   addToDB = () => {
-    console.log(this.state.addName);
     this.putDataToDB(this.state.addName);
+    this.setState({ fetch: true });
   };
   changeAddItem = result => {
     var common_name = result.common_name || "-";
@@ -68,7 +68,6 @@ class App extends Component {
         addSuitable_site_conditions: suitable_site_conditions
       },
       () => {
-        console.log("setState completed", this.state);
         this.addToDB();
       }
     );
@@ -101,8 +100,10 @@ class App extends Component {
   // our first get method that uses our backend api to
   // fetch data from our data base
   getDataFromDb = () => {
-    axios.get("/api/items").then(res => this.setState({ data: res.data }));
-    console.log(this.state.data);
+    if (this.state.fetch) {
+      axios.get("/api/items").then(res => this.setState({ data: res.data }));
+      this.setState({ fetch: false });
+    }
   };
 
   // getDataFromDb = () => {
@@ -120,7 +121,6 @@ class App extends Component {
       ++idToBeAdded;
     }
     var dataSet = new Set();
-
     this.state.data.forEach(arrayItem => {
       dataSet.add(arrayItem.message);
     });
@@ -150,8 +150,8 @@ class App extends Component {
         objIdToDelete = dat._id;
       }
     });
-
     axios.delete(`/api/items/${idTodelete}`);
+    this.setState({ fetch: true });
   };
 
   // our update method that uses our backend api
@@ -178,22 +178,15 @@ class App extends Component {
     return "Empty... please create a search and pin your favorite plants";
   };
   checkDbEmpty = () => {
-    console.log("here");
     if (this.state.data.length <= 0) {
       this.setState({ showPinned: false });
-      console.log("there");
     } else {
       this.setState({ showPinned: true });
-      console.log("whrer");
     }
   };
 
-  // here is our UI
-  // it is easy to understand their functions when you
-  // see them render into our screen
   render() {
     const { data } = this.state;
-
     if (this.state.data.length) {
       return (
         <>
