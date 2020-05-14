@@ -29,7 +29,15 @@ class App extends Component {
     addSuitable_site_conditions: "",
 
     emptyDB: 0,
+<<<<<<< HEAD
     showPinned: true
+=======
+    showPinned: true,
+    deleteBtnVariant: "primary",
+    deleteBtnClass: "btn-primary",
+    fetch: true,
+    test: null
+>>>>>>> test
   };
   addToDB = () => {
     this.putDataToDB(this.state.addName);
