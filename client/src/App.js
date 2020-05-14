@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
+import PlantTable from "./components/PlantTable/PlantTable";
 import axios from "axios";
 import { Table, Container, Display4, Row } from "bootstrap-4-react";
 import style from "./App.css";
@@ -148,6 +149,30 @@ class App extends Component {
     }
   };
 
+  handleDelete = result => {
+    this.setState({ idToDelete: result._id }, () =>
+      this.deleteFromDB(this.state.idToDelete)
+    );
+  };
+
+  changeAddItem = result => {
+    var modifiedResult = modifyResult(result);
+    this.setState(
+      {
+        addName: modifiedResult.common_name,
+        addBloom_time: modifiedResult.bloom_time,
+        addPlant_type: modifiedResult.plant_type,
+        addAppropriate_location: modifiedResult.appropriate_location,
+        addWater_needs: modifiedResult.water_needs,
+        addSize_at_maturity: modifiedResult.size_at_maturity,
+        addSuitable_site_conditions: modifiedResult.suitable_site_conditions
+      },
+      () => {
+        this.addToDB();
+      }
+    );
+  };
+
   // our delete method that uses our backend api
   // to remove existing database information
   deleteFromDB = idTodelete => {
@@ -199,17 +224,22 @@ class App extends Component {
       return (
         <>
           <Container className="m-3 m-md-5 mt-0  ">
+<<<<<<< HEAD
             <SearchBar
               changeAddItem={this.changeAddItem.bind(this)}
               addToDB={this.addToDB.bind(this)}
             />
 
+=======
+            <SearchBar changeAddItem={this.changeAddItem.bind(this)} />
+>>>>>>> created New Component to render table
             <Row>
               <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
             <p className={`mt-0 pb-0 mb-0 `}>
               <em> Pinned results are being pulled from connected database</em>
             </p>
+<<<<<<< HEAD
             <Table className={`table-primary-1 mt-1 `} striped bordered hover>
               <thead>
                 <tr>
@@ -253,6 +283,42 @@ class App extends Component {
                     })}
               </tbody>
             </Table>
+=======
+            <PlantTable
+              tableData={data}
+              handleAddorDelete={this.handleDelete.bind(this)}
+              utility="Delete"
+            />
+            <ul>
+              <li>
+                <p className={`mt-0 pb-0 mb-0 `}>
+                  <em>
+                    {" "}
+                    This web-app is developed by{" "}
+                    <a target="_blank" href="http://www.iamsharma.com">
+                      iamSharma
+                    </a>{" "}
+                    using the MERN stack (MongoDB, Express JS, React JS, Node
+                    JS)
+                  </em>
+                </p>
+              </li>
+              <li>
+                <p className={`mt-0 pb-0 mb-0 `}>
+                  <em>
+                    {" "}
+                    Checkout its source code on GitHub:{" "}
+                    <a
+                      target="_blank"
+                      href="https://github.com/oosharma/FloraDetails"
+                    >
+                      https://github.com/oosharma/FloraDetails
+                    </a>
+                  </em>
+                </p>
+              </li>
+            </ul>
+>>>>>>> created New Component to render table
           </Container>
         </>
       );
