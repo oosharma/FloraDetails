@@ -30,7 +30,7 @@ class PlantTable extends Component {
   };
 
   render() {
-    if (this.props.tableData) {
+    if (this.props.tableData && this.props.tableData.length > 0) {
       return (
         <>
           <Table className={`table-primary-1 mt-1`} striped bordered hover>
@@ -48,7 +48,6 @@ class PlantTable extends Component {
             </thead>
             <tbody>
               {this.props.tableData.map(result => {
-                console.log(result.water_needs);
                 return (
                   <>
                     <tr>

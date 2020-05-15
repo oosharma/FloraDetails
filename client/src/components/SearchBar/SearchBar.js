@@ -68,6 +68,7 @@ class SearchBar extends Component {
           }}
           onClick={() => {
             this.handleButtonClick();
+            //  this.props.changeFetchedResults(this.state.results);
           }}
         >
           {this.state.searchButtonTerm}
@@ -118,6 +119,7 @@ class SearchBar extends Component {
               this.setState({ searchButtonTerm: "Search" });
             }
           }
+
           this.props.changeFetchedResults(this.state.results);
         });
       this.setState({ heading: "Select Another Plant to Search" });
@@ -137,11 +139,9 @@ class SearchBar extends Component {
   };
 
   handleClearButtonClick = () => {
-    this.setState({
-      results: [],
-      classN: "hideButton"
-    });
-    this.setState({ classTable: "hideButton" });
+    let emptyArray = [];
+    this.setState({ results: emptyArray });
+    this.props.changeFetchedResults(emptyArray);
   };
 
   showClear = () => {

@@ -30,51 +30,27 @@ class App extends Component {
     addSuitable_site_conditions: "",
 
     emptyDB: 0,
-<<<<<<< HEAD
-    showPinned: true
-=======
     showPinned: true,
     deleteBtnVariant: "primary",
     deleteBtnClass: "btn-primary",
     fetch: true,
     test: null
->>>>>>> test
   };
   addToDB = () => {
     this.putDataToDB(this.state.addName);
     this.setState({ fetch: true });
   };
   changeAddItem = result => {
-    var common_name = result.common_name || "-";
-    common_name = common_name.replace(/;/g, ", ");
-
-    var bloom_time = result.bloom_time || "-";
-    bloom_time = bloom_time.replace(/;/g, ", ");
-
-    var plant_type = result.plant_type || "-";
-    plant_type = plant_type.replace(/;/g, ", ");
-
-    var water_needs = result.water_needs || "-";
-    water_needs = water_needs.replace(/;/g, ", ");
-
-    var size_at_maturity = result.size_at_maturity || "-";
-    size_at_maturity = size_at_maturity.replace(/;/g, ", ");
-
-    var appropriate_location = result.appropriate_location || "-";
-    appropriate_location = appropriate_location.replace(/;/g, ", ");
-
-    var suitable_site_conditions = result.suitable_site_conditions || "-";
-    suitable_site_conditions = suitable_site_conditions.replace(/;/g, ", ");
-
+    // var modifiedResult = modifyResult(result);
     this.setState(
       {
-        addName: common_name,
-        addBloom_time: bloom_time,
-        addPlant_type: plant_type,
-        addAppropriate_location: appropriate_location,
-        addWater_needs: water_needs,
-        addSize_at_maturity: size_at_maturity,
-        addSuitable_site_conditions: suitable_site_conditions
+        addName: result.common_name,
+        addBloom_time: result.bloom_time,
+        addPlant_type: result.plant_type,
+        addAppropriate_location: result.appropriate_location,
+        addWater_needs: result.water_needs,
+        addSize_at_maturity: result.size_at_maturity,
+        addSuitable_site_conditions: result.suitable_site_conditions
       },
       () => {
         this.addToDB();
@@ -155,29 +131,9 @@ class App extends Component {
     );
   };
   changeFetchedResults = result => {
-    console.log(result);
-
     var modifiedResult = modifyResult(result);
-    // console.log(modifiedResult);
 
     this.setState({ fetchedResults: modifiedResult });
-  };
-  changeAddItem = result => {
-    var modifiedResult = modifyResult(result);
-    this.setState(
-      {
-        addName: modifiedResult.common_name,
-        addBloom_time: modifiedResult.bloom_time,
-        addPlant_type: modifiedResult.plant_type,
-        addAppropriate_location: modifiedResult.appropriate_location,
-        addWater_needs: modifiedResult.water_needs,
-        addSize_at_maturity: modifiedResult.size_at_maturity,
-        addSuitable_site_conditions: modifiedResult.suitable_site_conditions
-      },
-      () => {
-        this.addToDB();
-      }
-    );
   };
 
   // our delete method that uses our backend api
@@ -190,8 +146,9 @@ class App extends Component {
         objIdToDelete = dat._id;
       }
     });
-    axios.delete(`/api/items/${idTodelete}`);
-    this.setState({ fetch: true });
+    axios
+      .delete(`/api/items/${idTodelete}`)
+      .then(this.setState({ fetch: true }));
   };
 
   // our update method that uses our backend api
@@ -231,17 +188,6 @@ class App extends Component {
       return (
         <>
           <Container className="m-3 m-md-5 mt-0  ">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <SearchBar
-              changeAddItem={this.changeAddItem.bind(this)}
-              addToDB={this.addToDB.bind(this)}
-            />
-
-=======
-            <SearchBar changeAddItem={this.changeAddItem.bind(this)} />
->>>>>>> created New Component to render table
-=======
             <SearchBar
               changeAddItem={this.changeAddItem.bind(this)}
               changeFetchedResults={this.changeFetchedResults.bind(this)}
@@ -251,58 +197,12 @@ class App extends Component {
               handleAddorDelete={this.changeAddItem.bind(this)}
               utility="Add"
             />
->>>>>>> both tables rendering from App.js; Refactored helper.js
             <Row>
               <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
             <p className={`mt-0 pb-0 mb-0 `}>
               <em> Pinned results are being pulled from connected database</em>
             </p>
-<<<<<<< HEAD
-            <Table className={`table-primary-1 mt-1 `} striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Action</th>
-
-                  <th className="head-1">Name</th>
-                  <th>Bloom Time</th>
-                  <th>Plant Type</th>
-                  <th>Water Needs</th>
-                  <th>Size at Maturity</th>
-                  <th>Appropriate Location</th>
-                  <th>Suitable Site Conditions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.length <= 0
-                  ? this.handleEmptyDb()
-                  : data.map(dat => {
-                      return (
-                        <>
-                          <tr key={data.message}>
-                            <td
-                              onClick={() =>
-                                this.setState({ idToDelete: dat._id }, () =>
-                                  this.deleteFromDB(this.state.idToDelete)
-                                )
-                              }
-                            >
-                              Delete
-                            </td>
-                            <td>{dat.message}</td>
-                            <td>{dat.bloom_time} </td>
-                            <td>{dat.plant_type} </td>
-                            <td>{dat.water_needs} </td>
-                            <td>{dat.size_at_maturity} </td>
-                            <td>{dat.appropriate_location} </td>
-                            <td>{dat.suitable_site_conditions} </td>
-                          </tr>
-                        </>
-                      );
-                    })}
-              </tbody>
-            </Table>
-=======
             <PlantTable
               tableData={data}
               handleAddorDelete={this.handleDelete.bind(this)}
@@ -337,7 +237,6 @@ class App extends Component {
                 </p>
               </li>
             </ul>
->>>>>>> created New Component to render table
           </Container>
         </>
       );
@@ -348,6 +247,13 @@ class App extends Component {
             <SearchBar
               changeAddItem={this.changeAddItem.bind(this)}
               addToDB={this.addToDB.bind(this)}
+              changeFetchedResults={this.changeFetchedResults.bind(this)}
+            />
+            <p>hello</p>
+            <PlantTable
+              tableData={this.state.fetchedResults}
+              handleAddorDelete={this.changeAddItem.bind(this)}
+              utility="Add"
             />
 
             <Row>
