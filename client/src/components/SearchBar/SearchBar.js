@@ -91,86 +91,6 @@ class SearchBar extends Component {
             </a>
           </em>
         </p>
-        <Table
-          className={`table-primary-1 ${this.state.classTable} mt-1`}
-          striped
-          bordered
-          hover
-        >
-          <thead>
-            <tr>
-              <th>Action</th>
-              <th className="head-1">Name</th>
-              <th>Bloom Time</th>
-              <th>Plant Type</th>
-              <th>Water Needs</th>
-              <th>Size at Maturity</th>
-              <th>Appropriate Location</th>
-              <th>Suitable Site Conditions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.results.map(result => {
-              console.log(result);
-              // result.common_name = result["common_name"].replace(";", ", ");
-              // result.bloom_time = result["bloom_time"].replace(";", ", ");
-              // result.plant_type = result["plant_type"].replace(";", ", ");
-              var common_name = result.common_name || "-";
-              common_name = common_name.replace(/;/g, ", ");
-
-              var bloom_time = result.bloom_time || "-";
-              bloom_time = bloom_time.replace(/;/g, ", ");
-
-              var plant_type = result.plant_type || "-";
-              plant_type = plant_type.replace(/;/g, ", ");
-
-              var water_needs = result.water_needs || "-";
-              water_needs = water_needs.replace(/;/g, ", ");
-
-              var size_at_maturity = result.size_at_maturity || "-";
-              size_at_maturity = size_at_maturity.replace(/;/g, ", ");
-
-              var appropriate_location = result.appropriate_location || "-";
-              appropriate_location = appropriate_location.replace(/;/g, ", ");
-
-              var suitable_site_conditions =
-                modifiedResult.suitable_site_conditions || "-";
-              return (
-                <>
-                  <tr>
-                    <td
-                      onClick={() => {
-                        this.handleAdd(result);
-                      }}
-                    >
-                      Add
-                    </td>
-                    <td>{common_name} </td>
-                    <td>{bloom_time} </td>
-                    <td>{plant_type} </td>
-                    <td>{water_needs} </td>
-                    <td>{size_at_maturity} </td>
-                    <td>{appropriate_location} </td>
-                    <td>{suitable_site_conditions} </td>
-                  </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </Table>
-
-        {/* {this.state.results.map(result => {
-          return (
-            <>
-              <Row>
-                <Col>{result.common_name}</Col>
-                <Col>{result.appropriate_location}</Col>
-                <Col>{result.bloom_time}</Col>
-                <Col> {result.plant_type}</Col>
-              </Row>
-            </>
-          );
-        })} */}
       </>
     );
   }
@@ -198,6 +118,7 @@ class SearchBar extends Component {
               this.setState({ searchButtonTerm: "Search" });
             }
           }
+          this.props.changeFetchedResults(this.state.results);
         });
       this.setState({ heading: "Select Another Plant to Search" });
       this.forceUpdate();

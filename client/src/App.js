@@ -154,7 +154,14 @@ class App extends Component {
       this.deleteFromDB(this.state.idToDelete)
     );
   };
+  changeFetchedResults = result => {
+    console.log(result);
 
+    var modifiedResult = modifyResult(result);
+    // console.log(modifiedResult);
+
+    this.setState({ fetchedResults: modifiedResult });
+  };
   changeAddItem = result => {
     var modifiedResult = modifyResult(result);
     this.setState(
@@ -225,6 +232,7 @@ class App extends Component {
         <>
           <Container className="m-3 m-md-5 mt-0  ">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <SearchBar
               changeAddItem={this.changeAddItem.bind(this)}
               addToDB={this.addToDB.bind(this)}
@@ -233,6 +241,17 @@ class App extends Component {
 =======
             <SearchBar changeAddItem={this.changeAddItem.bind(this)} />
 >>>>>>> created New Component to render table
+=======
+            <SearchBar
+              changeAddItem={this.changeAddItem.bind(this)}
+              changeFetchedResults={this.changeFetchedResults.bind(this)}
+            />
+            <PlantTable
+              tableData={this.state.fetchedResults}
+              handleAddorDelete={this.changeAddItem.bind(this)}
+              utility="Add"
+            />
+>>>>>>> both tables rendering from App.js; Refactored helper.js
             <Row>
               <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
