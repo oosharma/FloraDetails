@@ -72,7 +72,7 @@ router.post("/putData", (req, res) => {
   let data = new Data();
 
   const {
-    message,
+    common_name,
     bloom_time,
     plant_type,
     appropriate_location,
@@ -81,13 +81,13 @@ router.post("/putData", (req, res) => {
     suitable_site_conditions
   } = req.body;
 
-  if ((!id && id !== 0) || !message) {
+  if ((!id && id !== 0) || !common_name) {
     return res.json({
       success: false,
       error: "INVALID INPUTS"
     });
   }
-  data.message = message;
+  data.common_name = common_name;
   data.id = id;
   data.bloom_time = bloom_time;
   data.plant_type = plant_type;

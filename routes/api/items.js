@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const newItem = new Item({
-    message: req.body.message,
+    common_name: req.body.common_name,
     bloom_time: req.body.bloom_time,
     plant_type: req.body.plant_type,
     appropriate_location: req.body.appropriate_location,

@@ -10,7 +10,7 @@ class App extends Component {
   state = {
     data: [],
     id: 0,
-    message: null,
+    common_name: null,
     bloom_time: null,
     plant_type: null,
     appropriate_location: null,
@@ -99,7 +99,7 @@ class App extends Component {
 
   // our put method that uses our backend api
   // to create new query into our data base
-  putDataToDB = message => {
+  putDataToDB = common_name => {
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -107,14 +107,14 @@ class App extends Component {
     }
     var dataSet = new Set();
     this.state.data.forEach(arrayItem => {
-      dataSet.add(arrayItem.message);
+      dataSet.add(arrayItem.common_name);
     });
-    if (dataSet.has(message)) {
+    if (dataSet.has(common_name)) {
       window.alert("item already in pinned section");
     } else {
       axios.post("/api/items", {
         id: idToBeAdded,
-        message: message,
+        common_name: common_name,
         bloom_time: this.state.addBloom_time,
         plant_type: this.state.addPlant_type,
         appropriate_location: this.state.addAppropriate_location,

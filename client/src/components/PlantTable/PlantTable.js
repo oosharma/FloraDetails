@@ -63,18 +63,44 @@ class PlantTable extends Component {
                           {this.props.utility}
                         </Button>
                       </td>
-                      <td>{result.message || result.common_name} </td>
-                      <td>{result.bloom_time} </td>
-                      <td>{result.plant_type} </td>
+
+                      {result.common_name ? (
+                        <td>{result.common_name} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
+                      {result.bloom_time ? (
+                        <td>{result.bloom_time} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
+                      {result.plant_type ? (
+                        <td>{result.plant_type} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
                       {result.water_needs ? (
                         <td>{result.water_needs} </td>
                       ) : (
                         <td>-</td>
                       )}
 
-                      <td>{result.size_at_maturity} </td>
-                      <td>{result.appropriate_location} </td>
-                      <td>{result.suitable_site_conditions} </td>
+                      {result.size_at_maturity ? (
+                        <td>{result.size_at_maturity} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
+
+                      {result.appropriate_location ? (
+                        <td>{result.appropriate_location} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
+                      {result.suitable_site_conditions ? (
+                        <td>{result.suitable_site_conditions} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
                     </tr>
                   </>
                 );
