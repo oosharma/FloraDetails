@@ -72,29 +72,29 @@ router.post("/putData", (req, res) => {
   let data = new Data();
 
   const {
-    common_name,
-    bloom_time,
-    plant_type,
-    appropriate_location,
-    water_needs,
-    size_at_maturity,
-    suitable_site_conditions
+    commonName,
+    bloomTime,
+    plantType,
+    appropriateLocation,
+    waterNeeds,
+    sizeAtMaturity,
+    suitableSiteConditions
   } = req.body;
 
-  if ((!id && id !== 0) || !common_name) {
+  if ((!id && id !== 0) || !commonName) {
     return res.json({
       success: false,
       error: "INVALID INPUTS"
     });
   }
-  data.common_name = common_name;
+  data.commonName = commonName;
   data.id = id;
-  data.bloom_time = bloom_time;
-  data.plant_type = plant_type;
-  data.appropriate_location = appropriate_location;
-  data.water_needs = water_needs;
-  data.size_at_maturity = size_at_maturity;
-  data.suitable_site_conditions = suitable_site_conditions;
+  data.bloomTime = bloomTime;
+  data.plantType = plantType;
+  data.appropriateLocation = appropriateLocation;
+  data.waterNeeds = waterNeeds;
+  data.sizeAtMaturity = sizeAtMaturity;
+  data.suitableSiteConditions = suitableSiteConditions;
   data.save(err => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });

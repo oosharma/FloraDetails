@@ -64,40 +64,40 @@ class PlantTable extends Component {
                         </Button>
                       </td>
 
-                      {result.common_name ? (
-                        <td>{result.common_name} </td>
+                      {result.commonName ? (
+                        <td>{result.commonName} </td>
                       ) : (
                         <td>-</td>
                       )}
-                      {result.bloom_time ? (
-                        <td>{result.bloom_time} </td>
+                      {result.bloomTime ? (
+                        <td>{result.bloomTime} </td>
                       ) : (
                         <td>-</td>
                       )}
-                      {result.plant_type ? (
-                        <td>{result.plant_type} </td>
+                      {result.plantType ? (
+                        <td>{result.plantType} </td>
                       ) : (
                         <td>-</td>
                       )}
-                      {result.water_needs ? (
-                        <td>{result.water_needs} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-
-                      {result.size_at_maturity ? (
-                        <td>{result.size_at_maturity} </td>
+                      {result.waterNeeds ? (
+                        <td>{result.waterNeeds} </td>
                       ) : (
                         <td>-</td>
                       )}
 
-                      {result.appropriate_location ? (
-                        <td>{result.appropriate_location} </td>
+                      {result.sizeAtMaturity ? (
+                        <td>{result.sizeAtMaturity} </td>
                       ) : (
                         <td>-</td>
                       )}
-                      {result.suitable_site_conditions ? (
-                        <td>{result.suitable_site_conditions} </td>
+
+                      {result.appropriateLocation ? (
+                        <td>{result.appropriateLocation} </td>
+                      ) : (
+                        <td>-</td>
+                      )}
+                      {result.suitableSiteConditions ? (
+                        <td>{result.suitableSiteConditions} </td>
                       ) : (
                         <td>-</td>
                       )}

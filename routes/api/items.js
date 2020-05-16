@@ -20,13 +20,13 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const newItem = new Item({
-    common_name: req.body.common_name,
-    bloom_time: req.body.bloom_time,
-    plant_type: req.body.plant_type,
-    appropriate_location: req.body.appropriate_location,
-    water_needs: req.body.water_needs,
-    size_at_maturity: req.body.size_at_maturity,
-    suitable_site_conditions: req.body.suitable_site_conditions
+    commonName: req.body.commonName,
+    bloomTime: req.body.bloomTime,
+    plantType: req.body.plantType,
+    appropriateLocation: req.body.appropriateLocation,
+    waterNeeds: req.body.waterNeeds,
+    sizeAtMaturity: req.body.sizeAtMaturity,
+    suitableSiteConditions: req.body.suitableSiteConditions
   });
 
   newItem.save().then(item => res.json(item));

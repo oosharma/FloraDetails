@@ -6,13 +6,13 @@ const Schema = mongoose.Schema;
 const DataSchema = new Schema(
   {
     id: Number,
-    common_name: String,
-    bloom_time: String,
-    plant_type: String,
-    appropriate_location: String,
-    water_needs: String,
-    size_at_maturity: String,
-    suitable_site_conditions: String
+    commonName: String,
+    bloomTime: String,
+    plantType: String,
+    appropriateLocation: String,
+    waterNeeds: String,
+    sizeAtMaturity: String,
+    suitableSiteConditions: String
   },
   { timestamps: true }
 );

@@ -10,25 +10,24 @@ class App extends Component {
   state = {
     data: [],
     id: 0,
-    common_name: null,
-    bloom_time: null,
-    plant_type: null,
-    appropriate_location: null,
-    water_needs: null,
-    size_at_maturity: null,
-    suitable_site_conditions: null,
+    commonName: null,
+    bloomTime: null,
+    plantType: null,
+    appropriateLocation: null,
+    waterNeeds: null,
+    sizeAtMaturity: null,
+    suitableSiteConditions: null,
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
     objectToUpdate: null,
     addName: "",
-    addBloom_time: "",
-    addPlant_type: "",
-    addAppropriate_location: "",
-    addWater_needs: "",
-    addSize_at_maturity: "",
-    addSuitable_site_conditions: "",
-
+    addbloomTime: "",
+    addplantType: "",
+    addappropriateLocation: "",
+    addwaterNeeds: "",
+    addsizeAtMaturity: "",
+    addsuitableSiteConditions: "",
     emptyDB: 0,
     showPinned: true,
     deleteBtnVariant: "primary",
@@ -44,13 +43,13 @@ class App extends Component {
     // var modifiedResult = modifyResult(result);
     this.setState(
       {
-        addName: result.common_name,
-        addBloom_time: result.bloom_time,
-        addPlant_type: result.plant_type,
-        addAppropriate_location: result.appropriate_location,
-        addWater_needs: result.water_needs,
-        addSize_at_maturity: result.size_at_maturity,
-        addSuitable_site_conditions: result.suitable_site_conditions
+        addName: result.commonName,
+        addbloomTime: result.bloomTime,
+        addplantType: result.plantType,
+        addappropriateLocation: result.appropriateLocation,
+        addwaterNeeds: result.waterNeeds,
+        addsizeAtMaturity: result.sizeAtMaturity,
+        addsuitableSiteConditions: result.suitableSiteConditions
       },
       () => {
         this.addToDB();
@@ -99,7 +98,7 @@ class App extends Component {
 
   // our put method that uses our backend api
   // to create new query into our data base
-  putDataToDB = common_name => {
+  putDataToDB = commonName => {
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -107,20 +106,20 @@ class App extends Component {
     }
     var dataSet = new Set();
     this.state.data.forEach(arrayItem => {
-      dataSet.add(arrayItem.common_name);
+      dataSet.add(arrayItem.commonName);
     });
-    if (dataSet.has(common_name)) {
+    if (dataSet.has(commonName)) {
       window.alert("item already in pinned section");
     } else {
       axios.post("/api/items", {
         id: idToBeAdded,
-        common_name: common_name,
-        bloom_time: this.state.addBloom_time,
-        plant_type: this.state.addPlant_type,
-        appropriate_location: this.state.addAppropriate_location,
-        water_needs: this.state.addWater_needs,
-        size_at_maturity: this.state.addSize_at_maturity,
-        suitable_site_conditions: this.state.addSuitable_site_conditions
+        commonName: commonName,
+        bloomTime: this.state.addbloomTime,
+        plantType: this.state.addplantType,
+        appropriateLocation: this.state.addappropriateLocation,
+        waterNeeds: this.state.addwaterNeeds,
+        sizeAtMaturity: this.state.addsizeAtMaturity,
+        suitableSiteConditions: this.state.addsuitableSiteConditions
       });
     }
   };
@@ -146,9 +145,10 @@ class App extends Component {
         objIdToDelete = dat._id;
       }
     });
-    axios
-      .delete(`/api/items/${idTodelete}`)
-      .then(this.setState({ fetch: true }));
+    axios.delete(`/api/items/${idTodelete}`).then(() => {
+      this.setState({ fetch: true });
+      console.log("herree");
+    });
   };
 
   // our update method that uses our backend api
