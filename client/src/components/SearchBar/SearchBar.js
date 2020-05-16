@@ -109,22 +109,35 @@ class SearchBar extends Component {
       fetch(query)
         .then(response => response.json())
         .then(response => {
-          for (let i = 0; i < response.length; i++) {
-            this.setState({
-              results: [response[i], ...this.state.results]
-            });
-            if (response.length) {
-              this.showClear();
-              this.setState({ classTable: "showButton" });
-              this.setState({ searchButtonTerm: "Search" });
-            }
+          console.log("response is here");
+          console.log("response is here");
+
+          console.log("response is here");
+          console.log(response);
+
+          this.setState({
+            results: [...response, ...this.state.results]
+          });
+          if (response.length) {
+            this.showClear();
+            this.setState({ classTable: "showButton" });
+            this.setState({ searchButtonTerm: "Search" });
+          } else {
+            window.alert("Sorry, item details are not available");
+            this.setState({ classTable: "showButton" });
+            this.setState({ searchButtonTerm: "Search" });
           }
 
           this.props.changeFetchedResults(this.state.results);
+        })
+        .catch(err => {
+          window.alert("Sorry, item details are not available");
+        })
+        .finally(() => {
+          this.setState({ heading: "Select Another Plant to Search" });
+          this.forceUpdate();
+          this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
         });
-      this.setState({ heading: "Select Another Plant to Search" });
-      this.forceUpdate();
-      this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
     } else {
       window.alert("Please enter a search term");
     }
@@ -161,6 +174,7 @@ class SearchBar extends Component {
       term2 = this.addUpper(this.state.term);
     }
     const query = `https://data.sfgov.org/resource/vmnk-skih.json?$where=common_name%20like%20%27%25${this.state.term}%25%27%20OR%20common_name%20like%20%27%25${term2}%25%27`;
+    console.log(query);
     return query;
   };
 
