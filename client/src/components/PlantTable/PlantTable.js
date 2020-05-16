@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { modifyResult } from "../../helper.js";
+import { FaSortDown, FaSortUp } from "react-icons/fa";
 
 import {
   Row,
@@ -16,7 +17,10 @@ class PlantTable extends Component {
     this.state = {
       mode: "", // either search results or db results
       btnVariant: "primary",
-      btnClass: "btn-primary"
+      btnClass: "btn-primary",
+      sortDirection: "none",
+      sortColumn: "none",
+      sortedResults: this.props.tableData
     };
   }
 
@@ -29,6 +33,124 @@ class PlantTable extends Component {
     this.props.handleAddorDelete(result);
   };
 
+  sortToggle(column) {
+    if (this.state.sortDirection === "none") {
+      this.setState({ sortDirection: "ascending" });
+    }
+    if (this.state.sortDirection === "ascending") {
+      this.setState({ sortDirection: "descending" });
+    }
+    if (this.state.sortDirection === "descending") {
+      this.setState({ sortDirection: "ascending" });
+    }
+    let that = this;
+    this.setState({ sortColumn: column }, () => {
+      let unsortedArray = this.props.tableData;
+      console.log(unsortedArray.sort(this.sortByAttAndOrder()));
+      console.log(unsortedArray);
+      that.setState({ sortedResults: [...unsortedArray] });
+    });
+  }
+  sortSwitch(item) {
+    if (this.state.sortColumn === "none") {
+      return (
+        <>
+          <FaSortDown></FaSortDown>
+          <FaSortUp></FaSortUp>
+        </>
+      );
+    }
+    if (this.state.sortColumn === item) {
+      if (this.state.sortDirection === "ascending") {
+        return <FaSortUp></FaSortUp>;
+      } else {
+        return <FaSortDown></FaSortDown>;
+      }
+    }
+  }
+
+  sortByAttAndOrder() {
+    let att = "";
+    console.log(this.state.sortColumn);
+    switch (this.state.sortColumn) {
+      case "Name":
+        att = "commonName";
+        break;
+      case "Bloom Time":
+        att = "bloomTime";
+        break;
+      case "Plant Type":
+        att = "plantType";
+        break;
+      case "Water Needs":
+        att = "waterNeeds";
+        break;
+      case "Size at Maturity":
+        att = "sizeAtMaturity";
+        break;
+      case "Suitable Site Conditions":
+        att = "suitableSiteConditions";
+        break;
+      case "Appropriate Location":
+        att = "appropriateLocation";
+        break;
+      default:
+        break;
+    }
+    console.log({ att });
+    let that = this;
+    return function(a, b) {
+      if (that.state.sortDirection === "ascending") {
+        if (a[att] > b[att]) {
+          return 1;
+        } else if (a[att] < b[att]) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (a[att] > b[att]) {
+          return -1;
+        } else if (a[att] < b[att]) {
+          return 1;
+        }
+        return 0;
+      }
+    };
+  }
+
+  // columnItems = () => {
+
+  //   let returnValue = items.map(item => {
+  //     <th onClick={this.sortToggle.bind(this, item)} className="head-1">
+  //       {item}
+  //       {this.sortSwitch()}
+  //     </th>;
+  //   });
+  //   return returnValue;
+  // };
+
+  columnItems = () => {
+    const items = [
+      "Name",
+      "Bloom Time",
+      "Plant Type",
+      "Water Needs",
+      "Size at Maturity",
+      "Appropriate Location",
+      "Suitable Site Conditions"
+    ];
+
+    let columns = items.map(item => {
+      return (
+        <th onClick={this.sortToggle.bind(this, item)} className="head-1">
+          {item}
+          {this.sortSwitch(item)}
+        </th>
+      );
+    });
+    return columns;
+  };
+
   render() {
     if (this.props.tableData && this.props.tableData.length > 0) {
       return (
@@ -37,13 +159,8 @@ class PlantTable extends Component {
             <thead>
               <tr>
                 <th>Action</th>
-                <th className="head-1">Name</th>
-                <th>Bloom Time</th>
-                <th>Plant Type</th>
-                <th>Water Needs</th>
-                <th>Size at Maturity</th>
-                <th>Appropriate Location</th>
-                <th>Suitable Site Conditions</th>
+
+                {this.columnItems()}
               </tr>
             </thead>
             <tbody>
