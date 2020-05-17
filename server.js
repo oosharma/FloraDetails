@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const config = require("config");
 var cors = require("cors");
-const bodyParser = require("body-parser");
 const logger = require("morgan");
 const Data = require("./data");
 const path = require("path");
@@ -9,9 +9,7 @@ const app = express();
 app.use(cors());
 const router = express.Router();
 // DB Config
-const db = require("./config/keys").mongoURI;
-
-const items = require("./routes/api/items");
+const db = config.get("mongoURI");
 
 // Connect to MOngo
 // this is our MongoDB database
@@ -20,10 +18,11 @@ const items = require("./routes/api/items");
 // "mongodb+srv://sharma1:PlantBase%238@cluster0-ogvmk.mongodb.net/test?retryWrites=true&w=majority";
 // connects our back end code with the database
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log("MongoDB connected..."))
   .catch(err => console.log(err));
 
+<<<<<<< HEAD
 // let db = mongoose.connection;
 
 // db.once("open", () => console.log("connected to the database"));
@@ -35,6 +34,10 @@ mongoose
 // bodyParser, parses the request body to be a readable json format
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+=======
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+>>>>>>> added post routes to user for new user and auth for authenticating existing user. Both returns a JWT.
 app.use(logger("dev"));
 
 // this is our get method
@@ -105,7 +108,9 @@ router.post("/putData", (req, res) => {
 app.use("/api", router);
 
 //defining routes
-app.use("/api/items", items);
+app.use("/api/items", require("./routes/api/items"));
+app.use("/api/users", require("./routes/api/users"));
+app.use("/api/auth", require("./routes/api/auth"));
 
 const API_PORT = process.env.PORT || 3001;
 
