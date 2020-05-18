@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
+
 import axios from "axios";
 import { Table, Container, Display4, Row } from "bootstrap-4-react";
 import style from "./App.css";
@@ -33,7 +34,26 @@ class App extends Component {
     deleteBtnVariant: "primary",
     deleteBtnClass: "btn-primary",
     fetch: true,
+<<<<<<< HEAD
     test: null
+=======
+    test: null,
+    sort: [
+      { sortDirection: "none", sortColumn: "none" },
+      { sortDirection: "none", sortColumn: "none" }
+    ],
+    error: {
+      msg: null,
+      status: null,
+      id: null
+    },
+    auth: {
+      token: localStorage.getItem("token"),
+      isAuthorized: null,
+      isLoading: false,
+      user: null
+    }
+>>>>>>> added register input fields
   };
   addToDB = () => {
     this.putDataToDB(this.state.addName);
@@ -56,6 +76,58 @@ class App extends Component {
       }
     );
   };
+<<<<<<< HEAD
+=======
+
+  userLoaded = res => {
+    let authUpdate = {
+      token: localStorage.getItem("token"),
+      isAuthorized: true,
+      isLoading: false,
+      user: res
+    };
+
+    this.setState({ auth: authUpdate });
+  };
+
+  loadUser = () => {
+    let authUpdate = { ...this.state.auth, isLoading: true };
+    this.setState({ auth: authUpdate });
+    console.log(this.state.auth.token);
+    const config = {
+      headers: {
+        "content-type": "application/json"
+      }
+    };
+    if (this.state.auth.token) {
+      config.headers["x-auth-token"] = this.state.auth.token;
+    }
+    axios
+      .get("api/auth/user", config)
+      .then(res => {
+        this.userLoaded(res);
+      })
+      .catch(err => {
+        localStorage.removeItem("token");
+        let authUpdate = {
+          token: localStorage.getItem("token"),
+          isAuthorized: null,
+          isLoading: false,
+          user: null
+        };
+
+        this.setState({ auth: authUpdate });
+
+        let errorUpdate = {
+          msg: err.response.data,
+          status: err.response.status,
+          id: null
+        };
+        this.setState({ error: errorUpdate });
+      });
+  };
+
+>>>>>>> added register input fields
   // when component mounts, first thing it does is fetch all existing data in our db
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
@@ -65,6 +137,14 @@ class App extends Component {
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
     }
+    this.loadUser();
+  }
+
+  userRegister(regName, regEmail, regPass) {
+    //attemptRegistering.
+    // on success
+    //localStorage.setItem('token', res.token)
+    //do same for login
   }
 
   // never let a process live forever
@@ -182,12 +262,70 @@ class App extends Component {
     }
   };
 
+<<<<<<< HEAD
+=======
+  sortToggle(column, utility) {
+    let item = utility === "Add" ? 0 : 1;
+    let updatedSort = this.state.sort;
+
+    updatedSort[item].sortColumn = column;
+
+    if (
+      this.state.sort[item].sortDirection === "none" ||
+      this.state.sort[item].sortDirection === "descending"
+    ) {
+      updatedSort[item].sortDirection = "ascending";
+    } else {
+      updatedSort[item].sortDirection = "descending";
+    }
+
+    this.setState({ sort: updatedSort }, () => {});
+  }
+
+  regNameChange(event) {
+    this.setState({ regName: event.currentTarget.value });
+  }
+  regEmailChange(event) {
+    this.setState({ regEmail: event.currentTarget.value });
+  }
+  regPassChange(event) {
+    this.setState({ regPass: event.currentTarget.value });
+  }
+  addReg() {
+    this.userRegister(
+      this.state.regName,
+      this.state.regEmail,
+      this.state.regPass
+    );
+  }
+
+>>>>>>> added register input fields
   render() {
     const { data } = this.state;
     if (this.state.data.length) {
       return (
         <>
           <Container className="m-3 m-md-5 mt-0  ">
+            <h1> Register</h1>
+            <p>Name</p>
+            <textarea
+              value={this.state.regName}
+              onChange={this.regNameChange.bind(this)}
+            ></textarea>
+            <p>Email(s)</p>
+            <textarea
+              value={this.state.regEmail}
+              onChange={this.regEmailChange.bind(this)}
+            ></textarea>
+
+            <p>Password(s)</p>
+            <textarea
+              value={this.state.regPass}
+              onChange={this.regPassChange.bind(this)}
+            ></textarea>
+            <p>
+              <button onClick={this.addReg.bind(this)}>Add</button>
+            </p>
             <SearchBar
               changeAddItem={this.changeAddItem.bind(this)}
               changeFetchedResults={this.changeFetchedResults.bind(this)}
