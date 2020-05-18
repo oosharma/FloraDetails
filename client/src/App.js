@@ -9,6 +9,10 @@ import style from "./App.css";
 class App extends Component {
   // initialize our state
   state = {
+    regName: "",
+    regEmail: "",
+    regPass: "",
+    regMsg: null,
     data: [],
     id: 0,
     commonName: null,
@@ -34,9 +38,6 @@ class App extends Component {
     deleteBtnVariant: "primary",
     deleteBtnClass: "btn-primary",
     fetch: true,
-<<<<<<< HEAD
-    test: null
-=======
     test: null,
     sort: [
       { sortDirection: "none", sortColumn: "none" },
@@ -53,7 +54,6 @@ class App extends Component {
       isLoading: false,
       user: null
     }
->>>>>>> added register input fields
   };
   addToDB = () => {
     this.putDataToDB(this.state.addName);
@@ -76,58 +76,7 @@ class App extends Component {
       }
     );
   };
-<<<<<<< HEAD
-=======
 
-  userLoaded = res => {
-    let authUpdate = {
-      token: localStorage.getItem("token"),
-      isAuthorized: true,
-      isLoading: false,
-      user: res
-    };
-
-    this.setState({ auth: authUpdate });
-  };
-
-  loadUser = () => {
-    let authUpdate = { ...this.state.auth, isLoading: true };
-    this.setState({ auth: authUpdate });
-    console.log(this.state.auth.token);
-    const config = {
-      headers: {
-        "content-type": "application/json"
-      }
-    };
-    if (this.state.auth.token) {
-      config.headers["x-auth-token"] = this.state.auth.token;
-    }
-    axios
-      .get("api/auth/user", config)
-      .then(res => {
-        this.userLoaded(res);
-      })
-      .catch(err => {
-        localStorage.removeItem("token");
-        let authUpdate = {
-          token: localStorage.getItem("token"),
-          isAuthorized: null,
-          isLoading: false,
-          user: null
-        };
-
-        this.setState({ auth: authUpdate });
-
-        let errorUpdate = {
-          msg: err.response.data,
-          status: err.response.status,
-          id: null
-        };
-        this.setState({ error: errorUpdate });
-      });
-  };
-
->>>>>>> added register input fields
   // when component mounts, first thing it does is fetch all existing data in our db
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
@@ -143,7 +92,7 @@ class App extends Component {
   userRegister(regName, regEmail, regPass) {
     //attemptRegistering.
     // on success
-    //localStorage.setItem('token', res.token)
+    // localStorage.setItem("token", res.token);
     //do same for login
   }
 
@@ -262,8 +211,6 @@ class App extends Component {
     }
   };
 
-<<<<<<< HEAD
-=======
   sortToggle(column, utility) {
     let item = utility === "Add" ? 0 : 1;
     let updatedSort = this.state.sort;
@@ -299,7 +246,111 @@ class App extends Component {
     );
   }
 
->>>>>>> added register input fields
+  userLoaded = res => {
+    console.log({ res });
+    let authUpdate = {
+      token: localStorage.getItem("token"),
+      isAuthorized: true,
+      isLoading: false,
+      user: res.data
+    };
+
+    this.setState({ auth: authUpdate });
+
+    this.clearErrors();
+  };
+
+  userRegister = (name, email, password) => {
+    const config = this.tokenConfig();
+    const body = JSON.stringify({ name, email, password });
+    console.log({ body });
+    axios
+      .post("api/users", body, config)
+      .then(res => {
+        this.registerSuccess(res.data);
+      })
+      .catch(err => {
+        //  errorUpdate(err);
+        this.updateError(err);
+      });
+  };
+
+  registerSuccess = res => {
+    let authUpdate = {
+      token: res.token,
+      isAuthorized: true,
+      isLoading: false,
+      user: res.user
+    };
+    console.log(res.user);
+    localStorage.setItem("token", res.token);
+    this.setState({ auth: authUpdate });
+    this.clearErrors();
+  };
+
+  loadUser = () => {
+    let authUpdate = { ...this.state.auth, isLoading: true };
+    this.setState({ auth: authUpdate });
+    console.log(this.state.auth);
+    const config = this.tokenConfig();
+    console.log({ config });
+    axios
+      .get("api/auth/user", config)
+      .then(res => {
+        this.userLoaded(res);
+        console.log("user Loaded");
+      })
+      .catch(err => {
+        this.updateError(err);
+      });
+  };
+
+  clearErrors = () => {
+    let errorUpdate = {
+      msg: null,
+      status: null,
+      id: null
+    };
+    this.setState({ error: errorUpdate });
+  };
+  updateError = (err, id) => {
+    console.log("herwerwe");
+    localStorage.removeItem("token");
+    let authUpdate = {
+      token: localStorage.getItem("token"),
+      isAuthorized: null,
+      isLoading: false,
+      user: null
+    };
+    this.setState({ auth: authUpdate });
+
+    let errorUpdate = {
+      msg: err.response.data,
+      status: err.response.status,
+      id: null
+    };
+    this.setState({ error: errorUpdate });
+  };
+
+  tokenConfig = () => {
+    // Get token from localstorage
+    const token = this.state.auth.token;
+
+    // Headers
+    const config = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers["x-auth-token"] = token;
+    }
+
+    return config;
+  };
+
   render() {
     const { data } = this.state;
     if (this.state.data.length) {
