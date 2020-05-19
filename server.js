@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const config = require("config");
 var cors = require("cors");
+const bodyParser = require("body-parser");
 const logger = require("morgan");
 const Data = require("./data");
 const path = require("path");
@@ -9,7 +10,7 @@ const app = express();
 app.use(cors());
 const router = express.Router();
 // DB Config
-const db = config.get("mongoURI");
+const db = require("./config/keys").mongoURI;
 
 // Connect to MOngo
 // this is our MongoDB database
@@ -22,22 +23,8 @@ mongoose
   .then(() => console.log("MongoDB connected..."))
   .catch(err => console.log(err));
 
-<<<<<<< HEAD
-// let db = mongoose.connection;
-
-// db.once("open", () => console.log("connected to the database"));
-
-// // checks if connection with the database is successful
-// db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
-// (optional) only made for logging and
-// bodyParser, parses the request body to be a readable json format
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-=======
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
->>>>>>> added post routes to user for new user and auth for authenticating existing user. Both returns a JWT.
 app.use(logger("dev"));
 
 // this is our get method
