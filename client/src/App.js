@@ -534,7 +534,8 @@ class App extends Component {
     return (
       <>
         <Container className="m-3 m-md-5 mt-0  ">
-          {this.state.error.id === "REGISTER_FAIL" ? (
+          {this.state.error.id === "REGISTER_FAIL" ||
+          this.state.error.id === "LOGIN_FAIL" ? (
             <p>{this.state.error.msg.msg}</p>
           ) : (
             <></>
