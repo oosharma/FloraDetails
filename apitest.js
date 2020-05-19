@@ -37,6 +37,57 @@ let addUser = {
   json: true
 };
 
+// {
+//   id: idToBeAdded,
+//   commonName: commonName,
+//   bloomTime: this.state.addbloomTime,
+//   plantType: this.state.addplantType,
+//   appropriateLocation: this.state.addappropriateLocation,
+//   waterNeeds: this.state.addwaterNeeds,
+//   sizeAtMaturity: this.state.addsizeAtMaturity,
+//   suitableSiteConditions: this.state.addsuitableSiteConditions
+// }
+// let userUpdate = (name, email, password) => {
+//   const config = this.tokenConfig();
+//   const body = JSON.stringify({ name, email, password });
+//   console.log({ body });
+//   axios
+//     .post("api/users", body, config)
+//     .then(res => {
+//       this.registerSuccess(res.data);
+//     })
+//     .catch(err => {
+//       //  errorUpdate(err);
+//       this.updateError(err, "REGISTER_FAIL");
+//     });
+// };
+
+let userUpdate = {
+  method: "POST",
+  uri: "http://127.0.0.1:3001/api/userItem",
+  body: {
+    filter: { email: "abc" },
+    update: {
+      items: [
+        {
+          id: 1,
+          commonName: "ssss",
+          bloomTime: "dfd",
+          plantType: "ddd",
+          appropriateLocation: "ddd",
+          waterNeeds: "ddd",
+          sizeAtMaturity: "ddd",
+          suitableSiteConditions: "ddd"
+        }
+      ]
+    }
+  },
+  headers: {
+    "content-type": "application/json"
+  },
+  json: true
+};
+
 let testUser = {
   method: "POST",
   uri: "http://127.0.0.1:3001/api/auth",
@@ -65,7 +116,7 @@ let authGetUser = {
 
 (async function activityCycle() {
   console.log(`Initial get of items`);
-  let msg = await rp(authGetUser)
+  let msg = await rp(userUpdate)
     .then(function(data) {
       //   let msg = `${data.events.length} number of activities`;
 

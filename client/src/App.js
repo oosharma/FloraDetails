@@ -41,6 +41,8 @@ class App extends Component {
     test: null,
     sort: [
       { sortDirection: "none", sortColumn: "none" },
+      { sortDirection: "none", sortColumn: "none" },
+      { sortDirection: "none", sortColumn: "none" },
       { sortDirection: "none", sortColumn: "none" }
     ],
     error: {
@@ -220,6 +222,20 @@ class App extends Component {
 
   sortToggle(column, utility) {
     let item = utility === "Add" ? 0 : 1;
+
+    if (utility === "Add") {
+      item = 0;
+    }
+    if (utility === "Delete") {
+      item = 1;
+    }
+    if (utility === "personalAdd") {
+      item = 2;
+    }
+    if (utility === "personalDelete") {
+      item = 3;
+    }
+
     let updatedSort = this.state.sort;
 
     updatedSort[item].sortColumn = column;
@@ -359,6 +375,81 @@ class App extends Component {
   };
 
   render() {
+<<<<<<< HEAD
+=======
+    const authLinks = (
+      <>
+        <p>
+          <strong>
+            {this.state.auth.user
+              ? `Welcome ${this.state.auth.user.name}`
+              : null}
+          </strong>
+        </p>
+
+        <p>
+          <button onClick={this.logout.bind(this)}>Logout</button>
+        </p>
+      </>
+    );
+
+    const guestLinks = (
+      <>
+        <h1>Register</h1>
+        <p>Name</p>
+        <textarea
+          value={this.state.regName}
+          onChange={this.regNameChange.bind(this)}
+        ></textarea>
+        <p>Email(s)</p>
+        <textarea
+          value={this.state.regEmail}
+          onChange={this.regEmailChange.bind(this)}
+        ></textarea>
+
+        <p>Password(s)</p>
+        <textarea
+          value={this.state.regPass}
+          onChange={this.regPassChange.bind(this)}
+        ></textarea>
+        <p>
+          <button onClick={this.addReg.bind(this)}>Register</button>
+        </p>
+
+        <h1> Login</h1>
+
+        <p>Email(s)</p>
+        <textarea
+          value={this.state.logEmail}
+          onChange={this.logEmailChange.bind(this)}
+        ></textarea>
+
+        <p>Password</p>
+        <textarea
+          value={this.state.logPass}
+          onChange={this.logPassChange.bind(this)}
+        ></textarea>
+        <p>
+          <button onClick={this.addlog.bind(this)}>Login</button>
+        </p>
+      </>
+    );
+    const personalTables = (
+      <>
+        <h1>PersonalTable</h1>
+        {this.state.auth.user && this.state.auth.user.items ? (
+          <PlantTable
+            tableData={this.state.auth.user.items}
+            sortToggle={this.sortToggle.bind(this)}
+            sortColumn={this.state.sort[2].sortColumn}
+            sortDirection={this.state.sort[2].sortDirection}
+            handleAddorDelete={this.changeAddItem.bind(this)}
+            utility="Personal Add"
+          ></PlantTable>
+        ) : null}
+      </>
+    );
+>>>>>>> added endpoints for userItems to accept authenticated users request to post into their items. Get is from usual endpoint. I have not used middleware to pass JWT to it, rather just passing email and update. Successsfully rendering new table in UI to show users tabledata. Need to create delete functionality and add functionality as well. Cheers
     const { data } = this.state;
     if (this.state.data.length) {
       return (
@@ -396,9 +487,15 @@ class App extends Component {
             <Row>
               <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
+<<<<<<< HEAD
             <p className={`mt-0 pb-0 mb-0 `}>
               <em> Pinned results are being pulled from connected database</em>
             </p>
+=======
+
+            {this.state.auth.isAuthorized === true ? personalTables : null}
+
+>>>>>>> added endpoints for userItems to accept authenticated users request to post into their items. Get is from usual endpoint. I have not used middleware to pass JWT to it, rather just passing email and update. Successsfully rendering new table in UI to show users tabledata. Need to create delete functionality and add functionality as well. Cheers
             <PlantTable
               tableData={data}
               handleAddorDelete={this.handleDelete.bind(this)}

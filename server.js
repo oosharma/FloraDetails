@@ -110,6 +110,7 @@ app.use("/api", router);
 //defining routes
 app.use("/api/items", require("./routes/api/items"));
 app.use("/api/users", require("./routes/api/users"));
+app.use("/api/userItem", require("./routes/api/userItem"));
 app.use("/api/auth", require("./routes/api/auth"));
 
 const API_PORT = process.env.PORT || 3001;

@@ -227,7 +227,7 @@ class PlantTable extends Component {
         </>
       );
     } else {
-      return <> </>;
+      return <> nothing to show</>;
     }
   }
 }

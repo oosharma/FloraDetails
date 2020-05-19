@@ -20,6 +20,19 @@ const UserSchema = new Schema({
   register_date: {
     type: Date,
     default: Date.now
+  },
+  items: {
+    commonName: String,
+    bloomTime: String,
+    plantType: String,
+    appropriateLocation: String,
+    waterNeeds: String,
+    sizeAtMaturity: String,
+    suitableSiteConditions: String,
+    item_time: {
+      type: Date,
+      default: Date.now
+    }
   }
 });
 
