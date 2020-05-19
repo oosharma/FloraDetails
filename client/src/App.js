@@ -128,6 +128,7 @@ class App extends Component {
   // our put method that uses our backend api
   // to create new query into our data base
   putDataToDB = commonName => {
+    let config = this.tokenConfig();
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -140,16 +141,20 @@ class App extends Component {
     if (dataSet.has(commonName)) {
       window.alert("item already in pinned section");
     } else {
-      axios.post("/api/items", {
-        id: idToBeAdded,
-        commonName: commonName,
-        bloomTime: this.state.addbloomTime,
-        plantType: this.state.addplantType,
-        appropriateLocation: this.state.addappropriateLocation,
-        waterNeeds: this.state.addwaterNeeds,
-        sizeAtMaturity: this.state.addsizeAtMaturity,
-        suitableSiteConditions: this.state.addsuitableSiteConditions
-      });
+      axios.post(
+        "/api/items",
+        {
+          id: idToBeAdded,
+          commonName: commonName,
+          bloomTime: this.state.addbloomTime,
+          plantType: this.state.addplantType,
+          appropriateLocation: this.state.addappropriateLocation,
+          waterNeeds: this.state.addwaterNeeds,
+          sizeAtMaturity: this.state.addsizeAtMaturity,
+          suitableSiteConditions: this.state.addsuitableSiteConditions
+        },
+        config
+      );
     }
   };
 
@@ -168,13 +173,15 @@ class App extends Component {
   // to remove existing database information
   deleteFromDB = idTodelete => {
     parseInt(idTodelete);
+    let config = this.tokenConfig();
+
     let objIdToDelete = null;
     this.state.data.forEach(dat => {
       if (dat.id === idTodelete) {
         objIdToDelete = dat._id;
       }
     });
-    axios.delete(`/api/items/${idTodelete}`).then(() => {
+    axios.delete(`/api/items/${idTodelete}`, config).then(() => {
       this.setState({ fetch: true });
       console.log("herree");
     });
