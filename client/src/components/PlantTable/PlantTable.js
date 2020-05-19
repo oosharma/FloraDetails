@@ -227,7 +227,21 @@ class PlantTable extends Component {
         </>
       );
     } else {
-      return <> nothing to show</>;
+      if (
+        this.props.utility === "Personal Delete" ||
+        this.props.utility === "Delete"
+      ) {
+        return (
+          <>
+            <Row>
+              <Display4 className="mt-3">
+                Use Search to Find Plants and Pin them here
+              </Display4>
+            </Row>
+          </>
+        );
+      }
+      return <></>;
     }
   }
 }

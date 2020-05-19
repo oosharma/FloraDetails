@@ -375,8 +375,6 @@ class App extends Component {
   };
 
   render() {
-<<<<<<< HEAD
-=======
     const authLinks = (
       <>
         <p>
@@ -449,7 +447,6 @@ class App extends Component {
         ) : null}
       </>
     );
->>>>>>> added endpoints for userItems to accept authenticated users request to post into their items. Get is from usual endpoint. I have not used middleware to pass JWT to it, rather just passing email and update. Successsfully rendering new table in UI to show users tabledata. Need to create delete functionality and add functionality as well. Cheers
     const { data } = this.state;
     if (this.state.data.length) {
       return (
@@ -487,15 +484,9 @@ class App extends Component {
             <Row>
               <Display4 className="mt-3 mb-0">Pinned Results</Display4>
             </Row>
-<<<<<<< HEAD
-            <p className={`mt-0 pb-0 mb-0 `}>
-              <em> Pinned results are being pulled from connected database</em>
-            </p>
-=======
 
             {this.state.auth.isAuthorized === true ? personalTables : null}
 
->>>>>>> added endpoints for userItems to accept authenticated users request to post into their items. Get is from usual endpoint. I have not used middleware to pass JWT to it, rather just passing email and update. Successsfully rendering new table in UI to show users tabledata. Need to create delete functionality and add functionality as well. Cheers
             <PlantTable
               tableData={data}
               handleAddorDelete={this.handleDelete.bind(this)}
