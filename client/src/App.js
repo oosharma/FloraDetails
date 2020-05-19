@@ -159,6 +159,83 @@ class App extends Component {
       );
     }
   };
+  // handleSort = result => {
+  //   let newObj = this.state.sort;
+  //   newObj[result.i].sortColumn = result.sortColumn;
+  //   newObj[result.i].sortDirection = result.sortDirection;
+  //   this.setState({ sort: newObj });
+  // };
+
+  deletePersonalItem = result => {
+    //  const config = this.tokenConfig();
+    //  const body = JSON.stringify({ name, email, password });
+    let config = this.tokenConfig();
+
+    let updateItem = this.state.auth.user.items.filter(item => {
+      return item.commonName != result.commonName;
+    });
+
+    const body = {
+      filter: { email: this.state.auth.user.email },
+      update: { items: updateItem }
+    };
+    console.log(body);
+    axios.post("api/userItem", body, config).then(res => {
+      this.personalDeleteSuccess(res.data);
+    });
+  };
+
+  addPersonalItem = result => {
+    let postFlag = true;
+    if (
+      this.state.auth.user &&
+      this.state.auth.user.items &&
+      this.state.auth.user.items.length > 0
+    ) {
+      let dataSet = new Set();
+      this.state.auth.user.items.forEach(arrayItem => {
+        dataSet.add(arrayItem.commonName);
+      });
+      if (dataSet.has(result.common_name)) {
+        window.alert("item already in pinned section");
+        postFlag = false;
+      }
+    }
+    if (postFlag) {
+      let config = this.tokenConfig();
+
+      //  const config = this.tokenConfig();
+      //  const body = JSON.stringify({ name, email, password });
+      let updateRow = [
+        {
+          id: 1,
+          commonName: result.common_name,
+          bloomTime: result.bloom_time,
+          plantType: result.plant_type,
+          appropriateLocation: result.appropriate_location,
+          waterNeeds: result.water_needs,
+          sizeAtMaturity: result.size_at_maturity,
+          suitableSiteConditions: result.suitable_site_conditions
+        }
+      ];
+
+      let updateItem =
+        this.state.auth.user && this.state.auth.user.items
+          ? [...updateRow, ...this.state.auth.user.items]
+          : updateRow;
+
+      const body = {
+        filter: { email: this.state.auth.user.email },
+        update: { items: updateItem }
+      };
+      console.log(body);
+      axios.post("api/userItem", body, config).then(res => {
+        console.log("this is response");
+        console.log(res.data);
+        this.personalAddSuccess(res.data);
+      });
+    }
+  };
 
   handleDelete = result => {
     this.setState({ idToDelete: result._id }, () =>
@@ -229,7 +306,7 @@ class App extends Component {
     if (utility === "Delete") {
       item = 1;
     }
-    if (utility === "personalAdd") {
+    if (utility === "Personal Delete") {
       item = 2;
     }
     if (utility === "personalDelete") {
@@ -447,106 +524,76 @@ class App extends Component {
         ) : null}
       </>
     );
-    const { data } = this.state;
-    if (this.state.data.length) {
-      return (
-        <>
-          <Container className="m-3 m-md-5 mt-0  ">
-            <h1> Register</h1>
-            <p>Name</p>
-            <textarea
-              value={this.state.regName}
-              onChange={this.regNameChange.bind(this)}
-            ></textarea>
-            <p>Email(s)</p>
-            <textarea
-              value={this.state.regEmail}
-              onChange={this.regEmailChange.bind(this)}
-            ></textarea>
 
-            <p>Password(s)</p>
-            <textarea
-              value={this.state.regPass}
-              onChange={this.regPassChange.bind(this)}
-            ></textarea>
-            <p>
-              <button onClick={this.addReg.bind(this)}>Add</button>
-            </p>
-            <SearchBar
-              changeAddItem={this.changeAddItem.bind(this)}
-              changeFetchedResults={this.changeFetchedResults.bind(this)}
-            />
-            <PlantTable
-              tableData={this.state.fetchedResults}
-              handleAddorDelete={this.changeAddItem.bind(this)}
-              utility="Add"
-            />
-            <Row>
-              <Display4 className="mt-3 mb-0">Pinned Results</Display4>
-            </Row>
+    // if (this.state.auth.isAuthorized) {
+    //   {
+    //     return personalTables;
+    //   }
+    // }
 
-            {this.state.auth.isAuthorized === true ? personalTables : null}
+    return (
+      <>
+        <Container className="m-3 m-md-5 mt-0  ">
+          {this.state.error.id === "REGISTER_FAIL" ? (
+            <p>{this.state.error.msg.msg}</p>
+          ) : (
+            <></>
+          )}
+          {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
 
-            <PlantTable
-              tableData={data}
-              handleAddorDelete={this.handleDelete.bind(this)}
-              utility="Delete"
-            />
-            <ul>
-              <li>
-                <p className={`mt-0 pb-0 mb-0 `}>
-                  <em>
-                    {" "}
-                    This web-app is developed by{" "}
-                    <a target="_blank" href="http://www.iamsharma.com">
-                      iamSharma
-                    </a>{" "}
-                    using the MERN stack (MongoDB, Express JS, React JS, Node
-                    JS)
-                  </em>
-                </p>
-              </li>
-              <li>
-                <p className={`mt-0 pb-0 mb-0 `}>
-                  <em>
-                    {" "}
-                    Checkout its source code on GitHub:{" "}
-                    <a
-                      target="_blank"
-                      href="https://github.com/oosharma/FloraDetails"
-                    >
-                      https://github.com/oosharma/FloraDetails
-                    </a>
-                  </em>
-                </p>
-              </li>
-            </ul>
-          </Container>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Container className="m-4">
-            <SearchBar
-              changeAddItem={this.changeAddItem.bind(this)}
-              addToDB={this.addToDB.bind(this)}
-              changeFetchedResults={this.changeFetchedResults.bind(this)}
-            />
-            <p>hello</p>
-            <PlantTable
-              tableData={this.state.fetchedResults}
-              handleAddorDelete={this.changeAddItem.bind(this)}
-              utility="Add"
-            />
+          <SearchBar
+            changeFetchedResults={this.changeFetchedResults.bind(this)}
+          />
+          <PlantTable
+            tableData={this.state.fetchedResults}
+            sortToggle={this.sortToggle.bind(this)}
+            sortColumn={this.state.sort[0].sortColumn}
+            sortDirection={this.state.sort[0].sortDirection}
+            handleAddorDelete={this.changeAddItem.bind(
+              this,
+              this.state.auth.isAuthorized
+            )}
+            utility="Add"
+          />
+          <Row>
+            <Display4 className="mt-3 mb-0">Pinned Results</Display4>
+          </Row>
 
-            <Row>
-              {/* <Display4>Use Search to Find Plants and Pin them here</Display4> */}
-            </Row>
-          </Container>
-        </>
-      );
-    }
+          {this.state.auth.isAuthorized === true
+            ? personalTables
+            : publicTables}
+
+          <ul>
+            <li>
+              <p className={`mt-0 pb-0 mb-0 `}>
+                <em>
+                  {" "}
+                  This web-app is developed by{" "}
+                  <a target="_blank" href="http://www.iamsharma.com">
+                    iamSharma
+                  </a>{" "}
+                  using the MERN stack (MongoDB, Express JS, React JS, Node JS)
+                </em>
+              </p>
+            </li>
+            <li>
+              <p className={`mt-0 pb-0 mb-0 `}>
+                <em>
+                  {" "}
+                  Checkout its source code on GitHub:{" "}
+                  <a
+                    target="_blank"
+                    href="https://github.com/oosharma/FloraDetails"
+                  >
+                    https://github.com/oosharma/FloraDetails
+                  </a>
+                </em>
+              </p>
+            </li>
+          </ul>
+        </Container>
+      </>
+    );
   }
 }
 

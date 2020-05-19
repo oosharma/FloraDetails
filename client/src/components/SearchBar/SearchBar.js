@@ -96,10 +96,6 @@ class SearchBar extends Component {
     );
   }
 
-  handleAdd = result => {
-    this.props.changeAddItem(result);
-  };
-
   handleButtonClick = () => {
     const query = this.queryGenerator(this.state.term);
 
