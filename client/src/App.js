@@ -59,7 +59,6 @@ class App extends Component {
   };
   addToDB = () => {
     this.putDataToDB(this.state.addName);
-    this.setState({ fetch: true });
   };
   changeAddItem = result => {
     // var modifiedResult = modifyResult(result);
@@ -143,9 +142,8 @@ class App extends Component {
     if (dataSet.has(commonName)) {
       window.alert("item already in pinned section");
     } else {
-      axios.post(
-        "/api/items",
-        {
+      axios
+        .post("/api/items", {
           id: idToBeAdded,
           commonName: commonName,
           bloomTime: this.state.addbloomTime,
@@ -154,9 +152,14 @@ class App extends Component {
           waterNeeds: this.state.addwaterNeeds,
           sizeAtMaturity: this.state.addsizeAtMaturity,
           suitableSiteConditions: this.state.addsuitableSiteConditions
-        },
-        config
-      );
+        })
+        .then(res => {
+          console.log(res);
+          this.setState({ fetch: true });
+        })
+        .catch(err => {
+          this.setState({ fetch: true });
+        });
     }
   };
   // handleSort = result => {
@@ -260,10 +263,15 @@ class App extends Component {
         objIdToDelete = dat._id;
       }
     });
-    axios.delete(`/api/items/${idTodelete}`, config).then(() => {
-      this.setState({ fetch: true });
-      console.log("herree");
-    });
+    axios
+      .delete(`/api/items/${idTodelete}`)
+      .then(() => {
+        this.setState({ fetch: true });
+        console.log("herree");
+      })
+      .catch(() => {
+        this.setState({ fetch: true });
+      });
   };
 
   // our update method that uses our backend api
@@ -540,6 +548,7 @@ class App extends Component {
           ) : (
             <></>
           )}
+
           {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
 
           <SearchBar

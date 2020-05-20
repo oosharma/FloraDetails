@@ -19,17 +19,21 @@ router.get("/", (req, res) => {
 // @access private
 
 router.post("/", (req, res) => {
-  const newItem = new Item({
-    commonName: req.body.commonName,
-    bloomTime: req.body.bloomTime,
-    plantType: req.body.plantType,
-    appropriateLocation: req.body.appropriateLocation,
-    waterNeeds: req.body.waterNeeds,
-    sizeAtMaturity: req.body.sizeAtMaturity,
-    suitableSiteConditions: req.body.suitableSiteConditions
-  });
+  commonName = req.body.commonName;
+  Item.findOne({ commonName }).then(item => {
+    if (item) return res.status(400).json({ msg: "Item already exists" });
 
-  newItem.save().then(item => res.json(item));
+    const newItem = new Item({
+      commonName: req.body.commonName,
+      bloomTime: req.body.bloomTime,
+      plantType: req.body.plantType,
+      appropriateLocation: req.body.appropriateLocation,
+      waterNeeds: req.body.waterNeeds,
+      sizeAtMaturity: req.body.sizeAtMaturity,
+      suitableSiteConditions: req.body.suitableSiteConditions
+    });
+    newItem.save().then(item => res.json(item));
+  });
 });
 
 // @route DELETE api/items/:id
