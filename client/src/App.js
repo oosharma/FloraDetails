@@ -3,7 +3,24 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
 
 import axios from "axios";
+<<<<<<< HEAD
 import { Table, Container, Display4, Row } from "bootstrap-4-react";
+=======
+import {
+  Navbar,
+  Nav,
+  Collapse,
+  Dropdown,
+  Form,
+  Table,
+  Container,
+  Display4,
+  Row,
+  Button,
+  Modal
+} from "bootstrap-4-react";
+import { modifyResult } from "./helper.js";
+>>>>>>> everything good until previous commit. Now branching to a UI
 import style from "./App.css";
 
 class App extends Component {
@@ -13,6 +30,7 @@ class App extends Component {
     regEmail: "",
     regPass: "",
     regMsg: null,
+    regModal: false,
     data: [],
     id: 0,
     commonName: null,
@@ -347,6 +365,7 @@ class App extends Component {
     this.setState({ regPass: event.currentTarget.value });
   }
   addReg() {
+    console.log("this got called");
     this.userRegister(
       this.state.regName,
       this.state.regEmail,
@@ -459,7 +478,53 @@ class App extends Component {
     return config;
   };
 
+  toggleRegModal = () => {
+    this.setState({ regModal: !this.state.regModal });
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onRegSubmit = e => {
+    e.preventDefault();
+    this.addReg();
+    this.toggleRegModal();
+    console.log("regmodal");
+  };
+
   render() {
+    const authLinkss = (
+      <>
+        <strong></strong>
+        <Nav.ItemLink>
+          <strong>
+            {this.state.auth.user
+              ? `Welcome ${this.state.auth.user.name}`
+              : null}
+          </strong>
+        </Nav.ItemLink>
+        <Nav.ItemLink active href="#" onClick={this.logout.bind(this)}>
+          Logout
+        </Nav.ItemLink>
+      </>
+    );
+    const guestLinkss = (
+      <>
+        <Nav.ItemLink
+          data-toggle="modal"
+          data-target="#registerModal"
+          active
+          href="#"
+        >
+          Register
+        </Nav.ItemLink>
+        <Nav.ItemLink data-toggle="modal" data-target="#loginModal" href="#">
+          Login
+        </Nav.ItemLink>
+      </>
+    );
+
     const authLinks = (
       <>
         <p>
@@ -478,7 +543,7 @@ class App extends Component {
 
     const guestLinks = (
       <>
-        <h1>Register</h1>
+        {/* <h1>Register</h1>
         <p>Name</p>
         <textarea
           value={this.state.regName}
@@ -497,7 +562,7 @@ class App extends Component {
         ></textarea>
         <p>
           <button onClick={this.addReg.bind(this)}>Register</button>
-        </p>
+        </p> */}
 
         <h1> Login</h1>
 
@@ -548,9 +613,125 @@ class App extends Component {
           ) : (
             <></>
           )}
-
+          {/* <Navbar expand="lg" light bg="light">
+            <Navbar.Brand href="#">Flora Details</Navbar.Brand>
+            <Navbar.Toggler target="#navbarSupportedContent" />
+            <Collapse navbar id="navbarSupportedContent">
+              <Navbar.Nav mr="auto" justifyContent="center">
+                <Nav.Item active>
+                  <Nav.Link href="#">Register</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="#">Login</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="#">Logout</Nav.Link>
+                </Nav.Item>
+              </Navbar.Nav>
+            </Collapse>
+          </Navbar> */}
+          <Navbar expand="lg" light bg="light">
+            <Navbar.Brand href="/">Flora Details</Navbar.Brand>
+            <Navbar.Toggler target="#navbarSupportedContent" />
+            <Collapse
+              justifyContent="center"
+              navbar
+              id="navbarSupportedContent"
+            >
+              <Nav>
+                {this.state.auth.isAuthorized === true
+                  ? authLinkss
+                  : guestLinkss}
+              </Nav>
+            </Collapse>
+          </Navbar>
           {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
-
+          <Modal
+            show={true}
+            isOpen={this.state.regModal}
+            toggle={this.toggleRegModal}
+            id="registerModal"
+            fade
+          >
+            <Modal.Dialog centered>
+              <Modal.Content>
+                <Modal.Header toggle={this.toggleRegModal}>
+                  <Modal.Title>Register</Modal.Title>
+                  <Modal.Close>
+                    <span aria-hidden="true">&times;</span>
+                  </Modal.Close>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form>
+                    <Form.Group>
+                      <label htmlFor="regName">Name</label>
+                      <Form.Input
+                        type="text"
+                        id="regName"
+                        name="regName"
+                        placeholder="Enter name"
+                        onChange={this.onChange}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <label htmlFor="regEmail">Email address</label>
+                      <Form.Input
+                        type="email"
+                        id="regEmail"
+                        name="regEmail"
+                        placeholder="Enter email"
+                        onChange={this.onChange}
+                      />
+                      <Form.Text text="muted">
+                        We'll never share your email with anyone else.
+                      </Form.Text>
+                    </Form.Group>
+                    <Form.Group>
+                      <label htmlFor="exampleInputPassword1">Password</label>
+                      <Form.Input
+                        type="password"
+                        id="regPass"
+                        name="regPass"
+                        placeholder="Password"
+                        onChange={this.onChange}
+                      />
+                    </Form.Group>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button secondary data-dismiss="modal">
+                    Close
+                  </Button>
+                  <Button
+                    primary
+                    data-dismiss="modal"
+                    onClick={this.onRegSubmit}
+                  >
+                    Save changes
+                  </Button>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal.Dialog>
+          </Modal>
+          <Modal id="loginModal" fade>
+            <Modal.Dialog centered>
+              <Modal.Content>
+                <Modal.Header>
+                  <Modal.Title>Modal title</Modal.Title>
+                  <Modal.Close>
+                    <span aria-hidden="true">&times;</span>
+                  </Modal.Close>
+                </Modal.Header>
+                <Modal.Body>Modal body text goes here.</Modal.Body>
+                <Modal.Footer>
+                  <Button secondary data-dismiss="modal">
+                    Close
+                  </Button>
+                  <Button primary>Save changes</Button>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal.Dialog>
+          </Modal>
           <SearchBar
             changeFetchedResults={this.changeFetchedResults.bind(this)}
           />

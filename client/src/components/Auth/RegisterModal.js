@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { Modal, Button } from "bootstrap-4-react";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  NavLink,
+  Alert
+} from "bootstrap-4-react";
 
 export default class RegisterModal extends Component {
   render() {
