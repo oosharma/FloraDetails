@@ -3,9 +3,6 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
 
 import axios from "axios";
-<<<<<<< HEAD
-import { Table, Container, Display4, Row } from "bootstrap-4-react";
-=======
 import {
   Navbar,
   Nav,
@@ -20,7 +17,6 @@ import {
   Modal
 } from "bootstrap-4-react";
 import { modifyResult } from "./helper.js";
->>>>>>> everything good until previous commit. Now branching to a UI
 import style from "./App.css";
 
 class App extends Component {
