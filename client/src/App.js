@@ -351,6 +351,60 @@ class App extends Component {
     this.setState({ sort: updatedSort }, () => {});
   }
 
+  logEmailChange(event) {
+    this.setState({ logEmail: event.currentTarget.value });
+  }
+  logPassChange(event) {
+    this.setState({ logPass: event.currentTarget.value });
+  }
+  addlog() {
+    console.log(this.state.logEmail);
+    this.userLogin(this.state.logEmail, this.state.logPass);
+  }
+
+  userLogin = (email, password) => {
+    const config = this.tokenConfig();
+    const body = JSON.stringify({ email, password });
+    console.log({ body });
+    axios
+      .post("api/auth", body, config)
+      .then(res => {
+        this.loginSuccess(res.data);
+        this.toggleLogModal();
+      })
+      .catch(err => {
+        //  errorUpdate(err);
+        this.updateError(err, "LOGIN_FAIL");
+      });
+  };
+
+  registerSuccess = res => {
+    let authUpdate = {
+      token: res.token,
+      isAuthorized: true,
+      isLoading: false,
+      user: res.user
+    };
+    console.log(res.user);
+    localStorage.setItem("token", res.token);
+    this.setState({ auth: authUpdate });
+    this.clearErrors();
+    window.location.reload(false);
+  };
+  loginSuccess = res => {
+    let authUpdate = {
+      token: res.token,
+      isAuthorized: true,
+      isLoading: false,
+      user: res.user
+    };
+    console.log(res.user);
+    localStorage.setItem("token", res.token);
+    this.setState({ auth: authUpdate });
+    this.clearErrors();
+    window.location.reload(false);
+  };
+
   regNameChange(event) {
     this.setState({ regName: event.currentTarget.value });
   }
@@ -447,12 +501,9 @@ class App extends Component {
     };
     this.setState({ auth: authUpdate });
 
-    let errorUpdate = {
-      msg: err.response.data,
-      status: err.response.status,
-      id: null
-    };
-    this.setState({ error: errorUpdate });
+  logout = () => {
+    this.clearAuth();
+    window.location.reload(false);
   };
 
   tokenConfig = () => {
@@ -631,22 +682,14 @@ class App extends Component {
               </Navbar.Nav>
             </Collapse>
           </Navbar> */}
-          <Navbar expand="lg" light bg="light">
-            <Navbar.Brand href="/">Flora Details</Navbar.Brand>
-            <Navbar.Toggler target="#navbarSupportedContent" />
-            <Collapse
-              justifyContent="center"
-              navbar
-              id="navbarSupportedContent"
-            >
-              <Nav>
-                {this.state.auth.isAuthorized === true
-                  ? authLinkss
-                  : guestLinkss}
-              </Nav>
-            </Collapse>
-          </Navbar>
-          {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
+
+          <Nav>
+            <Nav.ItemLink disabled href="/">
+              Flora Details
+            </Nav.ItemLink>
+            {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
+          </Nav>
+
           <Modal
             show={true}
             isOpen={this.state.regModal}
