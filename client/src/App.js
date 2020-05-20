@@ -475,7 +475,12 @@ class App extends Component {
   };
 
   toggleRegModal = () => {
+    this.setState({ regName: "", regEmail: "", regPass: "" });
     this.setState({ regModal: !this.state.regModal });
+  };
+  toggleLogModal = () => {
+    this.setState({ logName: "", logEmail: "", logPass: "" });
+    this.setState({ logModal: !this.state.logModal });
   };
 
   onChange = e => {
@@ -649,84 +654,119 @@ class App extends Component {
             id="registerModal"
             fade
           >
-            <Modal.Dialog centered>
-              <Modal.Content>
-                <Modal.Header toggle={this.toggleRegModal}>
-                  <Modal.Title>Register</Modal.Title>
-                  <Modal.Close>
-                    <span aria-hidden="true">&times;</span>
-                  </Modal.Close>
-                </Modal.Header>
-                <Modal.Body>
-                  <Form>
-                    <Form.Group>
-                      <label htmlFor="regName">Name</label>
-                      <Form.Input
-                        type="text"
-                        id="regName"
-                        name="regName"
-                        placeholder="Enter name"
-                        onChange={this.onChange}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <label htmlFor="regEmail">Email address</label>
-                      <Form.Input
-                        type="email"
-                        id="regEmail"
-                        name="regEmail"
-                        placeholder="Enter email"
-                        onChange={this.onChange}
-                      />
-                      <Form.Text text="muted">
-                        We'll never share your email with anyone else.
-                      </Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                      <label htmlFor="exampleInputPassword1">Password</label>
-                      <Form.Input
-                        type="password"
-                        id="regPass"
-                        name="regPass"
-                        placeholder="Password"
-                        onChange={this.onChange}
-                      />
-                    </Form.Group>
-                  </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button secondary data-dismiss="modal">
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    data-dismiss="modal"
-                    onClick={this.onRegSubmit}
-                  >
-                    Save changes
-                  </Button>
-                </Modal.Footer>
-              </Modal.Content>
-            </Modal.Dialog>
+            <div className="modal-header">
+              <h5 className="modal-title">Register</h5>
+            </div>
+            <div className="modal-body">
+              <Alert>
+                {this.state.error.id === "REGISTER_FAIL" ||
+                this.state.error.id === "LOGIN_FAIL" ? (
+                  <p>{this.state.error.msg.msg}</p>
+                ) : (
+                  <></>
+                )}
+              </Alert>
+              <Form>
+                <Form.Group>
+                  <label htmlFor="regName">Name</label>
+                  <Form.Input
+                    type="text"
+                    id="regName"
+                    name="regName"
+                    placeholder="Enter name"
+                    value={this.state.regName}
+                    onChange={this.onChange}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <label htmlFor="regEmail">Email address</label>
+                  <Form.Input
+                    type="email"
+                    id="regEmail"
+                    name="regEmail"
+                    value={this.state.regEmail}
+                    placeholder="Enter email"
+                    onChange={this.onChange}
+                  />
+                  <Form.Text text="muted">
+                    We'll never share your email with anyone else.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <label htmlFor="regPass">Password</label>
+                  <Form.Input
+                    type="password"
+                    id="regPass"
+                    name="regPass"
+                    placeholder="Password"
+                    value={this.state.regPass}
+                    onChange={this.onChange}
+                  />
+                </Form.Group>
+              </Form>
+            </div>
+            <div className="modal-footer">
+              <Button secondary onClick={this.toggleRegModal}>
+                Close
+              </Button>
+              <Button primary onClick={this.onRegSubmit}>
+                Save changes
+              </Button>
+            </div>
           </Modal>
-          <Modal id="loginModal" fade>
-            <Modal.Dialog centered>
-              <Modal.Content>
-                <Modal.Header>
-                  <Modal.Title>Modal title</Modal.Title>
-                  <Modal.Close>
-                    <span aria-hidden="true">&times;</span>
-                  </Modal.Close>
-                </Modal.Header>
-                <Modal.Body>Modal body text goes here.</Modal.Body>
-                <Modal.Footer>
-                  <Button secondary data-dismiss="modal">
-                    Close
-                  </Button>
-                  <Button primary>Save changes</Button>
-                </Modal.Footer>
-              </Modal.Content>
-            </Modal.Dialog>
+
+          <Modal
+            visible={this.state.logModal}
+            onClickBackdrop={this.modalBackdropClicked}
+          >
+            <div className="modal-header">
+              <h5 className="modal-title">Login</h5>
+            </div>
+            <div className="modal-body">
+              <Alert>
+                {this.state.error.id === "REGISTER_FAIL" ||
+                this.state.error.id === "LOGIN_FAIL" ? (
+                  <p>{this.state.error.msg.msg}</p>
+                ) : (
+                  <></>
+                )}
+              </Alert>
+              <Form>
+                <Form.Group>
+                  <label htmlFor="logEmail">Email address</label>
+                  <Form.Input
+                    type="email"
+                    id="logEmail"
+                    name="logEmail"
+                    placeholder="Enter email"
+                    value={this.state.logEmail}
+                    onChange={this.logEmailChange.bind(this)}
+                  />
+                  <Form.Text text="muted">
+                    We'll never share your email with anyone else.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <label htmlFor="logPass">Password</label>
+                  <Form.Input
+                    type="password"
+                    id="logPass"
+                    name="logPass"
+                    placeholder="Password"
+                    value={this.state.logPass}
+                    onChange={this.logPassChange.bind(this)}
+                  />
+                </Form.Group>
+              </Form>
+            </div>
+            <div className="modal-footer">
+              <Button secondary onClick={this.toggleLogModal}>
+                Close
+              </Button>
+              <Button primary onClick={this.addlog.bind(this)}>
+                Save changes
+              </Button>
+            </div>
           </Modal>
           <SearchBar
             changeFetchedResults={this.changeFetchedResults.bind(this)}
