@@ -235,7 +235,7 @@ class PlantTable extends Component {
           <>
             <Row>
               <Display4 className="mt-3">
-                Use Search to Find Plants and Pin them here
+                Table Empty, Use Search Bar to Add Plants
               </Display4>
             </Row>
           </>

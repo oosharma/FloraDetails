@@ -389,7 +389,8 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    window.location.reload(false);
+    let emptyArray = [];
+    this.setState({ fetchedResults: emptyArray });
   };
   loginSuccess = res => {
     let authUpdate = {
@@ -402,7 +403,8 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    window.location.reload(false);
+    let emptyArray = [];
+    this.setState({ fetchedResults: emptyArray });
   };
 
   regNameChange(event) {
@@ -579,17 +581,16 @@ class App extends Component {
 
     const authLinks = (
       <>
-        <p>
-          <strong>
-            {this.state.auth.user
-              ? `Welcome ${this.state.auth.user.name}`
-              : null}
-          </strong>
-        </p>
+        <h1 className={`mt-2`}>Public Table</h1>
 
-        <p>
-          <button onClick={this.logout.bind(this)}>Logout</button>
-        </p>
+        <PlantTable
+          tableData={data}
+          handleAddorDelete={this.handleDelete.bind(this)}
+          sortToggle={this.sortToggle.bind(this)}
+          sortColumn={this.state.sort[1].sortColumn}
+          sortDirection={this.state.sort[1].sortDirection}
+          utility="Delete"
+        />
       </>
     );
 
@@ -636,8 +637,8 @@ class App extends Component {
     );
     const personalTables = (
       <>
-        <h1>PersonalTable</h1>
         {this.state.auth.user && this.state.auth.user.items ? (
+<<<<<<< HEAD
           <PlantTable
             tableData={this.state.auth.user.items}
             sortToggle={this.sortToggle.bind(this)}
@@ -646,6 +647,22 @@ class App extends Component {
             handleAddorDelete={this.changeAddItem.bind(this)}
             utility="Personal Add"
           ></PlantTable>
+=======
+          <>
+            <Display4 className={`mt-2`}>
+              {this.state.auth.user.name}'s Table
+            </Display4>
+
+            <PlantTable
+              tableData={this.state.auth.user.items}
+              sortToggle={this.sortToggle.bind(this)}
+              sortColumn={this.state.sort[2].sortColumn}
+              sortDirection={this.state.sort[2].sortDirection}
+              handleAddorDelete={this.deletePersonalItem.bind(this)}
+              utility="Personal Delete"
+            ></PlantTable>
+          </>
+>>>>>>> updated title for users, fixed array iteration problem in userItem
         ) : null}
       </>
     );
@@ -825,9 +842,6 @@ class App extends Component {
             )}
             utility="Add"
           />
-          <Row>
-            <Display4 className="mt-3 mb-0">Pinned Results</Display4>
-          </Row>
 
           {this.state.auth.isAuthorized === true
             ? personalTables

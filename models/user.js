@@ -28,11 +28,7 @@ const UserSchema = new Schema({
     appropriateLocation: String,
     waterNeeds: String,
     sizeAtMaturity: String,
-    suitableSiteConditions: String,
-    item_time: {
-      type: Date,
-      default: Date.now
-    }
+    suitableSiteConditions: String
   }
 });
 
