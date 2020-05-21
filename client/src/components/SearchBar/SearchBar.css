@@ -1,0 +1,34 @@
+.colHead {
+  font-weight: 800;
+}
+
+.table-primary-1 {
+  border: 1px solid #dee2e6;
+
+  margin-top: 10px;
+}
+.input-primary {
+  border: 1px solid #dee2e6;
+}
+
+.default-button {
+  margin: 0px 0px 8px 10px;
+}
+
+.hideButton {
+  display: none !important;
+  font-size: 30px;
+}
+
+input.input-primary {
+  width: 300px;
+  margin: 0px 0px 10px 0px;
+}
+
+button.btn.btn-primary.default-button {
+  margin: 0px 10px 0px 0px;
+}
+
+.selectClass {
+  width: 300px;
+}
