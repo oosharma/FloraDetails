@@ -1,5 +1,5 @@
 {
-  "name": "reactexpress",
+  "name": "Flora Details",
   "version": "1.0.0",
   "description": "Starter kit for creating React and Express apps",
   "main": "server.js",
@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
-  "author": "Brad Traversy",
+  "author": "Abhishek Sharma",
   "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.19.2"
