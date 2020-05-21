@@ -639,16 +639,7 @@ class App extends Component {
     const personalTables = (
       <>
         {this.state.auth.user && this.state.auth.user.items ? (
-<<<<<<< HEAD
-          <PlantTable
-            tableData={this.state.auth.user.items}
-            sortToggle={this.sortToggle.bind(this)}
-            sortColumn={this.state.sort[2].sortColumn}
-            sortDirection={this.state.sort[2].sortDirection}
-            handleAddorDelete={this.changeAddItem.bind(this)}
-            utility="Personal Add"
-          ></PlantTable>
-=======
+ 
           <>
             <Display4 className={`mt-2`}>
               {this.state.auth.user.name}'s Table
@@ -663,10 +654,17 @@ class App extends Component {
               utility="Personal Delete"
             ></PlantTable>
           </>
->>>>>>> updated title for users, fixed array iteration problem in userItem
-        ) : null}
-      </>
-    );
+  ) :  (
+          <>
+            <Row>
+              <Display4 className="mt-3">
+                Table Empty, Use Search Bar to Add Plants
+              </Display4>
+            </Row>
+          </>
+        
+       
+    )}</>);
 
     // if (this.state.auth.isAuthorized) {
     //   {
