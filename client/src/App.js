@@ -10,19 +10,26 @@ import {
   Display4,
   Row,
   Button,
-  Modal
+  Alert
 } from "bootstrap-4-react";
+import Modal from "react-bootstrap4-modal";
+
 import { modifyResult } from "./helper.js";
 import style from "./App.css";
 
 class App extends Component {
   // initialize our state
   state = {
+    finalPublicTableCheck: false,
+    finalCheck: false,
     regName: "",
     regEmail: "",
     regPass: "",
     regMsg: null,
     regModal: false,
+    logEmail: "",
+    logPass: "",
+    logModal: false,
     data: [],
     id: 0,
     commonName: null,
@@ -197,8 +204,14 @@ class App extends Component {
   // fetch data from our data base
   getDataFromDb = () => {
     if (this.state.fetch) {
-      axios.get("/api/items").then(res => this.setState({ data: res.data }));
-      this.setState({ fetch: false });
+      axios
+        .get("/api/items")
+        .then(res => {
+          this.setState({ data: res.data, fetch: false });
+        })
+        .finally(() => {
+          this.setState({ finalPublicTableCheck: true });
+        });
     }
   };
 
@@ -227,7 +240,6 @@ class App extends Component {
   };
   deleteFromDB = idTodelete => {
     parseInt(idTodelete);
-    let config = this.tokenConfig();
 
     let objIdToDelete = null;
     this.state.data.forEach(dat => {
@@ -251,13 +263,6 @@ class App extends Component {
     var modifiedResult = modifyResult(result);
     this.setState({ fetchedResults: modifiedResult });
   };
-  checkDbEmpty = () => {
-    if (this.state.data.length <= 0) {
-      this.setState({ showPinned: false });
-    } else {
-      this.setState({ showPinned: true });
-    }
-  };
 
   sortToggle(column, utility) {
     let item = utility === "Add" ? 0 : 1;
@@ -271,14 +276,10 @@ class App extends Component {
     if (utility === "Personal Delete") {
       item = 2;
     }
-    if (utility === "personalDelete") {
-      item = 3;
-    }
-
     let updatedSort = this.state.sort;
-
     updatedSort[item].sortColumn = column;
 
+    // toggle sort direction
     if (
       this.state.sort[item].sortDirection === "none" ||
       this.state.sort[item].sortDirection === "descending"
@@ -287,33 +288,20 @@ class App extends Component {
     } else {
       updatedSort[item].sortDirection = "descending";
     }
-
-    this.setState({ sort: updatedSort }, () => {});
+    this.setState({ sort: updatedSort });
   }
 
-  logEmailChange(event) {
-    this.setState({ logEmail: event.currentTarget.value });
-  }
-  logPassChange(event) {
-    this.setState({ logPass: event.currentTarget.value });
-  }
-  addlog() {
-    console.log(this.state.logEmail);
-    this.userLogin(this.state.logEmail, this.state.logPass);
-  }
-
-  userLogin = (email, password) => {
+  userLogin = () => {
+    let email = this.state.logEmail;
+    let password = this.state.logPass;
     const config = this.tokenConfig();
     const body = JSON.stringify({ email, password });
-    console.log({ body });
     axios
       .post("api/auth", body, config)
       .then(res => {
         this.loginSuccess(res.data);
-        this.toggleLogModal();
       })
       .catch(err => {
-        //  errorUpdate(err);
         this.updateError(err, "LOGIN_FAIL");
       });
   };
@@ -325,13 +313,13 @@ class App extends Component {
       isLoading: false,
       user: res.user
     };
-    console.log(res.user);
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    let emptyArray = [];
-    this.setState({ fetchedResults: emptyArray });
+    this.clearSearchBarTable();
+    this.toggleRegModal();
   };
+
   loginSuccess = res => {
     let authUpdate = {
       token: res.token,
@@ -339,34 +327,37 @@ class App extends Component {
       isLoading: false,
       user: res.user
     };
-    console.log(res.user);
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
+    this.clearSearchBarTable();
+    this.toggleLogModal();
+  };
+
+  clearSearchBarTable = () => {
     let emptyArray = [];
     this.setState({ fetchedResults: emptyArray });
   };
 
-  regNameChange(event) {
-    this.setState({ regName: event.currentTarget.value });
-  }
-  regEmailChange(event) {
-    this.setState({ regEmail: event.currentTarget.value });
-  }
-  regPassChange(event) {
-    this.setState({ regPass: event.currentTarget.value });
-  }
-  addReg() {
-    console.log("this got called");
-    this.userRegister(
-      this.state.regName,
-      this.state.regEmail,
-      this.state.regPass
-    );
-  }
+  userRegister = () => {
+    let name = this.state.regName;
+    let email = this.state.regEmail;
+    let password = this.state.regPass;
+
+    const config = this.tokenConfig();
+    const body = JSON.stringify({ name, email, password });
+
+    axios
+      .post("api/users", body, config)
+      .then(res => {
+        this.registerSuccess(res.data);
+      })
+      .catch(err => {
+        this.updateError(err, "REGISTER_FAIL");
+      });
+  };
 
   userLoaded = res => {
-    console.log({ res });
     let authUpdate = {
       token: localStorage.getItem("token"),
       isAuthorized: true,
@@ -379,39 +370,9 @@ class App extends Component {
     this.clearErrors();
   };
 
-  userRegister = (name, email, password) => {
-    const config = this.tokenConfig();
-    const body = JSON.stringify({ name, email, password });
-    console.log({ body });
-    axios
-      .post("api/users", body, config)
-      .then(res => {
-        this.registerSuccess(res.data);
-      })
-      .catch(err => {
-        //  errorUpdate(err);
-        this.updateError(err);
-      });
-  };
-
-  userLoaded = res => {
-    console.log({ res });
-    let authUpdate = {
-      token: res.token,
-      isAuthorized: true,
-      isLoading: false,
-      user: res.user
-    };
-    console.log(res.user);
-    localStorage.setItem("token", res.token);
-    this.setState({ auth: authUpdate });
-    this.clearErrors();
-  };
-
   loadUser = () => {
     let authUpdate = { ...this.state.auth, isLoading: true };
     this.setState({ auth: authUpdate });
-    console.log(this.state.auth);
     const config = this.tokenConfig();
     console.log({ config });
     axios
@@ -422,6 +383,9 @@ class App extends Component {
       })
       .catch(err => {
         this.updateError(err);
+      })
+      .finally(() => {
+        this.setState({ finalCheck: true });
       });
   };
 
@@ -452,11 +416,11 @@ class App extends Component {
       user: null
     };
     this.setState({ auth: authUpdate });
+  };
 
   logout = () => {
     this.clearAuth();
-    let emptyArray = [];
-    this.setState({ fetchedResults: emptyArray });
+    this.clearSearchBarTable();
   };
 
   tokenConfig = () => {
@@ -483,6 +447,7 @@ class App extends Component {
     this.setState({ regModal: !this.state.regModal });
     this.clearErrors();
   };
+
   toggleLogModal = () => {
     this.setState({ logName: "", logEmail: "", logPass: "" });
     this.setState({ logModal: !this.state.logModal });
@@ -495,15 +460,12 @@ class App extends Component {
 
   onRegSubmit = e => {
     e.preventDefault();
-    this.addReg();
-    this.toggleRegModal();
-    console.log("regmodal");
+    this.userRegister();
   };
 
   render() {
-    const authLinkss = (
+    const authLinks = (
       <>
-        <strong></strong>
         <Nav.ItemLink>
           <strong>
             {this.state.auth.user
@@ -516,82 +478,74 @@ class App extends Component {
         </Nav.ItemLink>
       </>
     );
-    const guestLinkss = (
+    const guestLinks = (
       <>
-        <Nav.ItemLink
-          data-toggle="modal"
-          data-target="#registerModal"
-          active
-          href="#"
-        >
+        <Nav.ItemLink onClick={this.toggleRegModal} active href="#">
           Register
         </Nav.ItemLink>
-        <Nav.ItemLink data-toggle="modal" data-target="#loginModal" href="#">
+        <Nav.ItemLink onClick={this.toggleLogModal} href="#">
           Login
         </Nav.ItemLink>
       </>
     );
 
-    const authLinks = (
-      <>
-        <h1 className={`mt-2`}>Public Table</h1>
+    const { data } = this.state;
 
-        <PlantTable
-          tableData={data}
-          handleAddorDelete={this.handleDelete.bind(this)}
-          sortToggle={this.sortToggle.bind(this)}
-          sortColumn={this.state.sort[1].sortColumn}
-          sortDirection={this.state.sort[1].sortDirection}
-          utility="Delete"
-        />
+    const publicTables = (
+      <>
+        {this.state.finalPublicTableCheck ? (
+          <>
+            <h1 className={`mt-2`}>Public Table</h1>
+
+            <PlantTable
+              tableData={data}
+              handleAddorDelete={this.handleDelete.bind(this)}
+              sortToggle={this.sortToggle.bind(this)}
+              sortColumn={this.state.sort[1].sortColumn}
+              sortDirection={this.state.sort[1].sortDirection}
+              utility="Delete"
+            />
+          </>
+        ) : (
+          <></>
+        )}
       </>
     );
-
-    const guestLinks = (
+    const footer = (
       <>
-        {/* <h1>Register</h1>
-        <p>Name</p>
-        <textarea
-          value={this.state.regName}
-          onChange={this.regNameChange.bind(this)}
-        ></textarea>
-        <p>Email(s)</p>
-        <textarea
-          value={this.state.regEmail}
-          onChange={this.regEmailChange.bind(this)}
-        ></textarea>
-
-        <p>Password(s)</p>
-        <textarea
-          value={this.state.regPass}
-          onChange={this.regPassChange.bind(this)}
-        ></textarea>
-        <p>
-          <button onClick={this.addReg.bind(this)}>Register</button>
-        </p> */}
-
-        <h1> Login</h1>
-
-        <p>Email(s)</p>
-        <textarea
-          value={this.state.logEmail}
-          onChange={this.logEmailChange.bind(this)}
-        ></textarea>
-
-        <p>Password</p>
-        <textarea
-          value={this.state.logPass}
-          onChange={this.logPassChange.bind(this)}
-        ></textarea>
-        <p>
-          <button onClick={this.addlog.bind(this)}>Login</button>
-        </p>
+        <ul>
+          <li>
+            <p className={`mt-0 pb-0 mb-0 `}>
+              <em>
+                {" "}
+                This web-app is developed by{" "}
+                <a target="_blank" href="http://www.iamsharma.com">
+                  iamSharma
+                </a>{" "}
+                using the MERN stack (MongoDB, Express JS, React JS, Node JS)
+              </em>
+            </p>
+          </li>
+          <li>
+            <p className={`mt-0 pb-0 mb-0 `}>
+              <em>
+                {" "}
+                Checkout its source code on GitHub:{" "}
+                <a
+                  target="_blank"
+                  href="https://github.com/oosharma/FloraDetails"
+                >
+                  https://github.com/oosharma/FloraDetails
+                </a>
+              </em>
+            </p>
+          </li>
+        </ul>
       </>
     );
     const personalTables = (
       <>
         {this.state.auth.user && this.state.auth.user.items ? (
- 
           <>
             <Display4 className={`mt-2`}>
               {this.state.auth.user.name}'s Table
@@ -606,7 +560,7 @@ class App extends Component {
               utility="Personal Delete"
             ></PlantTable>
           </>
-  ) :  (
+        ) : (
           <>
             <Row>
               <Display4 className="mt-3">
@@ -614,9 +568,9 @@ class App extends Component {
               </Display4>
             </Row>
           </>
-        
-       
-    )}</>);
+        )}
+      </>
+    );
 
     // if (this.state.auth.isAuthorized) {
     //   {
@@ -626,207 +580,164 @@ class App extends Component {
 
     return (
       <>
-        <Container className="m-3 m-md-5 mt-0  ">
-          {this.state.error.id === "REGISTER_FAIL" ||
-          this.state.error.id === "LOGIN_FAIL" ? (
-            <p>{this.state.error.msg.msg}</p>
-          ) : (
-            <></>
-          )}
-          {/* <Navbar expand="lg" light bg="light">
-            <Navbar.Brand href="#">Flora Details</Navbar.Brand>
-            <Navbar.Toggler target="#navbarSupportedContent" />
-            <Collapse navbar id="navbarSupportedContent">
-              <Navbar.Nav mr="auto" justifyContent="center">
-                <Nav.Item active>
-                  <Nav.Link href="#">Register</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="#">Login</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="#">Logout</Nav.Link>
-                </Nav.Item>
-              </Navbar.Nav>
-            </Collapse>
-          </Navbar> */}
+        {this.state.finalCheck && this.state.finalPublicTableCheck ? (
+          <>
+            <>
+              <Container className="m-3 m-md-5 mt-0  ">
+                <Nav>
+                  <Nav.ItemLink disabled href="/">
+                    Flora Details
+                  </Nav.ItemLink>
+                  {this.state.auth.isAuthorized === true
+                    ? authLinks
+                    : guestLinks}
+                </Nav>
 
-          <Nav>
-            <Nav.ItemLink disabled href="/">
-              Flora Details
-            </Nav.ItemLink>
-            {this.state.auth.isAuthorized === true ? authLinks : guestLinks}
-          </Nav>
+                <Modal
+                  visible={this.state.regModal}
+                  onClickBackdrop={this.toggleRegModal}
+                >
+                  <div className="modal-header">
+                    <h5 className="modal-title">Register</h5>
+                  </div>
+                  <div className="modal-body">
+                    <Alert>
+                      {this.state.error.id === "REGISTER_FAIL" ||
+                      this.state.error.id === "LOGIN_FAIL" ? (
+                        <p>{this.state.error.msg.msg}</p>
+                      ) : (
+                        <></>
+                      )}
+                    </Alert>
+                    <Form>
+                      <Form.Group>
+                        <label htmlFor="regName">Name</label>
+                        <Form.Input
+                          type="text"
+                          id="regName"
+                          name="regName"
+                          placeholder="Enter name"
+                          value={this.state.regName}
+                          onChange={this.onChange}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <label htmlFor="regEmail">Email address</label>
+                        <Form.Input
+                          type="email"
+                          id="regEmail"
+                          name="regEmail"
+                          value={this.state.regEmail}
+                          placeholder="Enter email"
+                          onChange={this.onChange}
+                        />
+                        <Form.Text text="muted">
+                          We'll never share your email with anyone else.
+                        </Form.Text>
+                      </Form.Group>
+                      <Form.Group>
+                        <label htmlFor="regPass">Password</label>
+                        <Form.Input
+                          type="password"
+                          id="regPass"
+                          name="regPass"
+                          placeholder="Password"
+                          value={this.state.regPass}
+                          onChange={this.onChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </div>
+                  <div className="modal-footer">
+                    <Button secondary onClick={this.toggleRegModal}>
+                      Close
+                    </Button>
+                    <Button primary onClick={this.onRegSubmit}>
+                      Register
+                    </Button>
+                  </div>
+                </Modal>
 
-          <Modal
-            show={true}
-            isOpen={this.state.regModal}
-            toggle={this.toggleRegModal}
-            id="registerModal"
-            fade
-          >
-            <div className="modal-header">
-              <h5 className="modal-title">Register</h5>
-            </div>
-            <div className="modal-body">
-              <Alert>
-                {this.state.error.id === "REGISTER_FAIL" ||
-                this.state.error.id === "LOGIN_FAIL" ? (
-                  <p>{this.state.error.msg.msg}</p>
-                ) : (
-                  <></>
-                )}
-              </Alert>
-              <Form>
-                <Form.Group>
-                  <label htmlFor="regName">Name</label>
-                  <Form.Input
-                    type="text"
-                    id="regName"
-                    name="regName"
-                    placeholder="Enter name"
-                    value={this.state.regName}
-                    onChange={this.onChange}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <label htmlFor="regEmail">Email address</label>
-                  <Form.Input
-                    type="email"
-                    id="regEmail"
-                    name="regEmail"
-                    value={this.state.regEmail}
-                    placeholder="Enter email"
-                    onChange={this.onChange}
-                  />
-                  <Form.Text text="muted">
-                    We'll never share your email with anyone else.
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group>
-                  <label htmlFor="regPass">Password</label>
-                  <Form.Input
-                    type="password"
-                    id="regPass"
-                    name="regPass"
-                    placeholder="Password"
-                    value={this.state.regPass}
-                    onChange={this.onChange}
-                  />
-                </Form.Group>
-              </Form>
-            </div>
-            <div className="modal-footer">
-              <Button secondary onClick={this.toggleRegModal}>
-                Close
-              </Button>
-              <Button primary onClick={this.onRegSubmit}>
-                Register
-              </Button>
-            </div>
-          </Modal>
+                <Modal
+                  visible={this.state.logModal}
+                  onClickBackdrop={this.toggleLogModal}
+                >
+                  <div className="modal-header">
+                    <h5 className="modal-title">Login</h5>
+                  </div>
+                  <div className="modal-body">
+                    <Alert>
+                      {this.state.error.id === "REGISTER_FAIL" ||
+                      this.state.error.id === "LOGIN_FAIL" ? (
+                        <p>{this.state.error.msg.msg}</p>
+                      ) : (
+                        <></>
+                      )}
+                    </Alert>
+                    <Form>
+                      <Form.Group>
+                        <label htmlFor="logEmail">Email address</label>
+                        <Form.Input
+                          type="email"
+                          id="logEmail"
+                          name="logEmail"
+                          placeholder="Enter email"
+                          value={this.state.logEmail}
+                          onChange={this.onChange}
+                        />
+                        <Form.Text text="muted">
+                          We'll never share your email with anyone else.
+                        </Form.Text>
+                      </Form.Group>
+                      <Form.Group>
+                        <label htmlFor="logPass">Password</label>
+                        <Form.Input
+                          type="password"
+                          id="logPass"
+                          name="logPass"
+                          placeholder="Password"
+                          value={this.state.logPass}
+                          onChange={this.onChange}
+                        />
+                      </Form.Group>
+                    </Form>
+                  </div>
+                  <div className="modal-footer">
+                    <Button secondary onClick={this.toggleLogModal}>
+                      Close
+                    </Button>
+                    <Button primary onClick={this.userLogin.bind(this)}>
+                      Login
+                    </Button>
+                  </div>
+                </Modal>
 
-          <Modal
-            visible={this.state.logModal}
-            onClickBackdrop={this.modalBackdropClicked}
-          >
-            <div className="modal-header">
-              <h5 className="modal-title">Login</h5>
-            </div>
-            <div className="modal-body">
-              <Alert>
-                {this.state.error.id === "REGISTER_FAIL" ||
-                this.state.error.id === "LOGIN_FAIL" ? (
-                  <p>{this.state.error.msg.msg}</p>
-                ) : (
-                  <></>
-                )}
-              </Alert>
-              <Form>
-                <Form.Group>
-                  <label htmlFor="logEmail">Email address</label>
-                  <Form.Input
-                    type="email"
-                    id="logEmail"
-                    name="logEmail"
-                    placeholder="Enter email"
-                    value={this.state.logEmail}
-                    onChange={this.logEmailChange.bind(this)}
-                  />
-                  <Form.Text text="muted">
-                    We'll never share your email with anyone else.
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group>
-                  <label htmlFor="logPass">Password</label>
-                  <Form.Input
-                    type="password"
-                    id="logPass"
-                    name="logPass"
-                    placeholder="Password"
-                    value={this.state.logPass}
-                    onChange={this.logPassChange.bind(this)}
-                  />
-                </Form.Group>
-              </Form>
-            </div>
-            <div className="modal-footer">
-              <Button secondary onClick={this.toggleLogModal}>
-                Close
-              </Button>
-              <Button primary onClick={this.addlog.bind(this)}>
-                Login
-              </Button>
-            </div>
-          </Modal>
-          <SearchBar
-            changeFetchedResults={this.changeFetchedResults.bind(this)}
-          />
-          <PlantTable
-            tableData={this.state.fetchedResults}
-            sortToggle={this.sortToggle.bind(this)}
-            sortColumn={this.state.sort[0].sortColumn}
-            sortDirection={this.state.sort[0].sortDirection}
-            handleAddorDelete={this.changeAddItem.bind(
-              this,
-              this.state.auth.isAuthorized
-            )}
-            utility="Add"
-          />
+                <SearchBar
+                  changeFetchedResults={this.changeFetchedResults.bind(this)}
+                />
+                <PlantTable
+                  tableData={this.state.fetchedResults}
+                  sortToggle={this.sortToggle.bind(this)}
+                  sortColumn={this.state.sort[0].sortColumn}
+                  sortDirection={this.state.sort[0].sortDirection}
+                  handleAddorDelete={this.changeAddItem.bind(
+                    this,
+                    this.state.auth.isAuthorized
+                  )}
+                  utility="Add"
+                />
 
-          {this.state.auth.isAuthorized === true
-            ? personalTables
-            : publicTables}
+                {this.state.auth.isAuthorized === true
+                  ? personalTables
+                  : publicTables}
 
-          <ul>
-            <li>
-              <p className={`mt-0 pb-0 mb-0 `}>
-                <em>
-                  {" "}
-                  This web-app is developed by{" "}
-                  <a target="_blank" href="http://www.iamsharma.com">
-                    iamSharma
-                  </a>{" "}
-                  using the MERN stack (MongoDB, Express JS, React JS, Node JS)
-                </em>
-              </p>
-            </li>
-            <li>
-              <p className={`mt-0 pb-0 mb-0 `}>
-                <em>
-                  {" "}
-                  Checkout its source code on GitHub:{" "}
-                  <a
-                    target="_blank"
-                    href="https://github.com/oosharma/FloraDetails"
-                  >
-                    https://github.com/oosharma/FloraDetails
-                  </a>
-                </em>
-              </p>
-            </li>
-          </ul>
-        </Container>
+                {footer}
+              </Container>
+            </>
+          </>
+        ) : (
+          <></>
+        )}
       </>
     );
   }

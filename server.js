@@ -12,12 +12,6 @@ const router = express.Router();
 // DB Config
 const db = require("./config/keys").mongoURI;
 
-// Connect to MOngo
-// this is our MongoDB database
-// const dbRoute =
-//   "  mongodb+srv://sharma1:r4vkrGErFFClbk99@plantbase-ogvmk.mongodb.net/test?retryWrites=true&w=majority";
-// "mongodb+srv://sharma1:PlantBase%238@cluster0-ogvmk.mongodb.net/test?retryWrites=true&w=majority";
-// connects our back end code with the database
 mongoose
   .connect(db, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log("MongoDB connected..."))
@@ -56,7 +50,7 @@ router.delete("/deleteData", (req, res) => {
   });
 });
 
-// this is our create methid
+// this is our create method
 // this method adds new data in our database
 router.post("/putData", (req, res) => {
   let data = new Data();

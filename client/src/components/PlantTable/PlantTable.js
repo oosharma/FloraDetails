@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { modifyResult } from "../../helper.js";
+import { modifyResult, sortByAttAndOrder } from "../../helper.js";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 
 import {
@@ -17,10 +17,7 @@ class PlantTable extends Component {
     this.state = {
       mode: "", // either search results or db results
       btnVariant: "primary",
-      btnClass: "btn-primary",
-      sortDirection: "none",
-      sortColumn: "none",
-      sortedResults: this.props.tableData
+      btnClass: "btn-primary"
     };
   }
 
@@ -33,91 +30,6 @@ class PlantTable extends Component {
     this.props.handleAddorDelete(result);
   };
 
-  sortToggle(column) {
-    if (this.state.sortDirection === "none") {
-      this.setState({ sortDirection: "ascending" });
-    }
-    if (this.state.sortDirection === "ascending") {
-      this.setState({ sortDirection: "descending" });
-    }
-    if (this.state.sortDirection === "descending") {
-      this.setState({ sortDirection: "ascending" });
-    }
-    let that = this;
-    this.setState({ sortColumn: column }, () => {
-      let unsortedArray = this.props.tableData;
-      console.log(unsortedArray.sort(this.sortByAttAndOrder()));
-      console.log(unsortedArray);
-      that.setState({ sortedResults: [...unsortedArray] });
-    });
-  }
-  sortSwitch(item) {
-    if (this.state.sortColumn === "none") {
-      return (
-        <>
-          <FaSortDown></FaSortDown>
-          <FaSortUp></FaSortUp>
-        </>
-      );
-    }
-    if (this.state.sortColumn === item) {
-      if (this.state.sortDirection === "ascending") {
-        return <FaSortUp></FaSortUp>;
-      } else {
-        return <FaSortDown></FaSortDown>;
-      }
-    }
-  }
-
-  sortByAttAndOrder() {
-    let att = "";
-    console.log(this.state.sortColumn);
-    switch (this.state.sortColumn) {
-      case "Name":
-        att = "commonName";
-        break;
-      case "Bloom Time":
-        att = "bloomTime";
-        break;
-      case "Plant Type":
-        att = "plantType";
-        break;
-      case "Water Needs":
-        att = "waterNeeds";
-        break;
-      case "Size at Maturity":
-        att = "sizeAtMaturity";
-        break;
-      case "Suitable Site Conditions":
-        att = "suitableSiteConditions";
-        break;
-      case "Appropriate Location":
-        att = "appropriateLocation";
-        break;
-      default:
-        break;
-    }
-    console.log({ att });
-    let that = this;
-    return function(a, b) {
-      if (that.state.sortDirection === "ascending") {
-        if (a[att] > b[att]) {
-          return 1;
-        } else if (a[att] < b[att]) {
-          return -1;
-        }
-        return 0;
-      } else {
-        if (a[att] > b[att]) {
-          return -1;
-        } else if (a[att] < b[att]) {
-          return 1;
-        }
-        return 0;
-      }
-    };
-  }
-
   // columnItems = () => {
 
   //   let returnValue = items.map(item => {
@@ -129,6 +41,23 @@ class PlantTable extends Component {
   //   return returnValue;
   // };
 
+  sortSwitch(item) {
+    if (this.props.sortColumn === "none") {
+      return (
+        <>
+          <FaSortDown></FaSortDown>
+          <FaSortUp></FaSortUp>
+        </>
+      );
+    }
+    if (this.props.sortColumn === item) {
+      if (this.props.sortDirection === "ascending") {
+        return <FaSortUp></FaSortUp>;
+      } else {
+        return <FaSortDown></FaSortDown>;
+      }
+    }
+  }
   columnItems = () => {
     const items = [
       "Name",
@@ -142,7 +71,10 @@ class PlantTable extends Component {
 
     let columns = items.map(item => {
       return (
-        <th onClick={this.sortToggle.bind(this, item)} className="head-1">
+        <th
+          onClick={this.props.sortToggle.bind(this, item, this.props.utility)}
+          className="head-1"
+        >
           {item}
           {this.sortSwitch(item)}
         </th>
@@ -153,8 +85,29 @@ class PlantTable extends Component {
 
   render() {
     if (this.props.tableData && this.props.tableData.length > 0) {
+      let tableData = this.props.tableData;
+      tableData.sort(
+        sortByAttAndOrder(this.props.sortColumn, this.props.sortDirection)
+      );
+
       return (
         <>
+          {this.props.utility === "Add" ? (
+            <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
+              <em>
+                {" "}
+                Search results are being pulled from{" "}
+                <a href="http://www.datasf.org" target="_blank">
+                  {" "}
+                  www.DataSF.org
+                </a>
+              </em>
+            </p>
+          ) : (
+            <p className={`mt-0 pb-0 mb-0 `}>
+              <em> Pinned results are being pulled from connected database</em>
+            </p>
+          )}
           <Table className={`table-primary-1 mt-1`} striped bordered hover>
             <thead>
               <tr>
@@ -164,7 +117,7 @@ class PlantTable extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.tableData.map(result => {
+              {tableData.map(result => {
                 return (
                   <>
                     <tr>

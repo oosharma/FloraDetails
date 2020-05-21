@@ -9,6 +9,8 @@ import {
   Display4
 } from "bootstrap-4-react";
 import Select from "react-select";
+import { modifyResult, filterArr } from "../../helper.js";
+import options from "./optionsData.js";
 
 class SearchBar extends Component {
   constructor(props) {
@@ -82,16 +84,6 @@ class SearchBar extends Component {
         >
           Clear Results
         </Button>
-        <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
-          <em>
-            {" "}
-            Search results are being pulled from{" "}
-            <a href="http://www.datasf.org" target="_blank">
-              {" "}
-              www.DataSF.org
-            </a>
-          </em>
-        </p>
       </>
     );
   }
@@ -119,11 +111,16 @@ class SearchBar extends Component {
             this.setState({ classTable: "showButton" });
             this.setState({ searchButtonTerm: "Search" });
           } else {
+            this.setState({ searchButtonTerm: "Search" });
+
             window.alert("Sorry, item details are not available");
             this.setState({ classTable: "showButton" });
-            this.setState({ searchButtonTerm: "Search" });
           }
 
+          const filteredResults = filterArr(this.state.results);
+          this.setState({
+            results: filteredResults
+          });
           this.props.changeFetchedResults(this.state.results);
         })
         .catch(err => {
@@ -133,6 +130,7 @@ class SearchBar extends Component {
           this.setState({ heading: "Select Another Plant to Search" });
           this.forceUpdate();
           this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
+          this.setState({ searchButtonTerm: "Search" });
         });
     } else {
       window.alert("Please enter a search term");
@@ -173,6 +171,7 @@ class SearchBar extends Component {
     console.log(query);
     return query;
   };
+  1;
 
   handleAdvancedFilterClick = () => {
     if (this.state.filterShow) {
@@ -181,7 +180,5 @@ class SearchBar extends Component {
       this.setState({ filterClass: "showButton" });
     }
   };
-
-  searchQuery(term) {}
 }
 export default SearchBar;
