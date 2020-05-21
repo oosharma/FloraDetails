@@ -505,7 +505,8 @@ class App extends Component {
 
   logout = () => {
     this.clearAuth();
-    window.location.reload(false);
+    let emptyArray = [];
+    this.setState({ fetchedResults: emptyArray });
   };
 
   tokenConfig = () => {
@@ -770,7 +771,7 @@ class App extends Component {
                 Close
               </Button>
               <Button primary onClick={this.onRegSubmit}>
-                Save changes
+                Register
               </Button>
             </div>
           </Modal>
@@ -824,7 +825,7 @@ class App extends Component {
                 Close
               </Button>
               <Button primary onClick={this.addlog.bind(this)}>
-                Save changes
+                Login
               </Button>
             </div>
           </Modal>
