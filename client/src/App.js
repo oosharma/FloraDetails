@@ -4,12 +4,8 @@ import PlantTable from "./components/PlantTable/PlantTable";
 
 import axios from "axios";
 import {
-  Navbar,
   Nav,
-  Collapse,
-  Dropdown,
   Form,
-  Table,
   Container,
   Display4,
   Row,
@@ -40,6 +36,7 @@ class App extends Component {
     idToDelete: null,
     idToUpdate: null,
     objectToUpdate: null,
+    addItem: {},
     addName: "",
     addbloomTime: "",
     addplantType: "",
@@ -71,6 +68,7 @@ class App extends Component {
       user: null
     }
   };
+<<<<<<< HEAD
   addToDB = () => {
     this.putDataToDB(this.state.addName);
   };
@@ -100,10 +98,64 @@ class App extends Component {
     if (!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
-    }
-    this.loadUser();
-  }
+=======
 
+  changeAddItem = (isAuthorized, result) => {
+    // var modifiedResult = modifyResult(result);
+    if (isAuthorized) {
+      this.addPersonalItem(result);
+    } else {
+      let addItem = JSON.parse(JSON.stringify(result));
+      this.setState({ addItem: addItem }, () => {
+        this.addToPulicDB();
+      });
+    }
+  };
+
+  addPersonalItem = result => {
+    console.log("result is " + JSON.stringify(result));
+    let postFlag = true;
+    if (
+      this.state.auth.user &&
+      this.state.auth.user.items &&
+      this.state.auth.user.items.length > 0
+    ) {
+      let dataSet = new Set();
+      this.state.auth.user.items.forEach(arrayItem => {
+        dataSet.add(arrayItem.commonName);
+      });
+      if (dataSet.has(result.commonName)) {
+        window.alert("item already in pinned section");
+        postFlag = false;
+      }
+>>>>>>> refactoring
+    }
+    if (postFlag) {
+      let config = this.tokenConfig();
+      const {
+        commonName,
+        bloomTime,
+        plantType,
+        appropriateLocation,
+        waterNeeds,
+        sizeAtMaturity,
+        suitableSiteConditions,
+        ...otherPart
+      } = result;
+      //  const config = this.tokenConfig();
+      //  const body = JSON.stringify({ name, email, password });
+      const updatedObj = {
+        commonName,
+        bloomTime,
+        plantType,
+        appropriateLocation,
+        waterNeeds,
+        sizeAtMaturity,
+        suitableSiteConditions
+      };
+      let updateRow = [updatedObj];
+
+<<<<<<< HEAD
   userRegister(regName, regEmail, regPass) {
     //attemptRegistering.
     // on success
@@ -144,6 +196,25 @@ class App extends Component {
   // to create new query into our data base
   putDataToDB = commonName => {
     let config = this.tokenConfig();
+=======
+      let updateItem =
+        this.state.auth.user && this.state.auth.user.items
+          ? [...updateRow, ...this.state.auth.user.items]
+          : updateRow;
+
+      const body = {
+        filter: { email: this.state.auth.user.email },
+        update: { items: updateItem }
+      };
+      axios.post("api/userItem", body, config).then(res => {
+        this.loadUser();
+      });
+    }
+  };
+
+  addToPulicDB = () => {
+    let commonName = this.state.addItem.commonName;
+>>>>>>> refactoring
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -159,16 +230,15 @@ class App extends Component {
       axios
         .post("/api/items", {
           id: idToBeAdded,
-          commonName: commonName,
-          bloomTime: this.state.addbloomTime,
-          plantType: this.state.addplantType,
-          appropriateLocation: this.state.addappropriateLocation,
-          waterNeeds: this.state.addwaterNeeds,
-          sizeAtMaturity: this.state.addsizeAtMaturity,
-          suitableSiteConditions: this.state.addsuitableSiteConditions
+          commonName: this.state.addItem.commonName,
+          bloomTime: this.state.addItem.bloomTime,
+          plantType: this.state.addItem.plantType,
+          appropriateLocation: this.state.addItem.appropriateLocation,
+          waterNeeds: this.state.addItem.waterNeeds,
+          sizeAtMaturity: this.state.addItem.sizeAtMaturity,
+          suitableSiteConditions: this.state.addItem.suitableSiteConditions
         })
         .then(res => {
-          console.log(res);
           this.setState({ fetch: true });
         })
         .catch(err => {
@@ -176,12 +246,36 @@ class App extends Component {
         });
     }
   };
-  // handleSort = result => {
-  //   let newObj = this.state.sort;
-  //   newObj[result.i].sortColumn = result.sortColumn;
-  //   newObj[result.i].sortDirection = result.sortDirection;
-  //   this.setState({ sort: newObj });
-  // };
+
+  // when component mounts, first thing it does is fetch all existing data in our db
+  // then we incorporate a polling logic so that we can easily see if our db has
+  // changed and implement those changes into our UI
+  componentDidMount() {
+    this.getDataFromDb();
+    if (!this.state.intervalIsSet) {
+      let interval = setInterval(this.getDataFromDb, 500);
+      this.setState({ intervalIsSet: interval });
+    }
+    this.loadUser();
+  }
+
+  // never let a process live forever
+  // always kill a process everytime we are done using it
+  componentWillUnmount() {
+    if (this.state.intervalIsSet) {
+      clearInterval(this.state.intervalIsSet);
+      this.setState({ intervalIsSet: null });
+    }
+  }
+
+  // our first get method that uses our backend api to
+  // fetch data from our data base
+  getDataFromDb = () => {
+    if (this.state.fetch) {
+      axios.get("/api/items").then(res => this.setState({ data: res.data }));
+      this.setState({ fetch: false });
+    }
+  };
 
   deletePersonalItem = result => {
     //  const config = this.tokenConfig();
@@ -196,62 +290,9 @@ class App extends Component {
       filter: { email: this.state.auth.user.email },
       update: { items: updateItem }
     };
-    console.log(body);
     axios.post("api/userItem", body, config).then(res => {
-      this.personalDeleteSuccess(res.data);
+      this.loadUser();
     });
-  };
-
-  addPersonalItem = result => {
-    let postFlag = true;
-    if (
-      this.state.auth.user &&
-      this.state.auth.user.items &&
-      this.state.auth.user.items.length > 0
-    ) {
-      let dataSet = new Set();
-      this.state.auth.user.items.forEach(arrayItem => {
-        dataSet.add(arrayItem.commonName);
-      });
-      if (dataSet.has(result.common_name)) {
-        window.alert("item already in pinned section");
-        postFlag = false;
-      }
-    }
-    if (postFlag) {
-      let config = this.tokenConfig();
-
-      //  const config = this.tokenConfig();
-      //  const body = JSON.stringify({ name, email, password });
-      let updateRow = [
-        {
-          id: 1,
-          commonName: result.common_name,
-          bloomTime: result.bloom_time,
-          plantType: result.plant_type,
-          appropriateLocation: result.appropriate_location,
-          waterNeeds: result.water_needs,
-          sizeAtMaturity: result.size_at_maturity,
-          suitableSiteConditions: result.suitable_site_conditions
-        }
-      ];
-
-      let updateItem =
-        this.state.auth.user && this.state.auth.user.items
-          ? [...updateRow, ...this.state.auth.user.items]
-          : updateRow;
-
-      const body = {
-        filter: { email: this.state.auth.user.email },
-        update: { items: updateItem }
-      };
-      console.log(body);
-      axios.post("api/userItem", body, config).then(res => {
-        console.log("this is response");
-        console.log(res.data);
-        this.personalAddSuccess(res.data);
-      });
-    }
   };
 
   handleDelete = result => {
@@ -259,6 +300,7 @@ class App extends Component {
       this.deleteFromDB(this.state.idToDelete)
     );
   };
+<<<<<<< HEAD
   changeFetchedResults = result => {
     var modifiedResult = modifyResult(result);
 
@@ -267,6 +309,8 @@ class App extends Component {
 
   // our delete method that uses our backend api
   // to remove existing database information
+=======
+>>>>>>> refactoring
   deleteFromDB = idTodelete => {
     parseInt(idTodelete);
     let config = this.tokenConfig();
@@ -288,6 +332,7 @@ class App extends Component {
       });
   };
 
+<<<<<<< HEAD
   // our update method that uses our backend api
   // to overwrite existing data base information
   updateDB = (idToUpdate, updateToApply) => {
@@ -310,6 +355,12 @@ class App extends Component {
     // });
     // this.setState({ emptyDB: 1 });
     return "Empty... please create a search and pin your favorite plants";
+=======
+  // Being passed to SearchBar
+  changeFetchedResults = result => {
+    var modifiedResult = modifyResult(result);
+    this.setState({ fetchedResults: modifiedResult });
+>>>>>>> refactoring
   };
   checkDbEmpty = () => {
     if (this.state.data.length <= 0) {
@@ -454,7 +505,12 @@ class App extends Component {
       });
   };
 
+<<<<<<< HEAD
   registerSuccess = res => {
+=======
+  userLoaded = res => {
+    console.log({ res });
+>>>>>>> refactoring
     let authUpdate = {
       token: res.token,
       isAuthorized: true,
