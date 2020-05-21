@@ -434,7 +434,16 @@ class App extends Component {
     this.setState({ error: errorUpdate });
   };
   updateError = (err, id) => {
-    console.log("herwerwe");
+    this.clearAuth();
+    let errorUpdate = {
+      msg: err.response.data,
+      status: err.response.status,
+      id: id
+    };
+    console.log("this.state.error.msg.msg");
+    this.setState({ error: errorUpdate });
+  };
+  clearAuth = () => {
     localStorage.removeItem("token");
     let authUpdate = {
       token: localStorage.getItem("token"),
@@ -472,10 +481,12 @@ class App extends Component {
   toggleRegModal = () => {
     this.setState({ regName: "", regEmail: "", regPass: "" });
     this.setState({ regModal: !this.state.regModal });
+    this.clearErrors();
   };
   toggleLogModal = () => {
     this.setState({ logName: "", logEmail: "", logPass: "" });
     this.setState({ logModal: !this.state.logModal });
+    this.clearErrors();
   };
 
   onChange = e => {
