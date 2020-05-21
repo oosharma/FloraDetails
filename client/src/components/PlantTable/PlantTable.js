@@ -130,7 +130,7 @@ class PlantTable extends Component {
                             this.handleAddorDelete(result);
                           }}
                         >
-                          {this.props.utility}
+                          {this.props.utility === "Add" ? "Add" : "Delete"}
                         </Button>
                       </td>
 

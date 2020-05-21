@@ -466,13 +466,6 @@ class App extends Component {
   render() {
     const authLinks = (
       <>
-        <Nav.ItemLink>
-          <strong>
-            {this.state.auth.user
-              ? `Welcome ${this.state.auth.user.name}`
-              : null}
-          </strong>
-        </Nav.ItemLink>
         <Nav.ItemLink active href="#" onClick={this.logout.bind(this)}>
           Logout
         </Nav.ItemLink>
@@ -495,7 +488,7 @@ class App extends Component {
       <>
         {this.state.finalPublicTableCheck ? (
           <>
-            <h1 className={`mt-2`}>Public Table</h1>
+            <Display4 className={`mt-2`}>Public Table</Display4>
 
             <PlantTable
               tableData={data}
@@ -511,43 +504,37 @@ class App extends Component {
         )}
       </>
     );
+
     const footer = (
       <>
-        <ul>
-          <li>
-            <p className={`mt-0 pb-0 mb-0 `}>
-              <em>
-                {" "}
-                This web-app is developed by{" "}
-                <a target="_blank" href="http://www.iamsharma.com">
-                  iamSharma
-                </a>{" "}
-                using the MERN stack (MongoDB, Express JS, React JS, Node JS)
-              </em>
-            </p>
-          </li>
-          <li>
-            <p className={`mt-0 pb-0 mb-0 `}>
-              <em>
-                {" "}
-                Checkout its source code on GitHub:{" "}
-                <a
-                  target="_blank"
-                  href="https://github.com/oosharma/FloraDetails"
-                >
-                  https://github.com/oosharma/FloraDetails
-                </a>
-              </em>
-            </p>
-          </li>
-        </ul>
+        <p className={`mt-0 pb-0 mb-0 `}>
+          <em>
+            {" "}
+            This web-app is developed by{" "}
+            <a target="_blank" href="http://www.iamsharma.com">
+              iamSharma
+            </a>{" "}
+            using the MERN stack (MongoDB, Express JS, React JS, Node JS)
+          </em>
+        </p>
+
+        <p className={`mt-0 pb-0 mb-0 `}>
+          <em>
+            {" "}
+            Checkout its source code on GitHub:{" "}
+            <a target="_blank" href="https://github.com/oosharma/FloraDetails">
+              https://github.com/oosharma/FloraDetails
+            </a>
+          </em>
+        </p>
       </>
     );
+
     const personalTables = (
       <>
         {this.state.auth.user && this.state.auth.user.items ? (
           <>
-            <Display4 className={`mt-2`}>
+            <Display4 className={`mt-3`}>
               {this.state.auth.user.name}'s Table
             </Display4>
 
@@ -572,12 +559,6 @@ class App extends Component {
       </>
     );
 
-    // if (this.state.auth.isAuthorized) {
-    //   {
-    //     return personalTables;
-    //   }
-    // }
-
     return (
       <>
         {this.state.finalCheck && this.state.finalPublicTableCheck ? (
@@ -585,7 +566,7 @@ class App extends Component {
             <>
               <Container className="m-3 m-md-5 mt-0  ">
                 <Nav>
-                  <Nav.ItemLink disabled href="/">
+                  <Nav.ItemLink className="pl-0" disabled href="/">
                     Flora Details
                   </Nav.ItemLink>
                   {this.state.auth.isAuthorized === true
@@ -711,7 +692,11 @@ class App extends Component {
                     </Button>
                   </div>
                 </Modal>
-
+                {this.state.auth.user ? (
+                  <p className="mb-0 mt-3">
+                    <em> Welcome {this.state.auth.user.name},</em>
+                  </p>
+                ) : null}
                 <SearchBar
                   changeFetchedResults={this.changeFetchedResults.bind(this)}
                 />
@@ -732,6 +717,7 @@ class App extends Component {
                   : publicTables}
 
                 {footer}
+                {/* {secondFooter} */}
               </Container>
             </>
           </>
