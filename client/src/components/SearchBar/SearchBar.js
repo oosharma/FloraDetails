@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import style from "./SearchBar.css";
-import {
-  Row,
-  Col,
-  Button,
-  Container,
-  Table,
-  Display4
-} from "bootstrap-4-react";
+import { Row, Col, Button, Display4 } from "bootstrap-4-react";
 import Select from "react-select";
 import { modifyResult, filterArr } from "../../helper.js";
 import options from "./optionsData.js";
@@ -149,6 +142,7 @@ class SearchBar extends Component {
     let emptyArray = [];
     this.setState({ results: emptyArray });
     this.props.changeFetchedResults(emptyArray);
+    this.setState({ selectedOption: null });
   };
 
   showClear = () => {

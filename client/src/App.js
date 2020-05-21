@@ -467,17 +467,17 @@ class App extends Component {
     const authLinks = (
       <>
         <Nav.ItemLink active href="#" onClick={this.logout.bind(this)}>
-          Logout
+          <em>Logout</em>
         </Nav.ItemLink>
       </>
     );
     const guestLinks = (
       <>
         <Nav.ItemLink onClick={this.toggleRegModal} active href="#">
-          Register
+          <em> Register</em>
         </Nav.ItemLink>
         <Nav.ItemLink onClick={this.toggleLogModal} href="#">
-          Login
+          <em>Login</em>
         </Nav.ItemLink>
       </>
     );
@@ -567,7 +567,7 @@ class App extends Component {
               <Container className="m-3 m-md-5 mt-0  ">
                 <Nav>
                   <Nav.ItemLink className="pl-0" disabled href="/">
-                    Flora Details
+                    <em>Flora Details</em>
                   </Nav.ItemLink>
                   {this.state.auth.isAuthorized === true
                     ? authLinks
@@ -666,9 +666,6 @@ class App extends Component {
                           value={this.state.logEmail}
                           onChange={this.onChange}
                         />
-                        <Form.Text text="muted">
-                          We'll never share your email with anyone else.
-                        </Form.Text>
                       </Form.Group>
                       <Form.Group>
                         <label htmlFor="logPass">Password</label>
