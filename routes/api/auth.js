@@ -3,23 +3,19 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-
 const auth = require("../../middleware/auth");
-
-// Item Model
 
 const User = require("../../models/user");
 
 // @route GET api/auth
-// @desc Authenticat user
+// @desc Authenticate user
 // @access public
 router.post("/", (req, res) => {
-  //  res.send("ddd");
   const { email, password } = req.body;
 
   // Simple validation
   if (!email || !password) {
-    return res.status(400).json({ msg: "lease enter all fields" });
+    return res.status(400).json({ msg: "Please enter all fields" });
   }
 
   // Check for existing user

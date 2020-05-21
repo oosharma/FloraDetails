@@ -68,37 +68,6 @@ class App extends Component {
       user: null
     }
   };
-<<<<<<< HEAD
-  addToDB = () => {
-    this.putDataToDB(this.state.addName);
-  };
-  changeAddItem = result => {
-    // var modifiedResult = modifyResult(result);
-    this.setState(
-      {
-        addName: result.commonName,
-        addbloomTime: result.bloomTime,
-        addplantType: result.plantType,
-        addappropriateLocation: result.appropriateLocation,
-        addwaterNeeds: result.waterNeeds,
-        addsizeAtMaturity: result.sizeAtMaturity,
-        addsuitableSiteConditions: result.suitableSiteConditions
-      },
-      () => {
-        this.addToDB();
-      }
-    );
-  };
-
-  // when component mounts, first thing it does is fetch all existing data in our db
-  // then we incorporate a polling logic so that we can easily see if our db has
-  // changed and implement those changes into our UI
-  componentDidMount() {
-    this.getDataFromDb();
-    if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({ intervalIsSet: interval });
-=======
 
   changeAddItem = (isAuthorized, result) => {
     // var modifiedResult = modifyResult(result);
@@ -128,7 +97,6 @@ class App extends Component {
         window.alert("item already in pinned section");
         postFlag = false;
       }
->>>>>>> refactoring
     }
     if (postFlag) {
       let config = this.tokenConfig();
@@ -155,48 +123,6 @@ class App extends Component {
       };
       let updateRow = [updatedObj];
 
-<<<<<<< HEAD
-  userRegister(regName, regEmail, regPass) {
-    //attemptRegistering.
-    // on success
-    // localStorage.setItem("token", res.token);
-    //do same for login
-  }
-
-  // never let a process live forever
-  // always kill a process everytime we are done using it
-  componentWillUnmount() {
-    if (this.state.intervalIsSet) {
-      clearInterval(this.state.intervalIsSet);
-      this.setState({ intervalIsSet: null });
-    }
-  }
-
-  // just a note, here, in the front end, we use the id key of our data object
-  // in order to identify which we want to Update or delete.
-  // for our back end, we use the object id assigned by MongoDB to modify
-  // data base entries
-
-  // our first get method that uses our backend api to
-  // fetch data from our data base
-  getDataFromDb = () => {
-    if (this.state.fetch) {
-      axios.get("/api/items").then(res => this.setState({ data: res.data }));
-      this.setState({ fetch: false });
-    }
-  };
-
-  // getDataFromDb = () => {
-  //   fetch("http://localhost:3001/api/getData")
-  //     .then(data => data.json())
-  //     .then(res => this.setState({ data: res.data }));
-  // };
-
-  // our put method that uses our backend api
-  // to create new query into our data base
-  putDataToDB = commonName => {
-    let config = this.tokenConfig();
-=======
       let updateItem =
         this.state.auth.user && this.state.auth.user.items
           ? [...updateRow, ...this.state.auth.user.items]
@@ -214,7 +140,6 @@ class App extends Component {
 
   addToPulicDB = () => {
     let commonName = this.state.addItem.commonName;
->>>>>>> refactoring
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -300,17 +225,6 @@ class App extends Component {
       this.deleteFromDB(this.state.idToDelete)
     );
   };
-<<<<<<< HEAD
-  changeFetchedResults = result => {
-    var modifiedResult = modifyResult(result);
-
-    this.setState({ fetchedResults: modifiedResult });
-  };
-
-  // our delete method that uses our backend api
-  // to remove existing database information
-=======
->>>>>>> refactoring
   deleteFromDB = idTodelete => {
     parseInt(idTodelete);
     let config = this.tokenConfig();
@@ -332,35 +246,10 @@ class App extends Component {
       });
   };
 
-<<<<<<< HEAD
-  // our update method that uses our backend api
-  // to overwrite existing data base information
-  updateDB = (idToUpdate, updateToApply) => {
-    let objIdToUpdate = null;
-    parseInt(idToUpdate);
-    this.state.data.forEach(dat => {
-      if (dat.id === idToUpdate) {
-        objIdToUpdate = dat._id;
-      }
-    });
-
-    axios.post("http://localhost:3001/api/updateData", {
-      id: objIdToUpdate,
-      update: { message: updateToApply }
-    });
-  };
-  handleEmptyDb = () => {
-    // this.setState({
-    //   emptyDB: true
-    // });
-    // this.setState({ emptyDB: 1 });
-    return "Empty... please create a search and pin your favorite plants";
-=======
   // Being passed to SearchBar
   changeFetchedResults = result => {
     var modifiedResult = modifyResult(result);
     this.setState({ fetchedResults: modifiedResult });
->>>>>>> refactoring
   };
   checkDbEmpty = () => {
     if (this.state.data.length <= 0) {
@@ -505,12 +394,8 @@ class App extends Component {
       });
   };
 
-<<<<<<< HEAD
-  registerSuccess = res => {
-=======
   userLoaded = res => {
     console.log({ res });
->>>>>>> refactoring
     let authUpdate = {
       token: res.token,
       isAuthorized: true,
