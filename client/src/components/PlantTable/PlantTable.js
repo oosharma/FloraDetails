@@ -186,11 +186,9 @@ class PlantTable extends Component {
       ) {
         return (
           <>
-            <Row>
-              <Display4 className="mt-3">
-                Table Empty, Use Search Bar to Add Plants
-              </Display4>
-            </Row>
+            <Display4 className="mt-3">
+              Table Empty, Use Search Bar to Add Plants
+            </Display4>
           </>
         );
       }

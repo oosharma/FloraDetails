@@ -19,62 +19,67 @@ import style from "./App.css";
 
 class App extends Component {
   // initialize our state
-  state = {
-    finalPublicTableCheck: false,
-    finalCheck: false,
-    regName: "",
-    regEmail: "",
-    regPass: "",
-    regMsg: null,
-    regModal: false,
-    logEmail: "",
-    logPass: "",
-    logModal: false,
-    data: [],
-    id: 0,
-    commonName: null,
-    bloomTime: null,
-    plantType: null,
-    appropriateLocation: null,
-    waterNeeds: null,
-    sizeAtMaturity: null,
-    suitableSiteConditions: null,
-    intervalIsSet: false,
-    idToDelete: null,
-    idToUpdate: null,
-    objectToUpdate: null,
-    addItem: {},
-    addName: "",
-    addbloomTime: "",
-    addplantType: "",
-    addappropriateLocation: "",
-    addwaterNeeds: "",
-    addsizeAtMaturity: "",
-    addsuitableSiteConditions: "",
-    emptyDB: 0,
-    showPinned: true,
-    deleteBtnVariant: "primary",
-    deleteBtnClass: "btn-primary",
-    fetch: true,
-    test: null,
-    sort: [
-      { sortDirection: "none", sortColumn: "none" },
-      { sortDirection: "none", sortColumn: "none" },
-      { sortDirection: "none", sortColumn: "none" },
-      { sortDirection: "none", sortColumn: "none" }
-    ],
-    error: {
-      msg: null,
-      status: null,
-      id: null
-    },
-    auth: {
-      token: localStorage.getItem("token"),
-      isAuthorized: null,
-      isLoading: false,
-      user: null
-    }
-  };
+  constructor(props) {
+    super(props);
+    this.searchBarElement = React.createRef();
+
+    this.state = {
+      finalPublicTableCheck: false,
+      finalCheck: false,
+      regName: "",
+      regEmail: "",
+      regPass: "",
+      regMsg: null,
+      regModal: false,
+      logEmail: "",
+      logPass: "",
+      logModal: false,
+      data: [],
+      id: 0,
+      commonName: null,
+      bloomTime: null,
+      plantType: null,
+      appropriateLocation: null,
+      waterNeeds: null,
+      sizeAtMaturity: null,
+      suitableSiteConditions: null,
+      intervalIsSet: false,
+      idToDelete: null,
+      idToUpdate: null,
+      objectToUpdate: null,
+      addItem: {},
+      addName: "",
+      addbloomTime: "",
+      addplantType: "",
+      addappropriateLocation: "",
+      addwaterNeeds: "",
+      addsizeAtMaturity: "",
+      addsuitableSiteConditions: "",
+      emptyDB: 0,
+      showPinned: true,
+      deleteBtnVariant: "primary",
+      deleteBtnClass: "btn-primary",
+      fetch: true,
+      test: null,
+      sort: [
+        { sortDirection: "none", sortColumn: "none" },
+        { sortDirection: "none", sortColumn: "none" },
+        { sortDirection: "none", sortColumn: "none" },
+        { sortDirection: "none", sortColumn: "none" }
+      ],
+      error: {
+        msg: null,
+        status: null,
+        id: null
+      },
+      auth: {
+        token: localStorage.getItem("token"),
+        isAuthorized: null,
+        isLoading: false,
+        user: null
+      }
+    };
+  }
 
   changeAddItem = (isAuthorized, result) => {
     // var modifiedResult = modifyResult(result);
@@ -318,6 +323,7 @@ class App extends Component {
     this.clearErrors();
     this.clearSearchBarTable();
     this.toggleRegModal();
+    this.searchBarElement.current.handleClearButtonClick();
   };
 
   loginSuccess = res => {
@@ -332,6 +338,7 @@ class App extends Component {
     this.clearErrors();
     this.clearSearchBarTable();
     this.toggleLogModal();
+    this.searchBarElement.current.handleClearButtonClick();
   };
 
   clearSearchBarTable = () => {
@@ -421,6 +428,7 @@ class App extends Component {
   logout = () => {
     this.clearAuth();
     this.clearSearchBarTable();
+    this.searchBarElement.current.handleClearButtonClick();
   };
 
   tokenConfig = () => {
@@ -488,16 +496,26 @@ class App extends Component {
       <>
         {this.state.finalPublicTableCheck ? (
           <>
-            <Display4 className={`mt-2`}>Public Table</Display4>
+            {data.length > 0 ? (
+              <>
+                <Display4 className={`mt-3`}>Public's Table</Display4>
 
-            <PlantTable
-              tableData={data}
-              handleAddorDelete={this.handleDelete.bind(this)}
-              sortToggle={this.sortToggle.bind(this)}
-              sortColumn={this.state.sort[1].sortColumn}
-              sortDirection={this.state.sort[1].sortDirection}
-              utility="Delete"
-            />
+                <PlantTable
+                  tableData={data}
+                  handleAddorDelete={this.handleDelete.bind(this)}
+                  sortToggle={this.sortToggle.bind(this)}
+                  sortColumn={this.state.sort[1].sortColumn}
+                  sortDirection={this.state.sort[1].sortDirection}
+                  utility="Delete"
+                />
+              </>
+            ) : (
+              <>
+                <Display4 className={`mt-3`}>
+                  Public's Table is Empty, Use Search to Add Items{" "}
+                </Display4>
+              </>
+            )}
           </>
         ) : (
           <></>
@@ -514,18 +532,17 @@ class App extends Component {
             <a target="_blank" href="http://www.iamsharma.com">
               iamSharma
             </a>{" "}
-            using the MERN stack (MongoDB, Express JS, React JS, Node JS)
-          </em>
-        </p>
-
-        <p className={`mt-0 pb-0 mb-0 `}>
-          <em>
-            {" "}
+            using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
+            authentication is implemented with JSON Web Tokens and Bcrypt JS.
             Checkout its source code on GitHub:{" "}
             <a target="_blank" href="https://github.com/oosharma/FloraDetails">
               https://github.com/oosharma/FloraDetails
             </a>
           </em>
+        </p>
+
+        <p className={`mt-0 pb-0 mb-0 `}>
+          <em> </em>
         </p>
       </>
     );
@@ -534,26 +551,42 @@ class App extends Component {
       <>
         {this.state.auth.user && this.state.auth.user.items ? (
           <>
-            <Display4 className={`mt-3`}>
-              {this.state.auth.user.name}'s Table
-            </Display4>
+            {this.state.auth.user.items.length > 0 ? (
+              <>
+                <Display4 className={`mt-3`}>
+                  {this.state.auth.user.name}'s Table
+                </Display4>
 
-            <PlantTable
-              tableData={this.state.auth.user.items}
-              sortToggle={this.sortToggle.bind(this)}
-              sortColumn={this.state.sort[2].sortColumn}
-              sortDirection={this.state.sort[2].sortDirection}
-              handleAddorDelete={this.deletePersonalItem.bind(this)}
-              utility="Personal Delete"
-            ></PlantTable>
+                <PlantTable
+                  tableData={this.state.auth.user.items}
+                  sortToggle={this.sortToggle.bind(this)}
+                  sortColumn={this.state.sort[2].sortColumn}
+                  sortDirection={this.state.sort[2].sortDirection}
+                  handleAddorDelete={this.deletePersonalItem.bind(this)}
+                  utility="Personal Delete"
+                ></PlantTable>
+              </>
+            ) : (
+              <>
+                <Display4 className={`mt-3`}>
+                  {this.state.auth.user.name}'s Table is Empty, Use Search Bar
+                  to Add Plants
+                </Display4>
+              </>
+            )}
           </>
         ) : (
           <>
-            <Row>
-              <Display4 className="mt-3">
-                Table Empty, Use Search Bar to Add Plants
-              </Display4>
-            </Row>
+            {this.state.auth.user ? (
+              <>
+                <Display4 className="mt-3">
+                  {this.state.auth.user.name}'s Table is Empty, Use Search Bar
+                  to Add Plants
+                </Display4>
+              </>
+            ) : (
+              <></>
+            )}
           </>
         )}
       </>
@@ -695,6 +728,7 @@ class App extends Component {
                   </p>
                 ) : null}
                 <SearchBar
+                  ref={this.searchBarElement}
                   changeFetchedResults={this.changeFetchedResults.bind(this)}
                 />
                 <PlantTable

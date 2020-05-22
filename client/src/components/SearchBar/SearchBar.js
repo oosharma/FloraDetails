@@ -143,6 +143,7 @@ class SearchBar extends Component {
     this.setState({ results: emptyArray });
     this.props.changeFetchedResults(emptyArray);
     this.setState({ selectedOption: null });
+    this.setState({ heading: "Select a Plant and Click on Search" });
   };
 
   showClear = () => {
