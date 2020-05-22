@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { modifyResult, sortByAttAndOrder } from "../../helper.js";
-import { FaSortDown, FaSortUp } from "react-icons/fa";
-
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
+import "./PlantTable.css";
 import {
   Row,
   Col,
@@ -45,16 +45,16 @@ class PlantTable extends Component {
     if (this.props.sortColumn === "none") {
       return (
         <>
-          <FaSortDown></FaSortDown>
-          <FaSortUp></FaSortUp>
+          <FaSort className="pl-2"></FaSort>
+          {/* <FaSortUp></FaSortUp> */}
         </>
       );
     }
     if (this.props.sortColumn === item) {
       if (this.props.sortDirection === "ascending") {
-        return <FaSortUp></FaSortUp>;
+        return <FaSortUp className="pl-2"></FaSortUp>;
       } else {
-        return <FaSortDown></FaSortDown>;
+        return <FaSortDown className="pl-2"></FaSortDown>;
       }
     }
   }
@@ -70,8 +70,17 @@ class PlantTable extends Component {
     ];
 
     let columns = items.map(item => {
+      let minWidth;
+      if (item.length >= 20) {
+        minWidth = "250px";
+      } else if (item.length > 15) {
+        minWidth = "200px";
+      } else {
+        minWidth = "150px";
+      }
       return (
         <th
+          style={{ minWidth: minWidth }}
           onClick={this.props.sortToggle.bind(this, item, this.props.utility)}
           className="head-1"
         >
@@ -93,7 +102,9 @@ class PlantTable extends Component {
       return (
         <>
           {this.props.utility === "Add" ? (
-            <p className={`${this.state.classTable} mt-3 pb-0 mb-0`}>
+            <p
+              className={`${this.state.classTable} mt-3 pb-0 mb-0 width-check`}
+            >
               <em>
                 {" "}
                 Search results are being pulled from{" "}
@@ -104,14 +115,19 @@ class PlantTable extends Component {
               </em>
             </p>
           ) : (
-            <p className={`mt-0 pb-0 mb-0 `}>
+            <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
               <em> Pinned results are being pulled from connected database</em>
             </p>
           )}
-          <Table className={`table-primary-1 mt-1`} striped bordered hover>
+          <Table
+            className={`table-primary-1 mt-1 pr-2 table-responsive width-check `}
+            striped
+            bordered
+            hover
+          >
             <thead>
               <tr>
-                <th>Action</th>
+                <th style={{ minWidth: "120px" }}>Action</th>
 
                 {this.columnItems()}
               </tr>
@@ -186,7 +202,7 @@ class PlantTable extends Component {
       ) {
         return (
           <>
-            <Display4 className="mt-3">
+            <Display4 className="mt-3 width-check">
               Table Empty, Use Search Bar to Add Plants
             </Display4>
           </>

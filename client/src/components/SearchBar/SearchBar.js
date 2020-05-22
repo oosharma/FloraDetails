@@ -40,43 +40,41 @@ class SearchBar extends Component {
     const { selectedOption } = this.state;
     return (
       <>
-        <container>
-          <Display4>{this.state.heading}</Display4>
-          <Row>
-            <Col>
-              <Select
-                value={selectedOption}
-                onChange={this.handleSelectChange}
-                options={options}
-                className="selectClass"
-              />
-            </Col>
-          </Row>
-          <br></br>
-          <Button
-            variant="primary"
-            className="btn-primary default-button"
-            type="button"
-            onSubmit={() => {
-              this.handleButtonClick();
-            }}
-            onClick={() => {
-              this.handleButtonClick();
-              //  this.props.changeFetchedResults(this.state.results);
-            }}
-          >
-            {this.state.searchButtonTerm}
-          </Button>
-          <Button
-            variant="primary"
-            className={`btn-primary default-button ${this.state.classN}`}
-            onClick={() => {
-              this.handleClearButtonClick();
-            }}
-          >
-            Clear Results
-          </Button>
-        </container>
+        <Display4 className="width-check">{this.state.heading}</Display4>
+        <Row>
+          <Col>
+            <Select
+              value={selectedOption}
+              onChange={this.handleSelectChange}
+              options={options}
+              className="selectClass pr-1"
+            />
+          </Col>
+        </Row>
+        <br></br>
+        <Button
+          variant="primary"
+          className="btn-primary default-button"
+          type="button"
+          onSubmit={() => {
+            this.handleButtonClick();
+          }}
+          onClick={() => {
+            this.handleButtonClick();
+            //  this.props.changeFetchedResults(this.state.results);
+          }}
+        >
+          {this.state.searchButtonTerm}
+        </Button>
+        <Button
+          variant="primary"
+          className={`btn-primary default-button ${this.state.classN}`}
+          onClick={() => {
+            this.handleClearButtonClick();
+          }}
+        >
+          Clear Results
+        </Button>
       </>
     );
   }

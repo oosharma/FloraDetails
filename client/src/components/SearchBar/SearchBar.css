@@ -6,6 +6,7 @@
   border: 1px solid #dee2e6;
 
   margin-top: 10px;
+  /* max-width: 100%; */
 }
 .input-primary {
   border: 1px solid #dee2e6;
@@ -29,6 +30,8 @@ button.btn.btn-primary.default-button {
   margin: 0px 10px 0px 0px;
 }
 
-.selectClass {
-  width: 300px;
+@media only screen and (min-width: 350px) {
+  .selectClass {
+    width: 313px;
+  }
 }

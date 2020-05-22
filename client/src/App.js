@@ -498,7 +498,9 @@ class App extends Component {
           <>
             {data.length > 0 ? (
               <>
-                <Display4 className={`mt-3`}>Public's Table</Display4>
+                <Display4 className={`mt-3 width-check`}>
+                  Public's Table
+                </Display4>
 
                 <PlantTable
                   tableData={data}
@@ -511,7 +513,7 @@ class App extends Component {
               </>
             ) : (
               <>
-                <Display4 className={`mt-3`}>
+                <Display4 className={`mt-3 width-check`}>
                   Public's Table is Empty, Use Search to Add Items{" "}
                 </Display4>
               </>
@@ -525,7 +527,7 @@ class App extends Component {
 
     const footer = (
       <>
-        <p className={`mt-0 pb-0 mb-0 `}>
+        <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
           <em>
             {" "}
             This web-app is developed by{" "}
@@ -540,10 +542,6 @@ class App extends Component {
             </a>
           </em>
         </p>
-
-        <p className={`mt-0 pb-0 mb-0 `}>
-          <em> </em>
-        </p>
       </>
     );
 
@@ -553,7 +551,7 @@ class App extends Component {
           <>
             {this.state.auth.user.items.length > 0 ? (
               <>
-                <Display4 className={`mt-3`}>
+                <Display4 className={`mt-3 width-check`}>
                   {this.state.auth.user.name}'s Table
                 </Display4>
 
@@ -568,7 +566,7 @@ class App extends Component {
               </>
             ) : (
               <>
-                <Display4 className={`mt-3`}>
+                <Display4 className={`mt-3 width-check`}>
                   {this.state.auth.user.name}'s Table is Empty, Use Search Bar
                   to Add Plants
                 </Display4>
@@ -579,7 +577,7 @@ class App extends Component {
           <>
             {this.state.auth.user ? (
               <>
-                <Display4 className="mt-3">
+                <Display4 className="mt-3 width-check">
                   {this.state.auth.user.name}'s Table is Empty, Use Search Bar
                   to Add Plants
                 </Display4>
@@ -597,7 +595,7 @@ class App extends Component {
         {this.state.finalCheck && this.state.finalPublicTableCheck ? (
           <>
             <>
-              <Container className="m-3 m-md-5 mt-0  ">
+              <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2  p-4 ">
                 <Nav>
                   <Nav.ItemLink className="pl-0" disabled href="/">
                     <em>Flora Details</em>
@@ -723,7 +721,7 @@ class App extends Component {
                   </div>
                 </Modal>
                 {this.state.auth.user ? (
-                  <p className="mb-0 mt-3">
+                  <p className="mb-0 mt-3 width-check">
                     <em> Welcome {this.state.auth.user.name},</em>
                   </p>
                 ) : null}
