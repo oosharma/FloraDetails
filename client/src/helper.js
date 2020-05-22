@@ -4,6 +4,7 @@ export function modifyResult(result) {
   for (let item of result) {
     for (let key in item) {
       item[key] = item[key].replace(/;/g, ", ");
+      item[key] = item[key].charAt(0).toUpperCase() + item[key].slice(1);
       let modKey = key.split("_");
       for (let i = 1; i < modKey.length; i++) {
         modKey[i] = modKey[i].charAt(0).toUpperCase() + modKey[i].slice(1);

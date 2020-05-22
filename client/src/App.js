@@ -492,6 +492,12 @@ class App extends Component {
 
     const { data } = this.state;
 
+    const addedItems = this.state.auth.user
+      ? this.state.auth.user.items
+        ? this.state.auth.user.items
+        : null
+      : this.state.data;
+
     const publicTables = (
       <>
         {this.state.finalPublicTableCheck ? (
@@ -730,6 +736,7 @@ class App extends Component {
                   changeFetchedResults={this.changeFetchedResults.bind(this)}
                 />
                 <PlantTable
+                  addedItems={addedItems}
                   tableData={this.state.fetchedResults}
                   sortToggle={this.sortToggle.bind(this)}
                   sortColumn={this.state.sort[0].sortColumn}

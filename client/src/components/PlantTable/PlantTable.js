@@ -78,6 +78,7 @@ class PlantTable extends Component {
       } else {
         minWidth = "150px";
       }
+
       return (
         <th
           style={{ minWidth: minWidth }}
@@ -93,6 +94,14 @@ class PlantTable extends Component {
   };
 
   render() {
+    const addedItems = this.props.addedItems;
+    let dataSet = new Set();
+    if (addedItems) {
+      addedItems.forEach(arrayItem => {
+        dataSet.add(arrayItem.commonName);
+      });
+    }
+
     if (this.props.tableData && this.props.tableData.length > 0) {
       let tableData = this.props.tableData;
       tableData.sort(
@@ -140,13 +149,21 @@ class PlantTable extends Component {
                       <td>
                         <Button
                           variant={`${this.state.btnVariant}`}
-                          className={`${this.state.btnClass} default-button`}
+                          className={`${this.state.btnClass} default-button ${
+                            dataSet.has(result.commonName) ? "disabled" : ""
+                          }`}
                           type="button"
                           onClick={() => {
                             this.handleAddorDelete(result);
                           }}
                         >
-                          {this.props.utility === "Add" ? "Add" : "Delete"}
+                          {this.props.utility === "Add" ? (
+                            <>
+                              {dataSet.has(result.commonName) ? "Added" : "Add"}
+                            </>
+                          ) : (
+                            "Delete"
+                          )}
                         </Button>
                       </td>
 
