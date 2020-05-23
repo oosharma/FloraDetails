@@ -1,41 +1,41 @@
 @media only screen and (min-width: 350px) {
   .width-check {
-    width: 320px;
+    width: 320px !important;
   }
 }
 
-@media only screen and (min-width: 520px) {
+@media only screen and (min-width: 550px) {
   .width-check {
-    width: 468px;
+    width: 468px !important;
   }
 }
 
 @media only screen and (min-width: 740px) {
   .width-check {
-    width: 614px;
+    width: 614px !important;
   }
 }
 
 @media only screen and (min-width: 860px) {
   .width-check {
-    width: 758px;
+    width: 758px !important;
   }
 }
 
 @media only screen and (min-width: 1170px) {
   .width-check {
-    width: 964px;
+    width: 964px !important;
   }
 }
 
 @media only screen and (min-width: 1400px) {
   .width-check {
-    width: 1217px;
+    width: 1217px !important;
   }
 }
 
 @media only screen and (min-width: 1550px) {
   .width-check {
-    width: 1423px;
+    width: 1423px !important;
   }
 }
