@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import style from "./SearchBar.css";
-import { Row, Col, Button, Display4 } from "bootstrap-4-react";
+import { Row, Col, Button, Display4, BDiv } from "bootstrap-4-react";
 import Select from "react-select";
 import { modifyResult, filterArr } from "../../helper.js";
 import options from "./optionsData.js";
@@ -27,7 +27,9 @@ class SearchBar extends Component {
       value: "",
       selectedOption: null,
       addBtnVariant: "primary",
-      addBtnClass: "btn-primary"
+      addBtnClass: "btn-primary",
+      showCondition: null,
+      showProperty: null
     };
   }
 
@@ -37,9 +39,52 @@ class SearchBar extends Component {
   };
 
   render() {
-    const { selectedOption } = this.state;
+    const { selectedOption, showCondition, showProperty } = this.state;
+    const selectCondition = {
+      width: "150px"
+    };
+
     return (
       <>
+        <React.Fragment>
+          <BDiv display="flex" flex="row" mb="3">
+            <BDiv p="2">
+              <Select
+                // value={selectWhere}
+                onChange={this.handleSelectChange}
+                options={options}
+                className="selectClass pr-1"
+                display="inline"
+              />
+            </BDiv>
+
+            {showCondition && (
+              <BDiv p="2" style={selectCondition}>
+                <Select
+                  // value={selectCondition}
+                  onChange={this.handleSelectChange}
+                  options={options}
+                  className="pr-1"
+                  display="inline"
+                  style={selectCondition}
+                />
+              </BDiv>
+            )}
+
+            {showProperty && (
+              <BDiv p="2">
+                <Select
+                  // value={selectProperty}
+                  onChange={this.handleSelectChange}
+                  options={options}
+                  className="selectClass pr-1"
+                  display="inline"
+                />
+              </BDiv>
+            )}
+          </BDiv>
+        </React.Fragment>
+
         <Display4 className="width-check">{this.state.heading}</Display4>
         <Row>
           <Col>
@@ -48,6 +93,7 @@ class SearchBar extends Component {
               onChange={this.handleSelectChange}
               options={options}
               className="selectClass pr-1"
+              display="inline"
             />
           </Col>
         </Row>
