@@ -1,4 +1,4 @@
-const nameOptions = [
+const nameValue = [
     {
       value: "Accolade Elm",
       label: "Accolade Elm"
@@ -2802,5 +2802,5 @@ const nameOptions = [
     }
   ];
   
-  export default nameOptions;
+  export default nameValue;
   

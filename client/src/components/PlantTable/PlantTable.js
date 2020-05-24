@@ -21,11 +21,6 @@ class PlantTable extends Component {
     };
   }
 
-  handleSelectChange = selectedOption => {
-    this.setState({ selectedOption });
-    this.setState({ term: selectedOption.label });
-  };
-
   handleAddorDelete = result => {
     this.props.handleAddorDelete(result);
   };

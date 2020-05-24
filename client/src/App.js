@@ -94,7 +94,6 @@ class App extends Component {
   };
 
   addPersonalItem = result => {
-    console.log("result is " + JSON.stringify(result));
     let postFlag = true;
     if (
       this.state.auth.user &&
@@ -256,7 +255,6 @@ class App extends Component {
       .delete(`/api/items/${idTodelete}`)
       .then(() => {
         this.setState({ fetch: true });
-        console.log("herree");
       })
       .catch(() => {
         this.setState({ fetch: true });
@@ -381,12 +379,10 @@ class App extends Component {
     let authUpdate = { ...this.state.auth, isLoading: true };
     this.setState({ auth: authUpdate });
     const config = this.tokenConfig();
-    console.log({ config });
     axios
       .get("api/auth/user", config)
       .then(res => {
         this.userLoaded(res);
-        console.log("user Loaded");
       })
       .catch(err => {
         this.updateError(err);
@@ -411,7 +407,6 @@ class App extends Component {
       status: err.response.status,
       id: id
     };
-    console.log("this.state.error.msg.msg");
     this.setState({ error: errorUpdate });
   };
   clearAuth = () => {

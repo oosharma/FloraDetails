@@ -1,4 +1,158 @@
-const nameOptions = [
+const bloomConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: "like",
+      label: "Contains"
+    }
+  ];
+  
+  
+  const siteConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: "like",
+      label: "Contains"
+    }
+  ];
+  
+  
+  const locationConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: "like",
+      label: "Contains"
+    }
+  ];
+  
+  
+  const nameConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: "like",
+      label: "Contains"
+    }
+  ];
+  
+  
+
+  const sizeConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: ">",
+      label: ">"
+    },
+    {
+      value: "<",
+      label: "<"
+    }
+  ];
+
+  const sizeValues = [
+    {
+      value: "1",
+      label: "1"
+    }
+  ];
+  
+  
+
+  const typeConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    }
+  ];
+  
+  
+
+  const waterConditions = [
+    {
+      value: "=",
+      label: "Equals"
+    },
+    {
+      value: "like",
+      label: "Contains"
+    }
+  ];
+  
+  
+
+  const bloomValues = [
+    {
+      value: "Spring",
+      label: "Spring"
+    },
+    {
+      value: "Summer",
+      label: "Summer"
+    },
+    {
+      value: "Winter",
+      label: "Winter"
+    },
+    {
+      value: "Fall",
+      label: "Fall"
+    }
+  ];
+  
+  
+
+  const siteValues = [
+    {
+      value: "Sun",
+      label: "Sun"
+    },
+    {
+      value: "Parte Shade",
+      label: "Parte Shade"
+    },
+    {
+      value: "Shade",
+      label: "Shade"
+    },
+    {
+      value: "Fall",
+      label: "Fall"
+    }
+  ];
+  
+  
+
+  const locationValues = [
+    {
+      value: "Garden",
+      label: "Garden"
+    },
+    {
+      value: "Sidewalk",
+      label: "Sidewalk"
+    },
+    {
+      value: "Roof",
+      label: "Roof"
+    }
+  ];
+  
+  
+
+  let nameValues = [
     {
       value: "Accolade Elm",
       label: "Accolade Elm"
@@ -2802,5 +2956,107 @@ const nameOptions = [
     }
   ];
   
-  export default nameOptions;
+   
+  const typeValues = [
+    {
+      value: "Perennial",
+      label: "Perennial"
+    },
+    {
+      value: "Tree (evergreen)",
+      label: "Tree (evergreen)"
+    },
+    {
+      value: "Tree (deciduous)",
+      label: "Tree (deciduous)"
+    },
+    {
+      value: "Annual",
+      label: "Annual"
+    },
+    {
+      value: "Succulent",
+      label: "Succulent"
+    },
+    {
+      value: "Grass",
+      label: "Grass"
+    },
+    {
+      value: "Vine",
+      label: "Vine"
+    },
+    {
+      value: "Palm",
+      label: "Palm"
+    }
+  ];
+  
+  
+
+  const waterValues = [
+    {
+      value: "None",
+      label: "None"
+    },
+    {
+      value: "Low",
+      label: "Low"
+    },
+    {
+      value: "Moderate",
+      label: "Moderate"
+    }
+  ];
+
+for (let item of nameValues) {
+  //console.log(item);
+  for (let keys in item) {
+    if (keys === "label") {
+      item[keys] = item[keys].charAt(0).toUpperCase() + item[keys].slice(1);
+    }
+  }
+}
+  
+  
+
+  const whereOptions = [
+    {
+      value: "common_name",
+      label: "Name"
+    },
+    {
+      value: "bloom_time",
+      label: "Bloom Time"
+    },
+    {
+      value: "plant_type",
+      label: "Plant Type"
+    },
+    {
+      value: "water_needs",
+      label: "Water Needs"
+    },
+    {
+      value: "size_at_maturity",
+      label: "Size at Maturity"
+    },
+    {
+      value: "appropriate_location",
+      label: "Appropriate Location"
+    },
+    {
+      value: "suitable_site_conditions",
+      label: "Suitable Site Conditions"
+    }
+  ];
+  
+  export default whereOptions;
+  export {bloomConditions, bloomValues, 
+    locationConditions, locationValues,
+     nameConditions, nameValues,
+      sizeConditions, sizeValues,
+    waterConditions, waterValues,
+siteConditions, siteValues,
+typeConditions, typeValues}
   
