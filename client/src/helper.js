@@ -55,6 +55,8 @@ export function sortByAttAndOrder(sortColumn, sortDirection) {
   }
   return function(a, b) {
     if (sortDirection === "ascending") {
+      console.log("a[att]: " + a[att]);
+      console.log("b[att]: " + b[att]);
       if (a[att] > b[att]) {
         return 1;
       } else if (a[att] < b[att]) {

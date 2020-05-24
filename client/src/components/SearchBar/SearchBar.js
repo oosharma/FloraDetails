@@ -175,7 +175,7 @@ class SearchBar extends Component {
           // console.log(this.state.selectedOption);
           return (
             <>
-              <React.Fragment>
+              {/* <React.Fragment>
                 <BDiv display="flex" flex="row" mb="3">
                   <BDiv p="3" style={selectWhereStyle}>
                     <p>Step 1: Select Attribute</p>
@@ -234,6 +234,63 @@ class SearchBar extends Component {
                 >
                   Search
                 </Button>
+              </React.Fragment> */}
+              <React.Fragment>
+                <Row>
+                  <Col col="col-9 md-4">
+                    <p className="mb-1 mt-2">Step 1: Select Attribute</p>
+                    <Select
+                      // value={selectWhere}
+                      onChange={this.handleWhereChange.bind(this, index)}
+                      options={whereOptions}
+                      className="pr-1"
+                      display="inline"
+                      placeholder="where"
+                      style={selectWhereStyle}
+                    />
+                  </Col>
+                  <Col col="col-9 md-4 ">
+                    <p className="mb-1 mt-2">Step 2: Select Condition</p>
+                    <Select
+                      // value={selectCondition}
+                      onChange={this.handleConditionChange.bind(this, index)}
+                      options={this.state.conditionOptions[index]}
+                      className="pr-1"
+                      display="inline"
+                      style={selectConditionStyle}
+                      value={selectedConditionOption[index]}
+                    />
+                  </Col>
+                  <Col col="col-9 md-4">
+                    <p className="mb-1 mt-2">Step 3: Select Value</p>
+
+                    <Select
+                      // value={selectProperty}
+                      onChange={this.handleValueChange.bind(this, index)}
+                      options={this.state.valueOptions[index]}
+                      className=" pr-1"
+                      display="inline"
+                      value={selectedValueOption[index]}
+                      style={selectConditionStyle}
+                    />
+                  </Col>
+                  <Col col="col-12">
+                    <Button
+                      variant="primary"
+                      className="btn-primary default-button mt-4"
+                      type="button"
+                      onSubmit={() => {
+                        this.handleAdButtonClick(index);
+                      }}
+                      onClick={() => {
+                        this.handleAdButtonClick(index);
+                        //  this.props.changeFetchedResults(this.state.results);
+                      }}
+                    >
+                      Search
+                    </Button>
+                  </Col>
+                </Row>
               </React.Fragment>
             </>
           );
@@ -281,41 +338,51 @@ class SearchBar extends Component {
 
   handleAdButtonClick = index => {
     console.log(index);
-    const query = this.adQueryGenerator(index);
-    console.log(query);
 
-    fetch(query)
-      .then(response => response.json())
-      .then(response => {
-        this.setState({
-          results: [...response, ...this.state.results]
-        });
-        if (response.length) {
-          this.showClear();
-          this.setState({ classTable: "showButton" });
-          this.setState({ searchButtonTerm: "Search" });
-        } else {
-          this.setState({ searchButtonTerm: "Search" });
+    if (
+      this.state.selectedWhereOption &&
+      this.state.selectedWhereOption[index] &&
+      this.state.selectedConditionOption &&
+      this.state.selectedConditionOption[index] &&
+      this.state.selectedValueOption &&
+      this.state.selectedValueOption[index]
+    ) {
+      const query = this.adQueryGenerator(index);
+      fetch(query)
+        .then(response => response.json())
+        .then(response => {
+          this.setState({
+            results: [...response, ...this.state.results]
+          });
+          if (response.length) {
+            this.showClear();
+            this.setState({ classTable: "showButton" });
+            this.setState({ searchButtonTerm: "Search" });
+          } else {
+            this.setState({ searchButtonTerm: "Search" });
 
+            window.alert("Sorry, item details are not available");
+            this.setState({ classTable: "showButton" });
+          }
+
+          const filteredResults = filterArr(this.state.results);
+          this.setState({
+            results: filteredResults
+          });
+          this.props.changeFetchedResults(this.state.results);
+        })
+        .catch(err => {
           window.alert("Sorry, item details are not available");
-          this.setState({ classTable: "showButton" });
-        }
-
-        const filteredResults = filterArr(this.state.results);
-        this.setState({
-          results: filteredResults
+        })
+        .finally(() => {
+          this.setState({ heading: "Select Another Plant to Search" });
+          this.forceUpdate();
+          this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
+          this.setState({ searchButtonTerm: "Search" });
         });
-        this.props.changeFetchedResults(this.state.results);
-      })
-      .catch(err => {
-        window.alert("Sorry, item details are not available");
-      })
-      .finally(() => {
-        this.setState({ heading: "Select Another Plant to Search" });
-        this.forceUpdate();
-        this.setState({ placeholder: "Ex: Rose, Palm, California, etc." });
-        this.setState({ searchButtonTerm: "Search" });
-      });
+    } else {
+      window.alert("Please complete all steps");
+    }
   };
   handleButtonClick = () => {
     const query = this.queryGenerator(this.state.term);
