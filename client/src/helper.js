@@ -8,6 +8,7 @@ export function modifyResult(result) {
       let modKey = key.split("_");
       for (let i = 1; i < modKey.length; i++) {
         modKey[i] = modKey[i].charAt(0).toUpperCase() + modKey[i].slice(1);
+        modKey[i] = modKey[i].replace(/\s/g, "");
       }
       let modKeyString = modKey.join("");
       item[modKeyString] = item[key];
@@ -54,19 +55,26 @@ export function sortByAttAndOrder(sortColumn, sortDirection) {
       break;
   }
   return function(a, b) {
+    let first = String(a[att])
+      .toUpperCase()
+      .replace(/'|\s/g, "");
+    let second = String(b[att])
+      .toUpperCase()
+      .replace(/'|\s/g, "");
     if (sortDirection === "ascending") {
       console.log("a[att]: " + a[att]);
       console.log("b[att]: " + b[att]);
-      if (a[att] > b[att]) {
+
+      if (first > second) {
         return 1;
-      } else if (a[att] < b[att]) {
+      } else if (first < second) {
         return -1;
       }
       return 0;
     } else {
-      if (a[att] > b[att]) {
+      if (first > second) {
         return -1;
-      } else if (a[att] < b[att]) {
+      } else if (first < second) {
         return 1;
       }
       return 0;

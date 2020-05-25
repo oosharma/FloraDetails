@@ -11,7 +11,9 @@
 .input-primary {
   border: 1px solid #dee2e6;
 }
-
+.dontShowFilter {
+  display: none !important;
+}
 .default-button {
   margin: 0px 0px 8px 10px;
 }

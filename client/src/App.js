@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
+import { filterArr } from "./helper.js";
 
 import axios from "axios";
 import {
@@ -25,6 +26,7 @@ class App extends Component {
 
     this.state = {
       finalPublicTableCheck: false,
+      finalFetchedCheck: false,
       finalCheck: false,
       regName: "",
       regEmail: "",
@@ -66,6 +68,11 @@ class App extends Component {
         { sortDirection: "none", sortColumn: "none" },
         { sortDirection: "none", sortColumn: "none" },
         { sortDirection: "none", sortColumn: "none" }
+      ],
+      limitItems: [
+        { pageNumber: 0, rowItems: 5 },
+        { pageNumber: 0, rowItems: 10 },
+        { pageNumber: 0, rowItems: 10 }
       ],
       error: {
         msg: null,
@@ -193,6 +200,8 @@ class App extends Component {
       this.setState({ intervalIsSet: interval });
     }
     this.loadUser();
+    const query = "https://data.sfgov.org/resource/vmnk-skih.json";
+    this.makeQuery(query);
   }
 
   // never let a process live forever
@@ -203,6 +212,27 @@ class App extends Component {
       this.setState({ intervalIsSet: null });
     }
   }
+
+  makeQuery = query => {
+    fetch(query)
+      .then(response => response.json())
+      .then(response => {
+        const filteredResults = filterArr(response);
+        var modifiedResult = modifyResult(filteredResults);
+        this.setState(
+          {
+            fetchedResults: [...modifiedResult],
+            finalFetchedCheck: true
+          },
+          () => {
+            console.log(this.state.fetchedResults);
+          }
+        );
+      })
+      .catch(err => {
+        window.alert("Sorry, item details are not available");
+      });
+  };
 
   // our first get method that uses our backend api to
   // fetch data from our data base
@@ -264,10 +294,10 @@ class App extends Component {
   // Being passed to SearchBar
   changeFetchedResults = result => {
     var modifiedResult = modifyResult(result);
-    this.setState({ fetchedResults: modifiedResult });
+    this.setState({ fetchedResults: modifiedResult, finalFetchedCheck: true });
   };
 
-  sortToggle(column, utility) {
+  findUtility(utility) {
     let item = utility === "Add" ? 0 : 1;
 
     if (utility === "Add") {
@@ -279,7 +309,51 @@ class App extends Component {
     if (utility === "Personal Delete") {
       item = 2;
     }
-    let updatedSort = this.state.sort;
+    return item;
+  }
+  itemChange(num, place, utility, totalRows) {
+    console.log({ num });
+    console.log({ place });
+    console.log({ utility });
+    console.log({ totalRows });
+
+    let item = this.findUtility(utility);
+    let tempLimitItems = [...this.state.limitItems];
+    if (num === "L") {
+      tempLimitItems[item].pageNumber =
+        tempLimitItems[item].pageNumber - 1 < 0
+          ? totalRows - 1
+          : tempLimitItems[item].pageNumber - 1;
+    } else if (num === "R") {
+      tempLimitItems[item].pageNumber =
+        tempLimitItems[item].pageNumber + 1 > totalRows - 1
+          ? 0
+          : tempLimitItems[item].pageNumber + 1;
+    } else {
+      tempLimitItems[item].pageNumber = num;
+    }
+
+    this.setState({ limitItems: tempLimitItems }, () => {
+      console.log(this.state.limitItems);
+    });
+  }
+
+  rowItemChange(place, utility, value) {
+    console.log("clicked");
+
+    let item = this.findUtility(utility);
+    let tempLimitItems = [...this.state.limitItems];
+    tempLimitItems[item].rowItems = value.value;
+    tempLimitItems[item].pageNumber = 0;
+
+    this.setState({ limitItems: tempLimitItems }, () => {
+      console.log(this.state.limitItems);
+    });
+  }
+
+  sortToggle(column, utility) {
+    let item = this.findUtility(utility);
+    let updatedSort = [...this.state.sort];
     updatedSort[item].sortColumn = column;
 
     // toggle sort direction
@@ -319,7 +393,7 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    this.clearSearchBarTable();
+    //  this.clearSearchBarTable();
     this.toggleRegModal();
     this.searchBarElement.current.handleClearButtonClick();
   };
@@ -334,7 +408,7 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    this.clearSearchBarTable();
+    //this.clearSearchBarTable();
     this.toggleLogModal();
     this.searchBarElement.current.handleClearButtonClick();
   };
@@ -422,7 +496,7 @@ class App extends Component {
 
   logout = () => {
     this.clearAuth();
-    this.clearSearchBarTable();
+    // this.clearSearchBarTable();
     this.searchBarElement.current.handleClearButtonClick();
   };
 
@@ -509,13 +583,16 @@ class App extends Component {
                   sortToggle={this.sortToggle.bind(this)}
                   sortColumn={this.state.sort[1].sortColumn}
                   sortDirection={this.state.sort[1].sortDirection}
+                  limitItems={this.state.limitItems[1]}
+                  itemChange={this.itemChange.bind(this)}
+                  rowItemChange={this.rowItemChange.bind(this)}
                   utility="Delete"
                 />
               </>
             ) : (
               <>
                 <Display4 className={`mt-3 width-check`}>
-                  Public's Table is Empty, Use Search to Add Items{" "}
+                  Public's Table is Empty, Use Search Results to Add Plants{" "}
                 </Display4>
               </>
             )}
@@ -553,7 +630,7 @@ class App extends Component {
             {this.state.auth.user.items.length > 0 ? (
               <>
                 <Display4 className={`mt-3 width-check`}>
-                  {this.state.auth.user.name}'s Table
+                  {this.state.auth.user.name}'s Personal Table
                 </Display4>
 
                 <PlantTable
@@ -561,6 +638,9 @@ class App extends Component {
                   sortToggle={this.sortToggle.bind(this)}
                   sortColumn={this.state.sort[2].sortColumn}
                   sortDirection={this.state.sort[2].sortDirection}
+                  limitItems={this.state.limitItems[2]}
+                  itemChange={this.itemChange.bind(this)}
+                  rowItemChange={this.rowItemChange.bind(this)}
                   handleAddorDelete={this.deletePersonalItem.bind(this)}
                   utility="Personal Delete"
                 ></PlantTable>
@@ -568,8 +648,8 @@ class App extends Component {
             ) : (
               <>
                 <Display4 className={`mt-3 width-check`}>
-                  {this.state.auth.user.name}'s Table is Empty, Use Search Bar
-                  to Add Plants
+                  {this.state.auth.user.name}'s Personal Table is Empty, Use
+                  Search Table to Add Plants
                 </Display4>
               </>
             )}
@@ -579,8 +659,8 @@ class App extends Component {
             {this.state.auth.user ? (
               <>
                 <Display4 className="mt-3 width-check">
-                  {this.state.auth.user.name}'s Table is Empty, Use Search Bar
-                  to Add Plants
+                  {this.state.auth.user.name}'s Persoanl Table is Empty, Use
+                  Search Results to Add Plants
                 </Display4>
               </>
             ) : (
@@ -593,7 +673,9 @@ class App extends Component {
 
     return (
       <>
-        {this.state.finalCheck && this.state.finalPublicTableCheck ? (
+        {this.state.finalCheck &&
+        this.state.finalPublicTableCheck &&
+        this.state.finalFetchedCheck ? (
           <>
             <>
               <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2  p-4 ">
@@ -728,20 +810,26 @@ class App extends Component {
                 ) : null}
                 <SearchBar
                   ref={this.searchBarElement}
+                  tableItems={this.state.fetchedResults}
                   changeFetchedResults={this.changeFetchedResults.bind(this)}
                 />
-                <PlantTable
-                  addedItems={addedItems}
-                  tableData={this.state.fetchedResults}
-                  sortToggle={this.sortToggle.bind(this)}
-                  sortColumn={this.state.sort[0].sortColumn}
-                  sortDirection={this.state.sort[0].sortDirection}
-                  handleAddorDelete={this.changeAddItem.bind(
-                    this,
-                    this.state.auth.isAuthorized
-                  )}
-                  utility="Add"
-                />
+                {this.state.fetchedResults && (
+                  <PlantTable
+                    addedItems={addedItems}
+                    tableData={this.state.fetchedResults}
+                    sortToggle={this.sortToggle.bind(this)}
+                    sortColumn={this.state.sort[0].sortColumn}
+                    sortDirection={this.state.sort[0].sortDirection}
+                    limitItems={this.state.limitItems[0]}
+                    itemChange={this.itemChange.bind(this)}
+                    rowItemChange={this.rowItemChange.bind(this)}
+                    handleAddorDelete={this.changeAddItem.bind(
+                      this,
+                      this.state.auth.isAuthorized
+                    )}
+                    utility="Add"
+                  />
+                )}
 
                 {this.state.auth.isAuthorized === true
                   ? personalTables

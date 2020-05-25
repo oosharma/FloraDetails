@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { modifyResult, sortByAttAndOrder } from "../../helper.js";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
+import Select from "react-select";
+
 import "./PlantTable.css";
 import {
   Row,
@@ -8,7 +10,10 @@ import {
   Button,
   Container,
   Table,
-  Display4
+  Display4,
+  ButtonGroup,
+  ButtonToolbar,
+  BDiv
 } from "bootstrap-4-react";
 
 class PlantTable extends Component {
@@ -89,7 +94,19 @@ class PlantTable extends Component {
   };
 
   render() {
+    const rowOptionsStyle = {
+      width: "50px"
+    };
+    const { pageNumber, rowItems } = this.props.limitItems;
+
+    let rowItemsValue = {
+      value: this.props.limitItems.rowItems,
+      label: this.props.limitItems.rowItems
+    };
+    // this.setState({ rowItemsValue: rowItemsValue });
+
     const addedItems = this.props.addedItems;
+
     let dataSet = new Set();
     if (addedItems) {
       addedItems.forEach(arrayItem => {
@@ -102,6 +119,271 @@ class PlantTable extends Component {
       tableData.sort(
         sortByAttAndOrder(this.props.sortColumn, this.props.sortDirection)
       );
+
+      let useTableData = [];
+
+      let startIndex = pageNumber * rowItems;
+      let lastItemIndex = Math.min(startIndex + rowItems, tableData.length);
+
+      let totalRows = Math.ceil(tableData.length / rowItems);
+
+      for (let i = startIndex; i < lastItemIndex; i++) {
+        useTableData[i] = tableData[i];
+      }
+
+      console.log(useTableData);
+      const rowOptions = [];
+      let obj1 = {};
+      obj1["value"] = 5;
+      obj1["label"] = 5;
+      rowOptions.push(obj1);
+
+      let obj2 = {};
+      obj2["value"] = 10;
+      obj2["label"] = 10;
+      rowOptions.push(obj2);
+
+      for (let i = 25; i <= Math.min(tableData.length, 100); i = i + 25) {
+        var obj = {};
+        let num;
+        if (i > tableData.length) {
+          num = tableData.length;
+        } else {
+          num = i;
+        }
+        obj["value"] = num;
+        obj["label"] = num;
+        rowOptions.push(obj);
+        if (i == 50) {
+          i += 25;
+        }
+      }
+      console.log(rowOptions);
+
+      let buttons;
+      if (totalRows < 9) {
+        // return (
+        //   <>
+        //   {symbolArray.map(symbolitem => <option>{symbolitem}</option>)}
+        //   </>
+        //  );
+        buttons = (
+          <>
+            {[...Array(totalRows)].map((e, i) => (
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  i,
+                  "button",
+                  this.props.utility
+                )}
+                className={pageNumber == i ? "activePage" : "pageStyle"}
+              >
+                {i + 1}
+              </Button>
+            ))}
+          </>
+        );
+      } else {
+        if (pageNumber < 4) {
+          buttons = (
+            <>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "L",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                L
+              </Button>
+
+              {[...Array(5)].map((e, i) => {
+                return (
+                  <Button
+                    onClick={this.props.itemChange.bind(
+                      this,
+                      i,
+                      "button",
+                      this.props.utility
+                    )}
+                    className={pageNumber == i ? "activePage" : "pageStyle"}
+                  >
+                    {i + 1}
+                  </Button>
+                );
+              })}
+              <Button className="pageStyle">...</Button>
+
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  totalRows - 1,
+                  "button",
+                  this.props.utility
+                )}
+                className={
+                  pageNumber == totalRows - 1 ? "activePage" : "pageStyle"
+                }
+              >
+                {totalRows}
+              </Button>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "R",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                R
+              </Button>
+            </>
+          );
+        } else if (totalRows - pageNumber + 1 < 4) {
+          buttons = (
+            <>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "L",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                L
+              </Button>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  0,
+                  "button",
+                  this.props.utility
+                )}
+                className={pageNumber == 0 ? "activePage" : "pageStyle"}
+              >
+                1
+              </Button>
+              <Button className="pageStyle">...</Button>
+
+              {[...Array(5)].map((e, i) => {
+                return (
+                  <Button
+                    onClick={this.props.itemChange.bind(
+                      this,
+                      totalRows - 5 + i,
+                      "button",
+                      this.props.utility
+                    )}
+                    className={
+                      pageNumber == totalRows - 5 + i
+                        ? "activePage"
+                        : "pageStyle"
+                    }
+                  >
+                    {totalRows - 4 + i}
+                  </Button>
+                );
+              })}
+
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "R",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                R
+              </Button>
+            </>
+          );
+        } else {
+          buttons = (
+            <>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "L",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                L
+              </Button>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  0,
+                  "button",
+                  this.props.utility
+                )}
+                className={pageNumber == 0 ? "activePage" : "pageStyle"}
+              >
+                1
+              </Button>
+              <Button className="pageStyle">...</Button>
+
+              {[...Array(3)].map((e, i) => {
+                return (
+                  <Button
+                    onClick={this.props.itemChange.bind(
+                      this,
+                      pageNumber - 1 + i,
+                      "button",
+                      this.props.utility
+                    )}
+                    className={
+                      pageNumber == pageNumber - 1 + i
+                        ? "activePage"
+                        : "pageStyle"
+                    }
+                  >
+                    {pageNumber + i}
+                  </Button>
+                );
+              })}
+              <Button className="pageStyle">...</Button>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  totalRows - 1,
+                  "button",
+                  this.props.utility
+                )}
+                className={
+                  pageNumber === totalRows - 1 ? "activePage" : "pageStyle"
+                }
+              >
+                {totalRows}
+              </Button>
+              <Button
+                onClick={this.props.itemChange.bind(
+                  this,
+                  "R",
+                  "button",
+                  this.props.utility,
+                  totalRows
+                )}
+                className="pageStyle"
+              >
+                R
+              </Button>
+            </>
+          );
+        }
+      }
 
       return (
         <>
@@ -123,88 +405,143 @@ class PlantTable extends Component {
               <em> Pinned results are being pulled from connected database</em>
             </p>
           )}
-          <Table
-            className={`table-primary-1 mt-1 pr-2 table-responsive width-check `}
-            striped
-            bordered
-            hover
-          >
-            <thead>
-              <tr>
-                <th style={{ minWidth: "120px" }}>Action</th>
+          <BDiv className="width-check ">
+            <Table
+              className={`table-primary-1 mt-1 mb-0 pr-2 table-responsive width-check `}
+              striped
+              bordered
+              hover
+            >
+              <thead>
+                <tr>
+                  <th style={{ minWidth: "120px" }}>Action</th>
 
-                {this.columnItems()}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.map(result => {
-                return (
-                  <>
-                    <tr>
-                      <td>
-                        <Button
-                          variant={`${this.state.btnVariant}`}
-                          className={`${this.state.btnClass} default-button ${
-                            dataSet.has(result.commonName) ? "disabled" : ""
-                          }`}
-                          type="button"
-                          onClick={() => {
-                            this.handleAddorDelete(result);
-                          }}
-                        >
-                          {this.props.utility === "Add" ? (
-                            <>
-                              {dataSet.has(result.commonName) ? "Added" : "Add"}
-                            </>
-                          ) : (
-                            "Delete"
-                          )}
-                        </Button>
-                      </td>
+                  {this.columnItems()}
+                </tr>
+              </thead>
+              <tbody>
+                {useTableData.map(result => {
+                  return (
+                    <>
+                      <tr>
+                        <td>
+                          <Button
+                            variant={`${this.state.btnVariant}`}
+                            className={`${this.state.btnClass} default-button ${
+                              dataSet.has(result.commonName) ? "disabled" : ""
+                            }`}
+                            type="button"
+                            onClick={() => {
+                              this.handleAddorDelete(result);
+                            }}
+                          >
+                            {this.props.utility === "Add" ? (
+                              <>
+                                {dataSet.has(result.commonName)
+                                  ? "Added"
+                                  : "Add"}
+                              </>
+                            ) : (
+                              "Delete"
+                            )}
+                          </Button>
+                        </td>
 
-                      {result.commonName ? (
-                        <td>{result.commonName} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-                      {result.bloomTime ? (
-                        <td>{result.bloomTime} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-                      {result.plantType ? (
-                        <td>{result.plantType} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-                      {result.waterNeeds ? (
-                        <td>{result.waterNeeds} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
+                        {result.commonName ? (
+                          <td>{result.commonName} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
+                        {result.bloomTime ? (
+                          <td>{result.bloomTime} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
+                        {result.plantType ? (
+                          <td>{result.plantType} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
+                        {result.waterNeeds ? (
+                          <td>{result.waterNeeds} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
 
-                      {result.sizeAtMaturity ? (
-                        <td>{result.sizeAtMaturity} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
+                        {result.sizeAtMaturity ? (
+                          <td>{result.sizeAtMaturity} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
 
-                      {result.appropriateLocation ? (
-                        <td>{result.appropriateLocation} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-                      {result.suitableSiteConditions ? (
-                        <td>{result.suitableSiteConditions} </td>
-                      ) : (
-                        <td>-</td>
-                      )}
-                    </tr>
-                  </>
-                );
-              })}
-            </tbody>
-          </Table>
+                        {result.appropriateLocation ? (
+                          <td>{result.appropriateLocation} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
+                        {result.suitableSiteConditions ? (
+                          <td>{result.suitableSiteConditions} </td>
+                        ) : (
+                          <td>-</td>
+                        )}
+                      </tr>
+                    </>
+                  );
+                })}
+              </tbody>
+            </Table>
+            <Row
+              alignItems="top"
+              className="mb-4 mb-lg-5 p-3 t-footer width-check m-0"
+            >
+              <Col
+                order="2 md-1"
+                col="col-12 md-6 xl-4"
+                display="inline-flex"
+                alignItems="xl-center"
+                className="mb-2 mb-md-0 pl-0 "
+              >
+                Showing {startIndex + 1} to {lastItemIndex} of {totalRows} Rows.
+              </Col>
+              <Col
+                col="col-12 md-8 xl-4 pl-0  "
+                display="inline-flex"
+                alignItems="center"
+                order="3 md-3 xl-2"
+                className="pl-0"
+              >
+                Show
+                <Select
+                  // value={selectCondition}
+
+                  onChange={this.props.rowItemChange.bind(
+                    this,
+                    "item",
+                    this.props.utility
+                  )}
+                  options={rowOptions}
+                  className="ml-2 mr-2 rowOptionStyle"
+                  display="inline"
+                  style={rowOptionsStyle}
+                  value={rowItemsValue}
+                  // value={selectedConditionOption[index]}
+                />
+                Rows Per Page
+              </Col>
+              <Col
+                col="col-12 md-6 xl-4  "
+                className="mb-2 pl-0 pr-md-0"
+                order="1 md-2 xl-3"
+              >
+                <ButtonToolbar
+                  float="md-right"
+                  aria-label="Toolbar with button groups"
+                >
+                  <ButtonGroup aria-label="First group">{buttons}</ButtonGroup>
+                </ButtonToolbar>
+              </Col>
+            </Row>
+          </BDiv>
         </>
       );
     } else {
@@ -215,7 +552,7 @@ class PlantTable extends Component {
         return (
           <>
             <Display4 className="mt-3 width-check">
-              Table Empty, Use Search Bar to Add Plants
+              Public Table Empty, Use Search Table to Add Plants
             </Display4>
           </>
         );
