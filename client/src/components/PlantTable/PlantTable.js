@@ -7,6 +7,8 @@ import "./PlantTable.css";
 import {
   Row,
   Col,
+  Span,
+  BTd,
   Button,
   Container,
   Table,
@@ -415,10 +417,12 @@ class PlantTable extends Component {
                   return (
                     <>
                       <tr>
-                        <td>
+                        <BTd align="middle">
                           <Button
                             variant={`${this.state.btnVariant}`}
-                            className={`${this.state.btnClass} default-button ${
+                            className={`${
+                              this.state.btnClass
+                            } shrinkTableButtons default-button ${
                               dataSet.has(result.commonName) ? "disabled" : ""
                             }`}
                             type="button"
@@ -436,44 +440,48 @@ class PlantTable extends Component {
                               "Delete"
                             )}
                           </Button>
-                        </td>
+                        </BTd>
 
                         {result.commonName ? (
-                          <td>{result.commonName} </td>
+                          <BTd align="middle">{result.commonName} </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
                         {result.bloomTime ? (
-                          <td>{result.bloomTime} </td>
+                          <BTd align="middle">{result.bloomTime} </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
                         {result.plantType ? (
-                          <td>{result.plantType} </td>
+                          <BTd align="middle">{result.plantType} </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
                         {result.waterNeeds ? (
-                          <td>{result.waterNeeds} </td>
+                          <BTd align="middle">{result.waterNeeds} </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
 
                         {result.sizeAtMaturity ? (
-                          <td>{result.sizeAtMaturity} </td>
+                          <BTd align="middle">{result.sizeAtMaturity} </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
 
                         {result.appropriateLocation ? (
-                          <td>{result.appropriateLocation} </td>
+                          <BTd align="middle">
+                            {result.appropriateLocation}{" "}
+                          </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
                         {result.suitableSiteConditions ? (
-                          <td>{result.suitableSiteConditions} </td>
+                          <BTd align="middle">
+                            {result.suitableSiteConditions}{" "}
+                          </BTd>
                         ) : (
-                          <td>-</td>
+                          <BTd align="middle">-</BTd>
                         )}
                       </tr>
                     </>
@@ -483,14 +491,14 @@ class PlantTable extends Component {
             </Table>
             <Row
               alignItems="top"
-              className="mb-4 mb-lg-5 p-3 t-footer width-check m-0"
+              className="mb-4 mb-lg-5 p-3 t-footer width-check m-0 "
             >
               <Col
                 order="2 md-1"
                 col="col-12 md-6 xl-4"
                 display="inline-flex"
                 alignItems="xl-center"
-                className="mb-2 mb-md-0 pl-0 "
+                className="mb-2 mb-md-0 pl-0  shrink"
               >
                 Showing {startIndex + 1} to {lastItemIndex} of {totalRows} Rows.
               </Col>
@@ -499,7 +507,7 @@ class PlantTable extends Component {
                 display="inline-flex"
                 alignItems="center"
                 order="3 md-3 xl-2"
-                className="pl-0"
+                className="pl-0  shrink"
               >
                 Show
                 <Select
@@ -521,7 +529,7 @@ class PlantTable extends Component {
               </Col>
               <Col
                 col="col-12 md-6 xl-4  "
-                className="mb-2 pl-0 pr-md-0"
+                className="mb-2 pl-0 pr-md-0 shrinkButton"
                 order="1 md-2 xl-3"
               >
                 <ButtonToolbar
