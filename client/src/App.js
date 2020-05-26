@@ -10,6 +10,7 @@ import axios from "axios";
 import {
   Nav,
   Form,
+  ItemLink,
   Container,
   Display4,
   Row,
@@ -569,7 +570,15 @@ class App extends Component {
             {data.length > 0 ? (
               <>
                 <Display4 className={`mt-3 width-check`}>
-                  Public's Table
+                  Public's Table.{" "}
+                  <a onClick={this.toggleRegModal} href="#">
+                    Register
+                  </a>{" "}
+                  or{" "}
+                  <a onClick={this.toggleLogModal} href="#">
+                    Login
+                  </a>{" "}
+                  to Manage Your Personal Table
                 </Display4>
 
                 <PlantTable

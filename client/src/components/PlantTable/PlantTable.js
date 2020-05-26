@@ -395,9 +395,7 @@ class PlantTable extends Component {
               <em>All plants are native to San Francisco</em>
             </p>
           ) : (
-            <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
-              <em> Pinned results are being pulled from connected database</em>
-            </p>
+            <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
           )}
           <BDiv className="width-check ">
             <Table
