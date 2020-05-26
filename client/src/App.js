@@ -683,14 +683,16 @@ class App extends Component {
                     <h5 className="modal-title">Register</h5>
                   </div>
                   <div className="modal-body">
-                    <Alert>
-                      {this.state.error.id === "REGISTER_FAIL" ||
-                      this.state.error.id === "LOGIN_FAIL" ? (
-                        <p>{this.state.error.msg.msg}</p>
-                      ) : (
-                        <></>
-                      )}
-                    </Alert>
+                    {this.state.error.msg && this.state.error.msg.msg && (
+                      <Alert danger>
+                        {this.state.error.id === "REGISTER_FAIL" ||
+                        this.state.error.id === "LOGIN_FAIL" ? (
+                          <p>{this.state.error.msg.msg}</p>
+                        ) : (
+                          <></>
+                        )}
+                      </Alert>
+                    )}
                     <Form>
                       <Form.Group>
                         <label htmlFor="regName">Name</label>
@@ -748,14 +750,16 @@ class App extends Component {
                     <h5 className="modal-title">Login</h5>
                   </div>
                   <div className="modal-body">
-                    <Alert>
-                      {this.state.error.id === "REGISTER_FAIL" ||
-                      this.state.error.id === "LOGIN_FAIL" ? (
-                        <p>{this.state.error.msg.msg}</p>
-                      ) : (
-                        <></>
-                      )}
-                    </Alert>
+                    {this.state.error.msg && this.state.error.msg.msg && (
+                      <Alert danger>
+                        {this.state.error.id === "REGISTER_FAIL" ||
+                        this.state.error.id === "LOGIN_FAIL" ? (
+                          <p>{this.state.error.msg.msg}</p>
+                        ) : (
+                          <></>
+                        )}
+                      </Alert>
+                    )}
                     <Form>
                       <Form.Group>
                         <label htmlFor="logEmail">Email address</label>
