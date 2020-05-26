@@ -22,13 +22,8 @@ const UserSchema = new Schema({
     default: Date.now
   },
   items: {
-    commonName: String,
-    bloomTime: String,
-    plantType: String,
-    appropriateLocation: String,
-    waterNeeds: String,
-    sizeAtMaturity: String,
-    suitableSiteConditions: String
+    type: Array,
+    default: []
   }
 });
 

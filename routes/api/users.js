@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
       email,
       password
     });
-    newUser.items = [{}];
+    //   newUser.items = [{}];
     // Create slat & hash
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {

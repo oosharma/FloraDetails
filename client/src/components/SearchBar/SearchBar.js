@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import style from "./SearchBar.css";
 import { Row, Col, Button, Display4, BDiv } from "bootstrap-4-react";
 import Select from "react-select";
-import { modifyResult, filterArr } from "../../helper.js";
+import { modifyResult, filterArr, randomize } from "../../helper.js";
 import options from "./optionsData.js";
 import whereOptions, {
   bloomConditions,
@@ -359,8 +359,9 @@ class SearchBar extends Component {
     fetch(query)
       .then(response => response.json())
       .then(response => {
+        let randomResponse = randomize(response);
         this.setState({
-          results: [...response]
+          results: [...randomResponse]
         });
         if (response.length) {
           this.showClear();

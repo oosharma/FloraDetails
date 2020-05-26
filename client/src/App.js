@@ -360,6 +360,7 @@ class App extends Component {
     axios
       .post("api/auth", body, config)
       .then(res => {
+        console.log("Reached Here");
         this.loginSuccess(res.data);
       })
       .catch(err => {
@@ -384,6 +385,7 @@ class App extends Component {
   };
 
   loginSuccess = res => {
+    console.log("resonse was" + JSON.stringify(res));
     let authUpdate = {
       token: res.token,
       isAuthorized: true,
@@ -458,16 +460,22 @@ class App extends Component {
       status: null,
       id: null
     };
+    console.log("clearErros Called");
     this.setState({ error: errorUpdate });
   };
   updateError = (err, id) => {
-    this.clearAuth();
-    let errorUpdate = {
-      msg: err.response.data,
-      status: err.response.status,
-      id: id
-    };
-    this.setState({ error: errorUpdate });
+    if (err.response) {
+      this.clearAuth();
+      let errorUpdate = {
+        msg: err.response.data,
+        status: err.response.status,
+        id: id
+      };
+      this.setState({ error: errorUpdate });
+    }
+    console.log("updateError called");
+    console.log(JSON.stringify(err));
+    console.log({ id });
   };
   clearAuth = () => {
     localStorage.removeItem("token");
@@ -646,7 +654,7 @@ class App extends Component {
             {this.state.auth.user ? (
               <>
                 <Display4 className="mt-3 width-check">
-                  {this.state.auth.user.name}'s Persoanl Table is Empty, Use
+                  {this.state.auth.user.name}'s Personal Table is Empty, Use
                   Search Results to Add Plants
                 </Display4>
               </>

@@ -108,9 +108,10 @@ class PlantTable extends Component {
     // this.setState({ rowItemsValue: rowItemsValue });
 
     const addedItems = this.props.addedItems;
-
+    console.log(addedItems);
+    console.log("addedItems");
     let dataSet = new Set();
-    if (addedItems) {
+    if (Array.isArray(addedItems)) {
       addedItems.forEach(arrayItem => {
         dataSet.add(arrayItem.commonName);
       });
