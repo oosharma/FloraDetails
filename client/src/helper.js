@@ -27,6 +27,42 @@ export function filterArr(arr) {
   return filteredArr;
 }
 
+function rank(size) {
+  let rank;
+  switch (size) {
+    case "<1ft":
+      rank = 1;
+      break;
+    case ">1ft":
+      rank = 1.5;
+    case "1-3ft":
+      rank = 2;
+      break;
+    case "4-6ft":
+      rank = 3;
+      break;
+    case "7-12ft":
+      rank = 4;
+      break;
+    case "13-24ft":
+      rank = 5;
+      break;
+    case ">24ft":
+      rank = 6;
+      break;
+    case "Varies":
+      rank = 7;
+      break;
+    case "FullGrownTree":
+      rank = 8;
+      break;
+    default:
+      rank = 7;
+      break;
+  }
+  return rank;
+}
+
 export function sortByAttAndOrder(sortColumn, sortDirection) {
   let att = " ";
   switch (sortColumn) {
@@ -55,6 +91,28 @@ export function sortByAttAndOrder(sortColumn, sortDirection) {
       break;
   }
   return function(a, b) {
+    if (att === "sizeAtMaturity") {
+      let first = String(a[att]).replace(/'|\s/g, "");
+      let second = String(b[att]).replace(/'|\s/g, "");
+      let firstNumber = rank(first);
+      let secondNumber = rank(second);
+      if (sortDirection === "ascending") {
+        if (firstNumber > secondNumber) {
+          return 1;
+        } else if (firstNumber < secondNumber) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (firstNumber > secondNumber) {
+          return -1;
+        } else if (firstNumber < secondNumber) {
+          return 1;
+        }
+        return 0;
+      }
+    }
+
     let first = String(a[att])
       .toUpperCase()
       .replace(/'|\s/g, "");

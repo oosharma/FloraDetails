@@ -212,45 +212,13 @@ class SearchBar extends Component {
           Showing {this.props.tableItems ? this.props.tableItems.length : 0}{" "}
           Plants
         </Display4>
-        <Button
-          variant="primary"
-          className="btn-primary default-button  "
-          type="button"
-          onSubmit={() => {
-            this.toggleFilters();
-          }}
-          onClick={() => {
-            this.toggleFilters();
-            //  this.props.changeFetchedResults(this.state.results);
-          }}
-        >
-          {this.state.filterTerm}
-        </Button>
-        {this.props.tableItems
-          ? this.props.tableItems.length !== 685 && (
-              <Button
-                variant="primary"
-                className={`btn-primary default-button ${this.state.filters}`}
-                type="button"
-                onSubmit={() => {
-                  this.handleShowAllClick();
-                }}
-                onClick={() => {
-                  this.handleShowAllClick();
-                  //  this.props.changeFetchedResults(this.state.results);
-                }}
-              >
-                Show All Plants
-              </Button>
-            )
-          : null}
         {[...Array(filterNumbers)].map((e, index) => {
           // console.log(selectedConditionOption[index]);
           // console.log(this.state.selectedOption);
           return (
             <>
               <React.Fragment>
-                <Row className={`mt-2 ${this.state.filters}`}>
+                <Row className={`mt-2 mb-2 ${this.state.filters}`}>
                   <Col col="col-9 md-4">
                     <p className="mb-1 mt-2">Step 1: Select Attribute</p>
                     <Select
@@ -293,6 +261,39 @@ class SearchBar extends Component {
             </>
           );
         })}
+        <Button
+          variant="primary"
+          className="btn-primary default-button  "
+          type="button"
+          onSubmit={() => {
+            this.toggleFilters();
+          }}
+          onClick={() => {
+            this.toggleFilters();
+            //  this.props.changeFetchedResults(this.state.results);
+          }}
+        >
+          {this.state.filterTerm}
+        </Button>
+        {this.props.tableItems
+          ? this.props.tableItems.length !== 685 && (
+              <Button
+                variant="primary"
+                className={`btn-primary default-button ${this.state.filters}`}
+                type="button"
+                onSubmit={() => {
+                  this.handleShowAllClick();
+                }}
+                onClick={() => {
+                  this.handleShowAllClick();
+                  //  this.props.changeFetchedResults(this.state.results);
+                }}
+              >
+                Show All Plants
+              </Button>
+            )
+          : null}
+
         {/* <Display4 className="width-check">{this.state.heading}</Display4>
         <Row>
           <Col>

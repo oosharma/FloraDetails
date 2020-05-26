@@ -391,14 +391,7 @@ class PlantTable extends Component {
             <p
               className={`${this.state.classTable} mt-3 pb-0 mb-0 width-check`}
             >
-              <em>
-                {" "}
-                Search results are being pulled from{" "}
-                <a href="http://www.datasf.org" target="_blank">
-                  {" "}
-                  www.DataSF.org
-                </a>
-              </em>
+              <em>All plants are native to San Francisco</em>
             </p>
           ) : (
             <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
