@@ -1,3 +1,4 @@
+import ReactGA from "react-ga";
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
@@ -197,6 +198,9 @@ class App extends Component {
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
   componentDidMount() {
+    ReactGA.initialize("UA-147525205-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 500);
