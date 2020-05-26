@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
 import { filterArr } from "./helper.js";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+import items from "./items.js";
 
 import axios from "axios";
 import {
@@ -200,9 +203,23 @@ class App extends Component {
       this.setState({ intervalIsSet: interval });
     }
     this.loadUser();
-    const query = "https://data.sfgov.org/resource/vmnk-skih.json";
-    this.makeQuery(query);
+
+    this.loadItems();
   }
+
+  loadItems = () => {
+    const filteredResults = filterArr(items);
+    const modifiedResult = modifyResult(filteredResults);
+    this.setState(
+      {
+        fetchedResults: [...modifiedResult],
+        finalFetchedCheck: true
+      },
+      () => {
+        console.log(this.state.fetchedResults);
+      }
+    );
+  };
 
   // never let a process live forever
   // always kill a process everytime we are done using it
@@ -212,27 +229,6 @@ class App extends Component {
       this.setState({ intervalIsSet: null });
     }
   }
-
-  makeQuery = query => {
-    fetch(query)
-      .then(response => response.json())
-      .then(response => {
-        const filteredResults = filterArr(response);
-        var modifiedResult = modifyResult(filteredResults);
-        this.setState(
-          {
-            fetchedResults: [...modifiedResult],
-            finalFetchedCheck: true
-          },
-          () => {
-            console.log(this.state.fetchedResults);
-          }
-        );
-      })
-      .catch(err => {
-        window.alert("Sorry, item details are not available");
-      });
-  };
 
   // our first get method that uses our backend api to
   // fetch data from our data base
@@ -393,9 +389,10 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
+    //  this.loadItems();
     //  this.clearSearchBarTable();
     this.toggleRegModal();
-    this.searchBarElement.current.handleClearButtonClick();
+    // this.searchBarElement.current.handleClearButtonClick();
   };
 
   loginSuccess = res => {
@@ -408,9 +405,10 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
+    // this.loadItems();
     //this.clearSearchBarTable();
     this.toggleLogModal();
-    this.searchBarElement.current.handleClearButtonClick();
+    // this.searchBarElement.current.handleClearButtonClick();
   };
 
   clearSearchBarTable = () => {
@@ -497,7 +495,8 @@ class App extends Component {
   logout = () => {
     this.clearAuth();
     // this.clearSearchBarTable();
-    this.searchBarElement.current.handleClearButtonClick();
+    //  this.loadItems();
+    // this.searchBarElement.current.handleClearButtonClick();
   };
 
   tokenConfig = () => {
