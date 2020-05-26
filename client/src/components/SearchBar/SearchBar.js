@@ -189,6 +189,7 @@ class SearchBar extends Component {
       },
       () => {
         this.handleAdButtonClick();
+        this.toggleFilters();
       }
     );
   };
@@ -282,7 +283,7 @@ class SearchBar extends Component {
           ? this.props.tableItems.length !== 685 && (
               <Button
                 variant="primary"
-                className={`btn-primary default-button ${this.state.filters}`}
+                className={`btn-primary default-button  `}
                 type="button"
                 onSubmit={() => {
                   this.handleShowAllClick();
@@ -292,7 +293,7 @@ class SearchBar extends Component {
                   //  this.props.changeFetchedResults(this.state.results);
                 }}
               >
-                Show All Plants
+                Remove Filters
               </Button>
             )
           : null}
