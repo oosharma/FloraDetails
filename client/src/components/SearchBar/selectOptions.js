@@ -44,30 +44,47 @@ const bloomConditions = [
       label: "Contains"
     }
   ];
-  
-  
-
+   
   const sizeConditions = [
     {
       value: "=",
       label: "Equals"
+    }, 
+  ]; 
+  const sizeValues  = [
+    {
+      value: "< 1 ft",
+      label: "< 1 ft"
+    },
+    
+    {
+      value: "1-3 ft",
+      label: "1-3 ft"
     },
     {
-      value: ">",
-      label: ">"
+      value: "4-6 ft",
+      label: "4-6 ft"
     },
     {
-      value: "<",
-      label: "<"
-    }
-  ];
-
-  const sizeValues = [
+      value: "7-12 ft",
+      label: "7-12 ft"
+    },
     {
-      value: "1",
-      label: "1"
+      value: "13-24 ft",
+      label: "13-24 ft"
+    },
+    {
+      value: "> 24 ft",
+      label: "> 24 ft"
+    },
+    {
+      value: "Varies",
+      label: "Varies"
     }
   ];
+  
+   
+ 
   
   
 
@@ -3010,8 +3027,7 @@ const bloomConditions = [
   ];
 
 for (let item of nameValues) {
-  //console.log(item);
-  for (let keys in item) {
+   for (let keys in item) {
     if (keys === "label") {
       item[keys] = item[keys].charAt(0).toUpperCase() + item[keys].slice(1);
     }

@@ -131,7 +131,6 @@ class PlantTable extends Component {
         useTableData[i] = tableData[i];
       }
 
-      console.log(useTableData);
       const rowOptions = [];
       let obj1 = {};
       obj1["value"] = 5;
@@ -158,7 +157,6 @@ class PlantTable extends Component {
           i += 25;
         }
       }
-      console.log(rowOptions);
 
       let buttons;
       if (totalRows < 9) {

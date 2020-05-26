@@ -210,15 +210,10 @@ class App extends Component {
   loadItems = () => {
     const filteredResults = filterArr(items);
     const modifiedResult = modifyResult(filteredResults);
-    this.setState(
-      {
-        fetchedResults: [...modifiedResult],
-        finalFetchedCheck: true
-      },
-      () => {
-        console.log(this.state.fetchedResults);
-      }
-    );
+    this.setState({
+      fetchedResults: [...modifiedResult],
+      finalFetchedCheck: true
+    });
   };
 
   // never let a process live forever
@@ -308,11 +303,6 @@ class App extends Component {
     return item;
   }
   itemChange(num, place, utility, totalRows) {
-    console.log({ num });
-    console.log({ place });
-    console.log({ utility });
-    console.log({ totalRows });
-
     let item = this.findUtility(utility);
     let tempLimitItems = [...this.state.limitItems];
     if (num === "L") {
@@ -329,22 +319,20 @@ class App extends Component {
       tempLimitItems[item].pageNumber = num;
     }
 
-    this.setState({ limitItems: tempLimitItems }, () => {
-      console.log(this.state.limitItems);
-    });
+    this.setState({ limitItems: tempLimitItems });
   }
+  clearTablePage = () => {
+    let tempLimitItems = [...this.state.limitItems];
+    tempLimitItems[0].pageNumber = 0;
+  };
 
   rowItemChange(place, utility, value) {
-    console.log("clicked");
-
     let item = this.findUtility(utility);
     let tempLimitItems = [...this.state.limitItems];
     tempLimitItems[item].rowItems = value.value;
     tempLimitItems[item].pageNumber = 0;
 
-    this.setState({ limitItems: tempLimitItems }, () => {
-      console.log(this.state.limitItems);
-    });
+    this.setState({ limitItems: tempLimitItems });
   }
 
   sortToggle(column, utility) {
@@ -811,6 +799,7 @@ class App extends Component {
                   ref={this.searchBarElement}
                   tableItems={this.state.fetchedResults}
                   changeFetchedResults={this.changeFetchedResults.bind(this)}
+                  clearTablePage={this.clearTablePage.bind(this)}
                 />
                 {this.state.fetchedResults && (
                   <PlantTable

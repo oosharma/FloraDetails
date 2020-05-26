@@ -120,9 +120,6 @@ export function sortByAttAndOrder(sortColumn, sortDirection) {
       .toUpperCase()
       .replace(/'|\s/g, "");
     if (sortDirection === "ascending") {
-      console.log("a[att]: " + a[att]);
-      console.log("b[att]: " + b[att]);
-
       if (first > second) {
         return 1;
       } else if (first < second) {

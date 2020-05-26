@@ -178,6 +178,11 @@ class SearchBar extends Component {
     let tempSelectedValueOption = [...this.state.selectedValueOption];
     tempSelectedValueOption[index] = option;
 
+    //fix this part
+    if (option.value !== tempSelectedValueOption[0]) {
+      this.props.clearTablePage();
+    }
+
     this.setState(
       {
         selectedValueOption: [...tempSelectedValueOption]
@@ -213,8 +218,6 @@ class SearchBar extends Component {
           Plants
         </Display4>
         {[...Array(filterNumbers)].map((e, index) => {
-          // console.log(selectedConditionOption[index]);
-          // console.log(this.state.selectedOption);
           return (
             <>
               <React.Fragment>
@@ -466,26 +469,19 @@ class SearchBar extends Component {
   onInputChange(term) {
     this.setState({ term });
   }
-  //https://data.sfgov.org/resource/vmnk-skih.json?$where=common_name=%27African%20Iris%27%20
   adQueryGenerator = index => {
-    console.log(index);
     let where = this.state.selectedWhereOption[index].value;
     let condition = this.state.selectedConditionOption[index].value;
     let value = this.state.selectedValueOption[index].value;
 
     if (this.state.selectedConditionOption[index].label === "Equals") {
-      //data.sfgov.org/resource/vmnk-skih.json?plant_type=Tree%20(evergreen)
-      //data.sfgov.org/resource/vmnk-skih.json?$where=bloom_time=%27Summer%27
       const query = `https://data.sfgov.org/resource/vmnk-skih.json?$where=${where}%20${condition}%20%27${value}%27`;
-      console.log({ query });
       return query;
     }
 
     const query = `https://data.sfgov.org/resource/vmnk-skih.json?$where=${where}%20${condition}%20%27%25${value}%25%27`;
 
-    // switch(this.state.selectedWhereOption[index]){
     return query;
-    // }
   };
 
   queryGenerator = () => {
@@ -497,7 +493,6 @@ class SearchBar extends Component {
       term2 = this.addUpper(this.state.term);
     }
     const query = `https://data.sfgov.org/resource/vmnk-skih.json?$where=common_name%20like%20%27%25${this.state.term}%25%27%20OR%20common_name%20like%20%27%25${term2}%25%27`;
-    console.log(query);
     return query;
   };
   1;
