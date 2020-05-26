@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
-import { filterArr } from "./helper.js";
+import { filterArr, randomize, modifyResult } from "./helper.js";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import items from "./items.js";
@@ -18,7 +18,6 @@ import {
 } from "bootstrap-4-react";
 import Modal from "react-bootstrap4-modal";
 
-import { modifyResult } from "./helper.js";
 import style from "./App.css";
 
 class App extends Component {
@@ -209,9 +208,10 @@ class App extends Component {
 
   loadItems = () => {
     const filteredResults = filterArr(items);
-    const modifiedResult = modifyResult(filteredResults);
+    const modifiedResults = modifyResult(filteredResults);
+    const randomResults = randomize(modifiedResults);
     this.setState({
-      fetchedResults: [...modifiedResult],
+      fetchedResults: [...randomResults],
       finalFetchedCheck: true
     });
   };

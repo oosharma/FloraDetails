@@ -63,6 +63,25 @@ function rank(size) {
   return rank;
 }
 
+function randomSort() {
+  return function(a, b) {
+    a = Math.random();
+    b = Math.random();
+
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+}
+
+export function randomize(results) {
+  return results.sort(randomSort());
+}
+
 export function sortByAttAndOrder(sortColumn, sortDirection) {
   let att = " ";
   switch (sortColumn) {
