@@ -37,6 +37,7 @@ class App extends Component {
       regPass: "",
       regMsg: null,
       regModal: false,
+      resetModal: false,
       logEmail: "",
       logPass: "",
       logModal: false,
@@ -79,6 +80,11 @@ class App extends Component {
         { pageNumber: 0, rowItems: 10 }
       ],
       error: {
+        msg: null,
+        status: null,
+        id: null
+      },
+      passError: {
         msg: null,
         status: null,
         id: null
@@ -207,8 +213,13 @@ class App extends Component {
       this.setState({ intervalIsSet: interval });
     }
     this.loadUser();
-
     this.loadItems();
+    if (this.props.query && this.props.query.includes("token")) {
+      let resetToken = this.props.query.split("-")[1];
+      this.setState({ resetModal: true, resetToken: resetToken }, () => {
+        this.clearErrors();
+      });
+    }
   }
 
   loadItems = () => {
@@ -365,7 +376,6 @@ class App extends Component {
     axios
       .post("api/auth", body, config)
       .then(res => {
-        console.log("Reached Here");
         this.loginSuccess(res.data);
       })
       .catch(err => {
@@ -390,7 +400,6 @@ class App extends Component {
   };
 
   loginSuccess = res => {
-    console.log("resonse was" + JSON.stringify(res));
     let authUpdate = {
       token: res.token,
       isAuthorized: true,
@@ -465,8 +474,27 @@ class App extends Component {
       status: null,
       id: null
     };
-    console.log("clearErros Called");
     this.setState({ error: errorUpdate });
+  };
+
+  updatePassError = (err, id) => {
+    if (err && err.response) {
+      let passErrorUpdate = {
+        msg: err.response.data,
+        status: err.response.status,
+        id: id
+      };
+      this.setState({ passError: passErrorUpdate });
+    }
+  };
+
+  clearPassError = () => {
+    let passErrorUpdate = {
+      msg: null,
+      status: null,
+      id: null
+    };
+    this.setState({ passError: passErrorUpdate });
   };
   updateError = (err, id) => {
     if (err.response) {
@@ -478,9 +506,6 @@ class App extends Component {
       };
       this.setState({ error: errorUpdate });
     }
-    console.log("updateError called");
-    console.log(JSON.stringify(err));
-    console.log({ id });
   };
   clearAuth = () => {
     localStorage.removeItem("token");
@@ -519,15 +544,93 @@ class App extends Component {
     return config;
   };
 
+  resetTokenConfig = () => {
+    const token = this.state.resetToken;
+
+    // Headers
+    const config = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers["x-auth-token"] = token;
+    }
+
+    return config;
+  };
+
+  handlePassReset = () => {
+    this.setState({ resetPassword: true });
+  };
+
+  //function to send reset email
+  handlePassResetSubmit = () => {
+    let email = this.state.passReset;
+    const config = this.tokenConfig();
+    const body = JSON.stringify({ email });
+    axios
+      .post("api/reset", body, config)
+      .then(res => {
+        console.log("Reached Here");
+        console.log("res.token");
+        console.log(res.data.token);
+        console.log(JSON.stringify(res));
+
+        this.resetSuccess(res.data);
+      })
+      .catch(err => {
+        this.updateError(err, "RESET_FAIL");
+      });
+  };
+  // reset email success
+  resetSuccess = res => {
+    this.clearPassError();
+  };
+
   toggleRegModal = () => {
     this.setState({ regName: "", regEmail: "", regPass: "" });
     this.setState({ regModal: !this.state.regModal });
     this.clearErrors();
   };
 
+  toggleResetModal = () => {
+    this.setState({ resetModal: !this.state.resetModal });
+    this.clearPassError();
+    //window.location.replace("http://localhost:3000/");
+  };
+
+  // new password submit
+  onResetSubmit = () => {
+    let password = this.state.resetPass;
+    const config = this.resetTokenConfig();
+    const body = JSON.stringify({ password });
+    axios
+      .post("api/passReset", body, config)
+      .then(res => {
+        this.passResetSuccess(res.data);
+      })
+      .catch(err => {
+        this.updatePassError(err, "RESET_FAIL_FINAL");
+      });
+    console.log("submitted");
+  };
+  passResetSuccess = res => {
+    this.setState({ passResetSuccess: true });
+    console.log();
+  };
+  handlePassResetSuccessLogin = () => {
+    this.setState({ passResetSuccess: false });
+    this.toggleResetModal();
+    this.toggleLogModal();
+    this.clearPassError();
+  };
+
   toggleLogModal = () => {
     this.setState({ logName: "", logEmail: "", logPass: "" });
-    this.setState({ logModal: !this.state.logModal });
+    this.setState({ logModal: !this.state.logModal, resetPassword: false });
     this.clearErrors();
   };
 
@@ -697,6 +800,70 @@ class App extends Component {
                 </Nav>
 
                 <Modal
+                  visible={this.state.resetModal}
+                  onClickBackdrop={this.toggleResetModal}
+                >
+                  <div className="modal-header">
+                    <h5 className="modal-title">Reset Password</h5>
+                  </div>
+                  <div className="modal-body">
+                    {this.state.passError && this.state.passError.msg && (
+                      <>
+                        {this.state.passError.id === "RESET_FAIL_FINAL" ? (
+                          <Alert danger>
+                            {" "}
+                            <p>{this.state.passError.msg.msg}</p>{" "}
+                          </Alert>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    )}
+                    {this.state.passResetSuccess ? (
+                      <>
+                        <Alert primary>
+                          {" "}
+                          <p>Password successfully reset</p>{" "}
+                        </Alert>
+                        <a onClick={this.handlePassResetSuccessLogin} href="#">
+                          Login
+                        </a>{" "}
+                      </>
+                    ) : (
+                      <>
+                        <Form>
+                          <Form.Group>
+                            <label htmlFor="resetPass">Password</label>
+                            <Form.Input
+                              type="password"
+                              id="resetPass"
+                              name="resetPass"
+                              placeholder="Password"
+                              value={this.state.resetPass}
+                              onChange={this.onChange}
+                            />
+                          </Form.Group>
+                        </Form>
+                      </>
+                    )}
+                  </div>
+                  <div className="modal-footer">
+                    <Button secondary onClick={this.toggleResetModal}>
+                      Close
+                    </Button>
+                    {this.state.passResetSuccess ? (
+                      <></>
+                    ) : (
+                      <>
+                        <Button primary onClick={this.onResetSubmit}>
+                          Submit
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </Modal>
+
+                <Modal
                   visible={this.state.regModal}
                   onClickBackdrop={this.toggleRegModal}
                 >
@@ -767,59 +934,110 @@ class App extends Component {
                   visible={this.state.logModal}
                   onClickBackdrop={this.toggleLogModal}
                 >
-                  <div className="modal-header">
-                    <h5 className="modal-title">Login</h5>
-                  </div>
-                  <div className="modal-body">
-                    {this.state.error.msg && this.state.error.msg.msg && (
-                      <Alert danger>
-                        {this.state.error.id === "REGISTER_FAIL" ||
-                        this.state.error.id === "LOGIN_FAIL" ? (
-                          <p>{this.state.error.msg.msg}</p>
-                        ) : (
-                          <></>
+                  {this.state.resetPassword ? (
+                    <>
+                      <>
+                        <div className="modal-header">
+                          <h5 className="modal-title">Reset Password</h5>
+                        </div>
+                        <div className="modal-body">
+                          {this.state.error.msg && this.state.error.msg.msg && (
+                            <Alert danger>
+                              {this.state.error.id === "RESET_FAIL" ? (
+                                <p>{this.state.error.msg.msg}</p>
+                              ) : (
+                                <></>
+                              )}
+                            </Alert>
+                          )}
+                          <Form>
+                            <Form.Group>
+                              <label htmlFor="logEmail">Email address</label>
+                              <Form.Input
+                                type="email"
+                                id="passReset"
+                                name="passReset"
+                                placeholder="Enter email"
+                                value={this.state.passReset}
+                                onChange={this.onChange}
+                              />
+                            </Form.Group>
+                          </Form>
+                        </div>
+                        <div className="modal-footer">
+                          <Button secondary onClick={this.toggleLogModal}>
+                            Close
+                          </Button>
+                          <Button
+                            primary
+                            onClick={this.handlePassResetSubmit.bind(this)}
+                          >
+                            Send Email
+                          </Button>
+                        </div>
+                      </>
+                    </>
+                  ) : (
+                    <>
+                      <div className="modal-header">
+                        <h5 className="modal-title">Login</h5>
+                      </div>
+                      <div className="modal-body">
+                        {this.state.error.msg && this.state.error.msg.msg && (
+                          <Alert danger>
+                            {this.state.error.id === "REGISTER_FAIL" ||
+                            this.state.error.id === "LOGIN_FAIL" ? (
+                              <p>{this.state.error.msg.msg}</p>
+                            ) : (
+                              <></>
+                            )}
+                          </Alert>
                         )}
-                      </Alert>
-                    )}
-                    <Form>
-                      <Form.Group>
-                        <label htmlFor="logEmail">Email address</label>
-                        <Form.Input
-                          type="email"
-                          id="logEmail"
-                          name="logEmail"
-                          placeholder="Enter email"
-                          value={this.state.logEmail}
-                          onChange={this.onChange}
-                        />
-                      </Form.Group>
-                      <Form.Group>
-                        <label htmlFor="logPass">Password</label>
-                        <Form.Input
-                          type="password"
-                          id="logPass"
-                          name="logPass"
-                          placeholder="Password"
-                          value={this.state.logPass}
-                          onChange={this.onChange}
-                        />
-                      </Form.Group>
-                    </Form>
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={this.toggleLogModal}>
-                      Close
-                    </Button>
-                    <Button primary onClick={this.userLogin.bind(this)}>
-                      Login
-                    </Button>
-                  </div>
+                        <Form>
+                          <Form.Group>
+                            <label htmlFor="logEmail">Email address</label>
+                            <Form.Input
+                              type="email"
+                              id="logEmail"
+                              name="logEmail"
+                              placeholder="Enter email"
+                              value={this.state.logEmail}
+                              onChange={this.onChange}
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <label htmlFor="logPass">Password</label>
+                            <Form.Input
+                              type="password"
+                              id="logPass"
+                              name="logPass"
+                              placeholder="Password"
+                              value={this.state.logPass}
+                              onChange={this.onChange}
+                            />
+                          </Form.Group>
+                        </Form>
+                        <a onClick={this.handlePassReset} href="#">
+                          Reset Password
+                        </a>{" "}
+                      </div>
+                      <div className="modal-footer">
+                        <Button secondary onClick={this.toggleLogModal}>
+                          Close
+                        </Button>
+                        <Button primary onClick={this.userLogin.bind(this)}>
+                          Login
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </Modal>
                 {this.state.auth.user ? (
                   <p className="mb-0 mt-3 width-check">
                     <em> Welcome {this.state.auth.user.name},</em>
                   </p>
                 ) : null}
+                {this.props.query ? <p>{this.props.query}</p> : null}
                 <SearchBar
                   ref={this.searchBarElement}
                   tableItems={this.state.fetchedResults}

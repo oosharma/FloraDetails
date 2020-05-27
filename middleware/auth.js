@@ -12,7 +12,9 @@ function auth(req, res, next) {
   try {
     // Verify token
     const decoded = jwt.verify(token, config.get("jwtSecret"));
-
+    console.log(decoded);
+    console.log(token);
+    console.log("FRON AUTHJSSSS");
     // Add user from payload
     req.user = decoded;
     next();

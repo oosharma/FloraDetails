@@ -7,6 +7,11 @@ const logger = require("morgan");
 const Data = require("./data");
 const path = require("path");
 const app = express();
+
+app.get("/reset", (req, res) => {
+  console.log("dddd");
+  res.json({ item: "reset" });
+});
 app.use(cors());
 const router = express.Router();
 // DB Config
@@ -93,12 +98,16 @@ app.use("/api/items", require("./routes/api/items"));
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/userItem", require("./routes/api/userItem"));
 app.use("/api/auth", require("./routes/api/auth"));
+app.use("/api/reset", require("./routes/api/reset"));
+app.use("/api/passReset", require("./routes/api/passReset"));
 
 const API_PORT = process.env.PORT || 3001;
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-
+  app.get("/reset", (req, res) => {
+    res.JSON("here");
+  });
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
