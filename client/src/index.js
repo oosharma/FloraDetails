@@ -8,8 +8,6 @@ ReactDOM.render(
   <App query={window.location.search} />,
   document.getElementById("root")
 );
-console.log(window.location.search);
-console.log("window.location.search");
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

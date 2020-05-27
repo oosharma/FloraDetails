@@ -7,6 +7,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import items from "./items.js";
 
+import zxcvbn from "zxcvbn";
+
 import axios from "axios";
 import {
   Nav,
@@ -32,6 +34,7 @@ class App extends Component {
       finalPublicTableCheck: false,
       finalFetchedCheck: false,
       finalCheck: false,
+      passStrength: 0,
       regName: "",
       regEmail: "",
       regPass: "",
@@ -204,6 +207,7 @@ class App extends Component {
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
   componentDidMount() {
+    //console.log(zxcvbn("Tr0ub4dour&3"));
     ReactGA.initialize("UA-147525205-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
 
@@ -574,11 +578,6 @@ class App extends Component {
     axios
       .post("api/reset", body, config)
       .then(res => {
-        console.log("Reached Here");
-        console.log("res.token");
-        console.log(res.data.token);
-        console.log(JSON.stringify(res));
-
         this.resetSuccess(res.data);
       })
       .catch(err => {
@@ -615,11 +614,9 @@ class App extends Component {
       .catch(err => {
         this.updatePassError(err, "RESET_FAIL_FINAL");
       });
-    console.log("submitted");
   };
   passResetSuccess = res => {
     this.setState({ passResetSuccess: true });
-    console.log();
   };
   handlePassResetSuccessLogin = () => {
     this.setState({ passResetSuccess: false });
@@ -798,6 +795,11 @@ class App extends Component {
                     ? authLinks
                     : guestLinks}
                 </Nav>
+
+                <callModal
+                  visible={this.state.resetModal}
+                  onClickBackdrop={this.toggleResetModal.bind(this)}
+                ></callModal>
 
                 <Modal
                   visible={this.state.resetModal}

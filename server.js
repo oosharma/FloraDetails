@@ -9,7 +9,6 @@ const path = require("path");
 const app = express();
 
 app.get("/reset", (req, res) => {
-  console.log("dddd");
   res.json({ item: "reset" });
 });
 app.use(cors());
