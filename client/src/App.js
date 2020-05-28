@@ -219,7 +219,14 @@ class App extends Component {
     this.loadUser();
     this.loadItems();
     if (this.props.query && this.props.query.includes("token")) {
-      let resetToken = this.props.query.split("-")[1];
+      // let resetToken = this.props.query.split(/- (.+)?/, 2);
+
+      let i = this.props.query.indexOf("-");
+      const resetToken = [
+        this.props.query.slice(0, i),
+        this.props.query.slice(i + 1)
+      ];
+
       this.setState({ resetModal: true, resetToken: resetToken }, () => {
         this.clearErrors();
       });
