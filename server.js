@@ -8,13 +8,19 @@ const Data = require("./data");
 const path = require("path");
 const app = express();
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+console.log("process env mongouri");
+console.log(process.env.MONGO_URI);
+
 app.get("/reset", (req, res) => {
   res.json({ item: "reset" });
 });
 app.use(cors());
 const router = express.Router();
 // DB Config
-const db = require("./config/keys").mongoURI;
+const db = process.env.MONGO_URI;
 
 mongoose
   .connect(db, { useNewUrlParser: true, useCreateIndex: true })

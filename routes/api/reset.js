@@ -16,11 +16,6 @@ const nodeMailer = require("nodemailer");
 // @access public
 router.post("/", (req, res) => {
   const { email } = req.body;
-  console.log("reachted dfasdfdsafd");
-  console.log("reachted dfasdfdsafd");
-
-  console.log("reachted dfasdfdsafd");
-  console.log("reachted dfasdfdsafd");
 
   // Simple validation
   if (!email) {
@@ -32,26 +27,18 @@ router.post("/", (req, res) => {
     if (!user) return res.status(400).json({ msg: "User does not exist" });
     jwt.sign(
       { id: user.id },
-      config.get("jwtSecret"),
+      process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
 
-        console.log("token generated");
-        console.log(token);
-
-        console.log(user.email);
-
         const transporter = nodeMailer.createTransport({
           service: "gmail",
           auth: {
-            user: `floradetailsweb@gmail.com`,
-            pass: `mernapp23*`
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
           }
         });
-
-        console.log("transporter generated");
-        console.log(user.email);
 
         const mailOptions = {
           from: "floradetailsweb@gmail.com",
@@ -64,48 +51,19 @@ router.post("/", (req, res) => {
             "If you did not request this, please ignore this email and your password will remain unchanged.\n"
         };
 
-        console.log("sending mail");
-
         transporter.sendMail(mailOptions, (err, response) => {
           if (err) {
-            console.log("not sent");
             console.log(err);
 
             res.status(400).json({ msg: "Email not sent" });
             //console.error("there was an error: ", err);
           } else {
-            console.log("mail sent");
-
-            console.log("here is the res: ", response);
             res.status(200).json("recovery email sent");
           }
         });
         console.log("outside");
       }
     );
-
-    // Validate password
-    // bcrypt.compare(password, user.password).then(isMatch => {
-    //   if (!isMatch)
-    //     return res.status(400).json({ msg: "Credentials do not match" });
-    //   jwt.sign(
-    //     { id: user.id },
-    //     config.get("jwtSecret"),
-    //     { expiresIn: 3600 },
-    //     (err, token) => {
-    //       if (err) throw err;
-    //       res.json({
-    //         token,
-    //         user: {
-    //           id: user.id,
-    //           name: user.name,
-    //           email: user.email,
-    //           items: user.items
-    //         }
-    //       });
-    //     }
-    //   );
-    // });
   });
 });
 

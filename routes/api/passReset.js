@@ -22,7 +22,7 @@ router.post("/", (req, res) => {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlY2RhNWEwODQ5YjlhMmIyNDJjNDRkYyIsImlhdCI6MTU5MDU1NzA2MywiZXhwIjoxNTkwNTYwNjYzfQ.2mk8pbIZWr1qxOUVs2r5Pd5zxHhz01b0bfILMz7sVqU";
 
     // Verify token
-    decoded = jwt.verify(token, config.get("jwtSecret"));
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     let hashedPass = "";
     bcrypt.genSalt(10, (err, salt) => {
