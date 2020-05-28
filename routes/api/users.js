@@ -23,8 +23,20 @@ router.post("/", (req, res) => {
     return re.test(String(email).toLowerCase());
   }
 
+  if (!validateEmail(email) && password.length < 8) {
+    return res.status(400).json({
+      msg: "Invalid email, Password must be at least 8 characters long "
+    });
+  }
+
   if (!validateEmail(email)) {
-    return res.status(400).json({ msg: "Please enter a valid email" });
+    return res.status(400).json({ msg: "Invalid email" });
+  }
+
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ msg: "Password must be at least 8 characters long" });
   }
 
   // Check for existing user

@@ -14,6 +14,12 @@ router.post("/", (req, res) => {
   const { password } = req.body;
   const token = req.header("x-auth-token");
 
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ msg: "Password must be at least 8 characters long" });
+  }
+
   if (!token)
     return res.status(401).json({ msg: "No token, authorization denied" });
   let decoded;
