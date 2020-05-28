@@ -283,7 +283,7 @@ class SearchBar extends Component {
           ? this.props.tableItems.length !== 685 && (
               <Button
                 variant="primary"
-                className={`btn-primary default-button  `}
+                className={`btn-primary default-button mt-2 ml-2 `}
                 type="button"
                 onSubmit={() => {
                   this.handleShowAllClick();
