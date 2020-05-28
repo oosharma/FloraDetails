@@ -222,10 +222,8 @@ class App extends Component {
       // let resetToken = this.props.query.split(/- (.+)?/, 2);
 
       let i = this.props.query.indexOf("-");
-      const resetToken = [
-        this.props.query.slice(0, i),
-        this.props.query.slice(i + 1)
-      ];
+      const resetToken = this.props.query.slice(i + 1);
+      console.log(resetToken);
 
       this.setState({ resetModal: true, resetToken: resetToken }, () => {
         this.clearErrors();
