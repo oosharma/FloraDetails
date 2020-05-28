@@ -4,6 +4,8 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
 import { filterArr, randomize, modifyResult } from "./helper.js";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+
 import items from "./items.js";
 
 import zxcvbn from "zxcvbn";
@@ -31,6 +33,7 @@ class App extends Component {
 
     this.state = {
       finalPublicTableCheck: false,
+      showRestLoader: false,
       finalFetchedCheck: false,
       finalCheck: false,
       passStrength: 0,
@@ -578,23 +581,29 @@ class App extends Component {
 
   //function to send reset email
   handlePassResetEmailSubmit = () => {
-    let email = this.state.passReset;
-    const config = this.tokenConfig();
-    const body = JSON.stringify({ email });
-    axios
-      .post("api/reset", body, config)
-      .then(res => {
-        this.handleResetEmailSentSuccess(res.data);
-      })
-      .catch(err => {
-        this.updateError(err, "RESET_FAIL");
-      });
+    this.setState({ showResetLoader: true }, () => {
+      let email = this.state.passReset;
+      const config = this.tokenConfig();
+      const body = JSON.stringify({ email });
+      axios
+        .post("api/reset", body, config)
+        .then(res => {
+          this.handleResetEmailSentSuccess(res.data);
+        })
+        .catch(err => {
+          this.updateError(err, "RESET_FAIL");
+        })
+        .finally(() => {
+          this.setState({ showResetLoader: false });
+        });
+    });
   };
 
   // reset email success
   handleResetEmailSentSuccess = res => {
     this.setState({ resetPasswordEmailSent: true });
     this.clearPassError();
+    //enter code to remove state for showing reset here
   };
 
   toggleRegModal = () => {
@@ -638,6 +647,7 @@ class App extends Component {
     this.setState({ logName: "", logEmail: "", logPass: "" });
     this.setState({ logModal: !this.state.logModal, resetPassword: false });
     this.clearErrors();
+    this.setState({ resetPasswordEmailSent: false });
   };
 
   onChange = e => {
@@ -992,14 +1002,30 @@ class App extends Component {
                               <Button secondary onClick={this.toggleLogModal}>
                                 Close
                               </Button>
-                              <Button
-                                primary
-                                onClick={this.handlePassResetEmailSubmit.bind(
-                                  this
-                                )}
-                              >
-                                Send Email
-                              </Button>
+                              {this.state.showResetLoader ? (
+                                <>
+                                  <Button primary className="loader-button">
+                                    <Loader
+                                      type="Puff"
+                                      color="#00BFFF"
+                                      height={25}
+                                      width={25}
+                                      // timeout={1000} //3 secs
+                                    />{" "}
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  <Button
+                                    primary
+                                    onClick={this.handlePassResetEmailSubmit.bind(
+                                      this
+                                    )}
+                                  >
+                                    Send Email
+                                  </Button>
+                                </>
+                              )}
                             </div>
                           </>
                         )}
