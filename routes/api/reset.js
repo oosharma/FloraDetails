@@ -45,8 +45,8 @@ router.post("/", (req, res) => {
         const transporter = nodeMailer.createTransport({
           service: "gmail",
           auth: {
-            user: `absharma6561@gmail.com`,
-            pass: `HotChocolate#8`
+            user: `floradetailsweb@gmail.com`,
+            pass: `mernapp23*`
           }
         });
 
@@ -54,7 +54,7 @@ router.post("/", (req, res) => {
         console.log(user.email);
 
         const mailOptions = {
-          from: "absharma6561@gmail.com",
+          from: "floradetailsweb@gmail.com",
           to: `${user.email}`,
           subject: "Flora Details: Link To Reset Password",
           text:

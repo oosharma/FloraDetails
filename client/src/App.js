@@ -4,7 +4,6 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import PlantTable from "./components/PlantTable/PlantTable";
 import { filterArr, randomize, modifyResult } from "./helper.js";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Loader from "react-loader-spinner";
 import items from "./items.js";
 
 import zxcvbn from "zxcvbn";
@@ -41,6 +40,7 @@ class App extends Component {
       regMsg: null,
       regModal: false,
       resetModal: false,
+      resetPasswordEmailSent: false,
       logEmail: "",
       logPass: "",
       logModal: false,
@@ -571,21 +571,23 @@ class App extends Component {
   };
 
   //function to send reset email
-  handlePassResetSubmit = () => {
+  handlePassResetEmailSubmit = () => {
     let email = this.state.passReset;
     const config = this.tokenConfig();
     const body = JSON.stringify({ email });
     axios
       .post("api/reset", body, config)
       .then(res => {
-        this.resetSuccess(res.data);
+        this.handleResetEmailSentSuccess(res.data);
       })
       .catch(err => {
         this.updateError(err, "RESET_FAIL");
       });
   };
+
   // reset email success
-  resetSuccess = res => {
+  handleResetEmailSentSuccess = res => {
+    this.setState({ resetPasswordEmailSent: true });
     this.clearPassError();
   };
 
@@ -609,13 +611,14 @@ class App extends Component {
     axios
       .post("api/passReset", body, config)
       .then(res => {
-        this.passResetSuccess(res.data);
+        this.handlePassResetSuccess(res.data);
       })
       .catch(err => {
         this.updatePassError(err, "RESET_FAIL_FINAL");
       });
   };
-  passResetSuccess = res => {
+  handlePassResetSuccess = res => {
+    console.log("got called");
     this.setState({ passResetSuccess: true });
   };
   handlePassResetSuccessLogin = () => {
@@ -796,11 +799,6 @@ class App extends Component {
                     : guestLinks}
                 </Nav>
 
-                <callModal
-                  visible={this.state.resetModal}
-                  onClickBackdrop={this.toggleResetModal.bind(this)}
-                ></callModal>
-
                 <Modal
                   visible={this.state.resetModal}
                   onClickBackdrop={this.toggleResetModal}
@@ -942,41 +940,63 @@ class App extends Component {
                         <div className="modal-header">
                           <h5 className="modal-title">Reset Password</h5>
                         </div>
-                        <div className="modal-body">
-                          {this.state.error.msg && this.state.error.msg.msg && (
-                            <Alert danger>
-                              {this.state.error.id === "RESET_FAIL" ? (
-                                <p>{this.state.error.msg.msg}</p>
-                              ) : (
-                                <></>
-                              )}
-                            </Alert>
-                          )}
-                          <Form>
-                            <Form.Group>
-                              <label htmlFor="logEmail">Email address</label>
-                              <Form.Input
-                                type="email"
-                                id="passReset"
-                                name="passReset"
-                                placeholder="Enter email"
-                                value={this.state.passReset}
-                                onChange={this.onChange}
-                              />
-                            </Form.Group>
-                          </Form>
-                        </div>
-                        <div className="modal-footer">
-                          <Button secondary onClick={this.toggleLogModal}>
-                            Close
-                          </Button>
-                          <Button
-                            primary
-                            onClick={this.handlePassResetSubmit.bind(this)}
-                          >
-                            Send Email
-                          </Button>
-                        </div>
+                        {this.state.resetPasswordEmailSent ? (
+                          <>
+                            <div className="modal-body">
+                              <Alert success>
+                                <p>Rest link sent to your email</p>
+                              </Alert>
+                            </div>
+                            <div className="modal-footer">
+                              <Button secondary onClick={this.toggleLogModal}>
+                                Close
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="modal-body">
+                              {this.state.error.msg &&
+                                this.state.error.msg.msg && (
+                                  <Alert danger>
+                                    {this.state.error.id === "RESET_FAIL" ? (
+                                      <p>{this.state.error.msg.msg}</p>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </Alert>
+                                )}
+                              <Form>
+                                <Form.Group>
+                                  <label htmlFor="logEmail">
+                                    Email address
+                                  </label>
+                                  <Form.Input
+                                    type="email"
+                                    id="passReset"
+                                    name="passReset"
+                                    placeholder="Enter email"
+                                    value={this.state.passReset}
+                                    onChange={this.onChange}
+                                  />
+                                </Form.Group>
+                              </Form>
+                            </div>
+                            <div className="modal-footer">
+                              <Button secondary onClick={this.toggleLogModal}>
+                                Close
+                              </Button>
+                              <Button
+                                primary
+                                onClick={this.handlePassResetEmailSubmit.bind(
+                                  this
+                                )}
+                              >
+                                Send Email
+                              </Button>
+                            </div>
+                          </>
+                        )}
                       </>
                     </>
                   ) : (
@@ -1039,7 +1059,7 @@ class App extends Component {
                     <em> Welcome {this.state.auth.user.name},</em>
                   </p>
                 ) : null}
-                {this.props.query ? <p>{this.props.query}</p> : null}
+
                 <SearchBar
                   ref={this.searchBarElement}
                   tableItems={this.state.fetchedResults}
