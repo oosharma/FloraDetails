@@ -226,7 +226,6 @@ class App extends Component {
 
       let i = this.props.query.indexOf("-");
       const resetToken = this.props.query.slice(i + 1);
-      console.log(resetToken);
 
       this.setState({ resetModal: true, resetToken: resetToken }, () => {
         this.clearErrors();
@@ -633,7 +632,6 @@ class App extends Component {
       });
   };
   handlePassResetSuccess = res => {
-    console.log("got called");
     this.setState({ passResetSuccess: true });
   };
   handlePassResetSuccessLogin = () => {

@@ -11,8 +11,6 @@ const app = express();
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-console.log("process env mongouri");
-console.log(process.env.MONGO_URI);
 
 app.get("/reset", (req, res) => {
   res.json({ item: "reset" });

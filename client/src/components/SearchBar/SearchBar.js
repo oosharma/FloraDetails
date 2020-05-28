@@ -51,8 +51,8 @@ class SearchBar extends Component {
       selectedValueOption: [],
       selectedWhereOption: [],
       initial: true,
-      filters: "dontShowFilter",
-      filterTerm: "Show Filters"
+      filters: "showFilter",
+      filterTerm: "Hide Filters"
     };
   }
   // componentDidMount() {
@@ -267,7 +267,7 @@ class SearchBar extends Component {
         })}
         <Button
           variant="primary"
-          className="btn-primary default-button  "
+          className="btn-primary default-button mt-2 "
           type="button"
           onSubmit={() => {
             this.toggleFilters();
