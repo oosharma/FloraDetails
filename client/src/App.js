@@ -418,6 +418,7 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
+    window.location.replace("http://floradetails.com/");
     // this.loadItems();
     //this.clearSearchBarTable();
     this.toggleLogModal();
