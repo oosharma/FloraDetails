@@ -747,8 +747,9 @@ class App extends Component {
               iamSharma
             </a>{" "}
             using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
-            authentication is implemented with JSON Web Tokens and Bcrypt JS.
-            Checkout its source code on GitHub:{" "}
+            authentication is implemented with JSON Web Tokens and Bcrypt JS,
+            and password reset emails are sent through NodeMailer. Checkout its
+            source code on GitHub:{" "}
             <a target="_blank" href="https://github.com/oosharma/FloraDetails">
               https://github.com/oosharma/FloraDetails
             </a>
