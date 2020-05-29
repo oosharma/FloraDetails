@@ -577,7 +577,9 @@ class App extends Component {
   };
 
   handlePassReset = () => {
-    this.setState({ resetPassword: true });
+    this.setState({ resetPassword: true }, () => {
+      this.clearErrors();
+    });
   };
 
   //function to send reset email
