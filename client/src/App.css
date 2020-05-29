@@ -53,3 +53,7 @@ p {
 .loader-button {
   width: 106.1px;
 }
+
+.empty-form-group {
+  display: none;
+}

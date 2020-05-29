@@ -4,6 +4,8 @@ import { Row, Col, Button, Display4, BDiv } from "bootstrap-4-react";
 import Select from "react-select";
 import { modifyResult, filterArr, randomize } from "../../helper.js";
 import options from "./optionsData.js";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 import whereOptions, {
   bloomConditions,
   bloomValues,
@@ -51,6 +53,7 @@ class SearchBar extends Component {
       selectedValueOption: [],
       selectedWhereOption: [],
       initial: true,
+      showFilterLoader: false,
       filters: "showFilter",
       filterTerm: "Hide Filters"
     };
@@ -166,6 +169,19 @@ class SearchBar extends Component {
   };
 
   handleConditionChange = (index, option) => {
+    if (
+      this.state.selectedConditionOption[index] &&
+      this.state.selectedConditionOption[index].label !== option.label
+    ) {
+      let selectedValueOption = [...this.state.selectedValueOption];
+
+      selectedValueOption[index] = null;
+
+      this.setState({
+        selectedValueOption: [...selectedValueOption]
+      });
+    }
+
     let tempSelectedConditionOption = [...this.state.selectedConditionOption];
     tempSelectedConditionOption[index] = option;
     this.setState({
@@ -185,7 +201,8 @@ class SearchBar extends Component {
 
     this.setState(
       {
-        selectedValueOption: [...tempSelectedValueOption]
+        selectedValueOption: [...tempSelectedValueOption],
+        showFilterLoader: true
       },
       () => {
         this.handleAdButtonClick();
@@ -265,6 +282,7 @@ class SearchBar extends Component {
             </>
           );
         })}
+
         <Button
           variant="primary"
           className="btn-primary default-button mt-2 "
@@ -279,24 +297,44 @@ class SearchBar extends Component {
         >
           {this.state.filterTerm}
         </Button>
-        {this.props.tableItems
-          ? this.props.tableItems.length !== 685 && (
-              <Button
-                variant="primary"
-                className={`btn-primary default-button mt-2 ml-2 `}
-                type="button"
-                onSubmit={() => {
-                  this.handleShowAllClick();
-                }}
-                onClick={() => {
-                  this.handleShowAllClick();
-                  //  this.props.changeFetchedResults(this.state.results);
-                }}
-              >
-                Remove Filters
-              </Button>
-            )
-          : null}
+
+        {this.state.showFilterLoader ? (
+          <>
+            <Button
+              primary
+              className="btn-primary default-button mt-2 ml-2 filter-loader-button"
+            >
+              <Loader
+                type="Puff"
+                color="#00BFFF"
+                height={25}
+                width={25}
+                // timeout={1000} //3 secs
+              />{" "}
+            </Button>
+          </>
+        ) : (
+          <>
+            {this.props.tableItems
+              ? this.props.tableItems.length !== 685 && (
+                  <Button
+                    variant="primary"
+                    className={`btn-primary default-button mt-2 ml-2 filter-button `}
+                    type="button"
+                    onSubmit={() => {
+                      this.handleShowAllClick();
+                    }}
+                    onClick={() => {
+                      this.handleShowAllClick();
+                      //  this.props.changeFetchedResults(this.state.results);
+                    }}
+                  >
+                    Remove Filters
+                  </Button>
+                )
+              : null}
+          </>
+        )}
 
         {/* <Display4 className="width-check">{this.state.heading}</Display4>
         <Row>
@@ -360,9 +398,14 @@ class SearchBar extends Component {
       .then(response => response.json())
       .then(response => {
         let randomResponse = randomize(response);
-        this.setState({
-          results: [...randomResponse]
-        });
+        this.setState(
+          {
+            results: [...randomResponse]
+          },
+          () => {
+            this.setState({ showFilterLoader: false });
+          }
+        );
         if (response.length) {
           this.showClear();
           this.setState({ classTable: "showButton" });
@@ -475,9 +518,9 @@ class SearchBar extends Component {
     let where = this.state.selectedWhereOption[index].value;
     let condition = this.state.selectedConditionOption[index].value;
     let value = this.state.selectedValueOption[index].value;
-
     if (this.state.selectedConditionOption[index].label === "Equals") {
       const query = `https://data.sfgov.org/resource/vmnk-skih.json?$where=${where}%20${condition}%20%27${value}%27`;
+
       return query;
     }
 

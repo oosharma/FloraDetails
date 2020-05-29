@@ -210,7 +210,6 @@ class App extends Component {
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
   componentDidMount() {
-    //console.log(zxcvbn("Tr0ub4dour&3"));
     ReactGA.initialize("UA-147525205-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
 
@@ -420,7 +419,10 @@ class App extends Component {
     localStorage.setItem("token", res.token);
     this.setState({ auth: authUpdate });
     this.clearErrors();
-    window.location.replace("http://floradetails.com/");
+    if (this.state.resetToken) {
+      window.location.replace("http://floradetails.com/");
+    }
+
     // this.loadItems();
     //this.clearSearchBarTable();
     this.toggleLogModal();
@@ -612,9 +614,13 @@ class App extends Component {
   };
 
   toggleResetModal = () => {
+    if (this.state.resetModal === true) {
+      this.setState({ resetModal: !this.state.resetModal }, () => {
+        this.clearPassError();
+        window.location.replace("http://floradetails.com/");
+      });
+    }
     this.setState({ resetModal: !this.state.resetModal });
-    this.clearPassError();
-    //window.location.replace("http://localhost:3000/");
   };
 
   // new password submit
@@ -622,6 +628,7 @@ class App extends Component {
     let password = this.state.resetPass;
     const config = this.resetTokenConfig();
     const body = JSON.stringify({ password });
+    this.clearPassError();
     axios
       .post("api/passReset", body, config)
       .then(res => {
@@ -839,9 +846,9 @@ class App extends Component {
                           {" "}
                           <p>Password successfully reset</p>{" "}
                         </Alert>
-                        <a onClick={this.handlePassResetSuccessLogin} href="#">
+                        {/* <a onClick={this.handlePassResetSuccessLogin} href="#">
                           Login
-                        </a>{" "}
+                        </a>{" "} */}
                       </>
                     ) : (
                       <>
@@ -856,6 +863,10 @@ class App extends Component {
                               value={this.state.resetPass}
                               onChange={this.onChange}
                             />
+                          </Form.Group>
+                          <Form.Group className="empty-form-group">
+                            <label htmlFor="resetPass">N/A</label>
+                            <Form.Input />
                           </Form.Group>
                         </Form>
                       </>

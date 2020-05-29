@@ -25,7 +25,7 @@ router.post("/", (req, res) => {
 
   if (!validateEmail(email) && password.length < 8) {
     return res.status(400).json({
-      msg: "Invalid email, Password must be at least 8 characters long "
+      msg: "Invalid email, password must be at least 8 characters long"
     });
   }
 

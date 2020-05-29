@@ -37,3 +37,8 @@ button.btn.btn-primary.default-button {
     width: 313px;
   }
 }
+
+.filter-loader-button,
+.filter-button {
+  width: 133px;
+}

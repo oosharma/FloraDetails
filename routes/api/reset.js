@@ -46,7 +46,6 @@ router.post("/", (req, res) => {
         // } else {
         //   resetUrl = `http://localhost:3000/?token-${token} `;
         // }
-        console.log(process.env);
         const mailOptions = {
           from: "floradetailsweb@gmail.com",
           to: `${user.email}`,
@@ -60,15 +59,12 @@ router.post("/", (req, res) => {
 
         transporter.sendMail(mailOptions, (err, response) => {
           if (err) {
-            console.log(err);
-
             res.status(400).json({ msg: "Email not sent" });
             //console.error("there was an error: ", err);
           } else {
             res.status(200).json("recovery email sent");
           }
         });
-        console.log("outside");
       }
     );
   });

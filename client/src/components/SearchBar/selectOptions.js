@@ -137,16 +137,12 @@ const bloomConditions = [
       label: "Sun"
     },
     {
-      value: "Parte Shade",
-      label: "Parte Shade"
+      value: "Part%20Shade",
+      label: "Part Shade"
     },
     {
       value: "Shade",
       label: "Shade"
-    },
-    {
-      value: "Fall",
-      label: "Fall"
     }
   ];
   
