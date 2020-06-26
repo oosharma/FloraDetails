@@ -1099,9 +1099,19 @@ class App extends Component {
                   )}
                 </Modal>
                 {this.state.auth.user ? (
-                  <p className="mb-0 mt-3 width-check">
-                    <em> Welcome {this.state.auth.user.name},</em>
-                  </p>
+                  <>
+                    <p className="mb-0 mt-3 width-check">
+                      <em> Welcome {this.state.auth.user.name},</em>
+                    </p>
+                    <img
+                      width="80"
+                      alt="not available"
+                      onError={() => {
+                        console.log("errrrrrrrr");
+                      }}
+                      src="https://via.placeholder.com/300.png/09f/fff%20C/O%20https://placeholder.com/"
+                    ></img>
+                  </>
                 ) : null}
 
                 <SearchBar

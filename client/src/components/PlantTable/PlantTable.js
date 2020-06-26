@@ -405,6 +405,7 @@ class PlantTable extends Component {
               <thead>
                 <tr>
                   <th style={{ minWidth: "120px" }}>Action</th>
+                  <th style={{ minWidth: "120px" }}>Image</th>
 
                   {this.columnItems()}
                 </tr>
@@ -437,6 +438,28 @@ class PlantTable extends Component {
                               "Delete"
                             )}
                           </Button>
+                        </BTd>
+                        <BTd
+                          align="middle center"
+                          style={{ textAlign: "center", height: "108px" }}
+                        >
+                          <img
+                            width="80"
+                            alt="not available"
+                            onError={() => {
+                              console.log("errrrrrrrr");
+                            }}
+                            src={
+                              result && result.commonName
+                                ? `https://flora-details-images.s3-us-west-1.amazonaws.com/${result.commonName
+                                    .replace(/\s+/g, "")
+                                    .replace(/"/g, "")
+                                    .replace(/'/g, "")
+                                    .replace(/,/g, "")
+                                    .replace(/\//g, "")}01.jpg`
+                                : ""
+                            }
+                          ></img>
                         </BTd>
 
                         {result.commonName ? (
