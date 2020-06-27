@@ -21,6 +21,14 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  profile_pic: {
+    type: Boolean,
+    default: false
+  },
+  pic_uri: {
+    type: String,
+    default: null
+  },
   items: {
     type: Array,
     default: []

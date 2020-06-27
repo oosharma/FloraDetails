@@ -103,6 +103,7 @@ app.use("/api/userItem", require("./routes/api/userItem"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/reset", require("./routes/api/reset"));
 app.use("/api/passReset", require("./routes/api/passReset"));
+app.use("/api/upload", require("./routes/api/upload"));
 
 const API_PORT = process.env.PORT || 3001;
 

@@ -38,7 +38,9 @@ router.post("/", (req, res) => {
               id: user.id,
               name: user.name,
               email: user.email,
-              items: user.items
+              items: user.items,
+              profile_pic: user.profile_pic,
+              pic_uri: user.pic_uri
             }
           });
         }

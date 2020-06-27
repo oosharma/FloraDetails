@@ -57,3 +57,59 @@ p {
 .empty-form-group {
   display: none;
 }
+
+.editImage {
+  background-color: white;
+  padding: 10px;
+  max-width: 400px;
+  border: solid 1px;
+  border-color: gray;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  margin-top: 9px;
+}
+.imageInputBtn {
+  margin: 2px 0px 1px 3px;
+  font-size: 0.8rem;
+}
+.editImageWarning {
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+.profile-pic-div {
+  max-width: 120px;
+  max-height: 120px;
+  overflow: hidden;
+}
+.pic-img {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: scale-down;
+  border: solid;
+
+  border-color: black;
+  border-radius: 5px;
+}
+.imageInput {
+  margin: 2px 0px 10px 3px;
+  max-width: 244px;
+  font-size: 0.8rem;
+  display: block;
+}
+
+@media screen and (min-width: 397px) {
+  .imageInput {
+    margin: 2px 0px 10px 3px;
+    max-width: 350px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .editImage,
+  .editImageWarning,
+  .imageInput,
+  .imageInputBtn {
+    font-size: 1rem;
+  }
+}
