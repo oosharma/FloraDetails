@@ -702,7 +702,9 @@ class App extends Component {
           this.setState({ uploadMessage: "Please choose a valid image file" });
         })
         .finally(() => {
-          this.setState({ editImageLoading: false });
+          this.setState({ editImageLoading: false }, () => {
+            this.loadUser();
+          });
         });
     } else {
       this.setState({
