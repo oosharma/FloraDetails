@@ -103,7 +103,8 @@ class App extends Component {
       },
       file: null,
       editImage: false,
-      uploadMessage: null
+      uploadMessage: null,
+      editImageLoading: false
     };
   }
 
@@ -674,6 +675,7 @@ class App extends Component {
   };
 
   submitFile = event => {
+    this.setState({ editImageLoading: true });
     const token = this.state.auth.token;
     const userEmail = this.state.auth.email;
     event.preventDefault();
@@ -698,9 +700,15 @@ class App extends Component {
         .catch(error => {
           // handle your error
           this.setState({ uploadMessage: "Please choose a valid image file" });
+        })
+        .finally(() => {
+          this.setState({ editImageLoading: false });
         });
     } else {
-      this.setState({ uploadMessage: "Please choose a file" });
+      this.setState({
+        uploadMessage: "Please choose a file",
+        editImageLoading: false
+      });
     }
   };
 
@@ -1156,7 +1164,7 @@ class App extends Component {
                           onError={() => {
                             console.log("errrrrrrrr");
                           }}
-                          class={`mt-2 pic-img`}
+                          class={`pic-img`}
                           onClick={this.handleProfilePic}
                           src={
                             this.state.auth.user.profile_pic
@@ -1168,36 +1176,56 @@ class App extends Component {
 
                       {this.state.editImage && (
                         <>
-                          <div className={`editImage`}>
-                            {this.state.uploadMessage && (
-                              <p className={`mt-1 mb-1 editImageWarning`}>
-                                {this.state.uploadMessage}
-                              </p>
-                            )}
-                            <form
-                              class={`mt-1 mb-1`}
-                              onSubmit={this.submitFile}
-                            >
-                              <input
-                                class={`imageInput`}
-                                label="upload file"
-                                type="file"
-                                onChange={this.handleFileUpload}
-                              />
-                              <Button
-                                className={`btn btn-primary imageInputBtn`}
-                                type="submit"
+                          {" "}
+                          <>
+                            <div className={`editImage`}>
+                              {this.state.uploadMessage && (
+                                <p className={`mt-1 mb-1 editImageWarning`}>
+                                  {this.state.uploadMessage}
+                                </p>
+                              )}
+                              <form
+                                class={`mt-1 mb-1`}
+                                onSubmit={this.submitFile}
                               >
-                                Upload
-                              </Button>
-                              <Button
-                                className={`btn btn-secondary imageInputBtn ml-3`}
-                                onClick={this.cancelUpload}
-                              >
-                                Cancel
-                              </Button>
-                            </form>
-                          </div>
+                                <input
+                                  class={`imageInput`}
+                                  label="upload file"
+                                  type="file"
+                                  onChange={this.handleFileUpload}
+                                />
+                                {this.state.editImageLoading ? (
+                                  <>
+                                    <Button primary className="loader-button">
+                                      <Loader
+                                        type="Puff"
+                                        color="#00BFFF"
+                                        height={25}
+                                        width={25}
+                                        // timeout={1000} //3 secs
+                                      />{" "}
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Button
+                                      className={`btn btn-primary imageInputBtn`}
+                                      type="submit"
+                                    >
+                                      Upload
+                                    </Button>
+                                  </>
+                                )}
+
+                                <Button
+                                  className={`btn btn-secondary imageInputBtn ml-3`}
+                                  onClick={this.cancelUpload}
+                                >
+                                  Cancel
+                                </Button>
+                              </form>
+                            </div>
+                          </>
                         </>
                       )}
                       <p className="mb-0 mt-1 width-check">
