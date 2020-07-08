@@ -446,9 +446,9 @@ class PlantTable extends Component {
                           <img
                             width="80"
                             alt="not available"
-                            onError={() => {
-                              console.log("errrrrrrrr");
-                            }}
+                            // onError={() => {
+                            //   console.log("errrrrrrrr");
+                            // }}
                             src={
                               result && result.commonName
                                 ? `https://flora-details-images.s3-us-west-1.amazonaws.com/${result.commonName

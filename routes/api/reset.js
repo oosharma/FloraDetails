@@ -46,6 +46,7 @@ router.post("/", (req, res) => {
         // } else {
         //   resetUrl = `http://localhost:3000/?token-${token} `;
         // }
+
         const mailOptions = {
           from: "floradetailsweb@gmail.com",
           to: `${user.email}`,
@@ -56,9 +57,7 @@ router.post("/", (req, res) => {
             `http://floradetails.com/?token-${token} ` +
             "If you did not request this, please ignore this email and your password will remain unchanged.\n"
         };
-        console.log("user email: " + user.email);
-        console.log("user email: " + process.env.GMAIL_USER);
-        console.log("user pass: " + process.env.GMAIL_PASS);
+
         transporter.sendMail(mailOptions, (err, response) => {
           if (err) {
             res.status(400).json({ msg: "Email not sent" });

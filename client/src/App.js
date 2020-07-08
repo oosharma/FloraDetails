@@ -682,8 +682,7 @@ class App extends Component {
     const formData = new FormData();
     if (this.state.file && this.state.file[0]) {
       formData.append("file", this.state.file[0]);
-      console.log(typeof formData);
-      console.log("got");
+
       axios
         .post(`/api/upload`, formData, {
           headers: {
@@ -722,9 +721,6 @@ class App extends Component {
   };
 
   render() {
-    if (this.state.auth.user) {
-      console.log(this.state.auth.user);
-    }
     const authLinks = (
       <>
         <Nav.ItemLink active href="#" onClick={this.logout.bind(this)}>
@@ -1163,9 +1159,9 @@ class App extends Component {
                         <img
                           title="edit image"
                           alt="not available"
-                          onError={() => {
-                            console.log("errrrrrrrr");
-                          }}
+                          // onError={() => {
+                          //   console.log("errrrrrrrr");
+                          // }}
                           class={`pic-img`}
                           onClick={this.handleProfilePic}
                           src={

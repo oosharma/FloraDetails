@@ -23,9 +23,6 @@ AWS.config.setPromisesDependency(bluebird);
 const s3 = new AWS.S3();
 
 const uploadFile = (buffer, name, type) => {
-  console.log(type);
-  console.log(type);
-  console.log(type.mime);
   const params = {
     ACL: "public-read",
     Body: buffer,
@@ -43,7 +40,6 @@ router.post("/", auth, (req, res) => {
   const token = req.header("x-auth-token");
   let decoded = jwt.verify(token, process.env.JWT_SECRET);
   const filter = { id: decoded.id };
-  console.log(token);
   const form = new multiparty.Form();
   form.parse(req, async (error, fields, files) => {
     if (error) throw new Error(error);
@@ -51,9 +47,7 @@ router.post("/", auth, (req, res) => {
       const path = files.file[0].path;
       const buffer = fs.readFileSync(path);
       const type = path2.extname(path);
-      console.log("ggagagaga");
-      console.log(type);
-      console.log(decoded.id.toString());
+
       //const fileName = `-dp`;
       const fileName = `${decoded.id.toString()}-dp`;
       const update = { profile_pic: true, pic_uri: `${fileName}${type}` };
@@ -66,10 +60,8 @@ router.post("/", auth, (req, res) => {
         ".png"
       ];
       if (!validFileExtensions.includes(type)) {
-        console.log("got here");
         return res.status(400).send("Ivalid file");
       }
-      console.log("got ddddd");
 
       const data = await uploadFile(buffer, fileName, type).then(
         User.findByIdAndUpdate(decoded.id, update)
