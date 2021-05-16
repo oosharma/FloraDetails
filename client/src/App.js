@@ -1028,7 +1028,7 @@ class App extends Component {
                           <>
                             <div className="modal-body">
                               <Alert success>
-                                <p>Rest link sent to your email</p>
+                                <p>Reset link sent to your email</p>
                               </Alert>
                             </div>
                             <div className="modal-footer">

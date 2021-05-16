@@ -8,7 +8,9 @@ import reducer from "./store/reducer";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const store = createStore(reducer, applyMiddleware(thunk));
+const store: Store<FilterState, FilterAction> & {
+  dispatch: DispatchType;
+} = createStore(reducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
