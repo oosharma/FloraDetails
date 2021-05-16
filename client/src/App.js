@@ -1,6 +1,7 @@
 import ReactGA from "react-ga";
 import React, { Component } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
+import Filters from "./components/Filters/Filters";
 import PlantTable from "./components/PlantTable/PlantTable";
 import { filterArr, randomize, modifyResult } from "./helper.js";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -862,6 +863,7 @@ class App extends Component {
 
     return (
       <>
+      <Filters />
         {this.state.finalCheck &&
         this.state.finalPublicTableCheck &&
         this.state.finalFetchedCheck ? (

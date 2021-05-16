@@ -1,0 +1,30 @@
+.Filter-Item {
+  display: inline;
+}
+.Filter-Items {
+  display: flex;
+  flex-direction: column;
+}
+.Filters {
+  display: flex;
+  justify-content: space-around;
+  /* flex-direction: row; */
+}
+.Filter-Option {
+  display: flex;
+  align-items: center;
+}
+.Filters-Section {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  text-align: center;
+}
+
+.Filter-Option input {
+  margin-right: 5px;
+}
+
+.Filter-Option label {
+  margin-bottom: 0;
+}
