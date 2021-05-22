@@ -5,14 +5,14 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import reducer from "./store/reducer";
 
-import App from "./App";
+import App2 from "./App2";
 import * as serviceWorker from "./serviceWorker";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
-    <App query={window.location.search} />
+    <App2 query={window.location.search} />
   </Provider>,
   document.getElementById("root")
 );

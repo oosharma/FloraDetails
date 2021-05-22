@@ -29,7 +29,13 @@ class PlantTable extends Component {
   }
 
   handleAddorDelete = result => {
-    this.props.handleAddorDelete(result);
+    if(this.props.utility === "Add"){
+      this.props.handleAddorDelete( this.props.isAuthorized, result);
+
+    } else {
+      this.props.handleAddorDelete(   result);
+
+    }
   };
 
   // columnItems = () => {

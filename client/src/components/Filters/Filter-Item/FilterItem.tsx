@@ -37,7 +37,7 @@ const FilterItem: React.FC<FilterItemProps> = ({ title, options }) => {
                 <input type={"checkbox"} id={`${title.replace(/\s/g, "-")}-${option.replace(/\s/g, "-")}-${index}`}
                   onChange={editOption} />
                 <label htmlFor={`${title.replace(/\s/g, "-")}-${option.replace(/\s/g, "-")}-${index}`}>{option}</label>
-                {filterOptions}
+               
               </div>
             );
           })}
