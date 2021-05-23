@@ -21,8 +21,7 @@ const FilterItem: React.FC<FilterItemProps> = ({ title, options }) => {
     // console.log(e.target.id);
     const filterOption: string = e.target.id
     dispatch(toggleFilter(filterOption))
-    console.log(filterOptions)
-  }
+   }
 
   return (
     <>

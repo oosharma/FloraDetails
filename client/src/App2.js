@@ -129,10 +129,10 @@ const [upLoadMessage, setUploadMessage] = useState("");
   const changeAddItem = (isAuthorized, result) => {
      // var modifiedResult = modifyResult(result);    
   
-     console.log(1, isAuthorized)
+
     if (isAuthorized  ) {
     
-      console.log(1, result)
+
       addPersonalItem(result);
     } else {
       let addItem = JSON.parse(JSON.stringify(result));
@@ -143,8 +143,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
   };
 
   const addPersonalItem = (result) => {
-    console.log(4, result)
-    let postFlag = true;
+     let postFlag = true;
     if (
       auth.user &&
       auth.user.items &&
@@ -314,8 +313,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
 
  const handleDelete = (result) => {
     setIdToDelete(result._id)
-    console.log(2, idToDelete);
-    deleteFromDB(result._id)
+     deleteFromDB(result._id)
     
   };
 
@@ -716,7 +714,7 @@ const clearPassError = () => {
   };
 
  const handleProfilePic = () => {
-    setEditImage(true);
+     setEditImage(true);
 
   };
 
@@ -1219,7 +1217,7 @@ const clearPassError = () => {
                           onClick={handleProfilePic}
                           src={
                             auth.user.profile_pic
-                              ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${auth.user.pic_uri}`
+                              ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${auth.user.pic_uri}?=${Date.now()}`
                               : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
                           }
                         ></img>
