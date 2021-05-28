@@ -1,16 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createStore, applyMiddleware, Store } from "redux";
+import { createStore, applyMiddleware, Store, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import reducer from "./store/reducer";
+import {reducer as filters} from "./store/Filters/reducer";
+import {reducer as auth} from "./store/Auth/reducer";
+ 
+
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-const store: Store<FilterState, FilterAction> & {
-  dispatch: DispatchType;
-} = createStore(reducer, applyMiddleware(thunk));
+const rootReducer = combineReducers({
+  filters, auth
+})
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

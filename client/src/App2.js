@@ -26,10 +26,11 @@ import {
 import Modal from "react-bootstrap4-modal";
 
 import { useDispatch, useSelector } from "react-redux";
+import {setAuthAction} from './store/Auth/actionCreators'
 
 import style from "./App.css";
 
-function App2({query}) {
+function App2({ query }) {
   const [regName, setRegName] = useState("");
   const [regPass, setRegPass] = useState("");
   const [regEmail, setRegEmail] = useState("");
@@ -51,14 +52,10 @@ function App2({query}) {
   const [finalCheck, setFinalCheck] = useState(false);
   const [passStrength, setPassStrength] = useState(0);
 
-
-
   const [regMsg, setRegMsg] = useState(null);
   const [regModal, setRegModal] = useState(false);
   const [resetModal, setResetModal] = useState(false);
   const [resetPasswordEmailSent, setResetPasswordEmailSent] = useState(false);
-
-
 
   const [data, setData] = useState([]);
   const [id, setId] = useState(0);
@@ -89,8 +86,7 @@ function App2({query}) {
   const [fetch, setFetch] = useState(true);
 
   const [test, setTest] = useState(null);
-const [upLoadMessage, setUploadMessage] = useState("");
-
+  const [upLoadMessage, setUploadMessage] = useState("");
 
   const [sort, setSort] = useState([
     { sortDirection: "none", sortColumn: "none" },
@@ -113,26 +109,29 @@ const [upLoadMessage, setUploadMessage] = useState("");
     status: null,
     id: null,
   });
-  const [auth, setAuth] = useState({
-    token: localStorage.getItem("token"),
-    isAuthorized: null,
-    isLoading: false,
-    user: null,
-  });
+  // const [auth, setAuth] = useState({
+  //   token: localStorage.getItem("token"),
+  //   isAuthorized: null,
+  //   isLoading: false,
+  //   user: null,
+  // });
   const [file, setFile] = useState(null);
   const [editImage, setEditImage] = useState(false);
   const [uploadMessage, setupLoadMessage] = useState(null);
   const [editImageLoading, setEditImageLoading] = useState(false);
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
- const searchBarElement = React.createRef();
+  React.useEffect(() => {
+   // setAuth(authRed);
+  }, []);
+
+  const searchBarElement = React.createRef();
 
   const changeAddItem = (isAuthorized, result) => {
-     // var modifiedResult = modifyResult(result);    
-  
+    // var modifiedResult = modifyResult(result);
 
-    if (isAuthorized  ) {
-    
-
+    if (isAuthorized) {
       addPersonalItem(result);
     } else {
       let addItem = JSON.parse(JSON.stringify(result));
@@ -143,14 +142,10 @@ const [upLoadMessage, setUploadMessage] = useState("");
   };
 
   const addPersonalItem = (result) => {
-     let postFlag = true;
-    if (
-      auth.user &&
-      auth.user.items &&
-      auth.user.items.length > 0
-    ) {
+    let postFlag = true;
+    if (auth.user && auth.user.items && auth.user.items.length > 0) {
       let dataSet = new Set();
-       auth.user.items.forEach((arrayItem) => {
+      auth.user.items.forEach((arrayItem) => {
         dataSet.add(arrayItem.commonName);
       });
       if (dataSet.has(result.commonName)) {
@@ -159,7 +154,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
       }
     }
     if (postFlag) {
-      let config =  tokenConfig();
+      let config = tokenConfig();
       const {
         commonName,
         bloomTime,
@@ -198,8 +193,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
     }
   };
 
-
- const addToPulicDB = (addItem) => {
+  const addToPulicDB = (addItem) => {
     let commonName = addItem.commonName;
     let currentIds = data.map((data) => data.id);
     let idToBeAdded = 0;
@@ -226,12 +220,10 @@ const [upLoadMessage, setUploadMessage] = useState("");
         })
         .then((res) => {
           setFetch(true);
-
         })
         .catch((err) => {
           setFetch(true);
-
-         });
+        });
     }
   };
 
@@ -245,22 +237,22 @@ const [upLoadMessage, setUploadMessage] = useState("");
     getDataFromDb();
     if (!intervalIsSet) {
       let interval = setInterval(getDataFromDb, 500);
-      setIntervalIsSet(interval)
-     }
+      setIntervalIsSet(interval);
+    }
     loadUser();
     loadItems();
     if (query && query.includes("token")) {
       // let resetToken = props.query.split(/- (.+)?/, 2);
 
       let i = query.indexOf("-");
-        
+
       setResetModal(true);
       setResetToken(query.slice(i + 1));
       clearErrors();
     }
-  }, []) 
+  }, []);
 
- const loadItems = () => {
+  const loadItems = () => {
     const filteredResults = filterArr(items);
     const modifiedResults = modifyResult(filteredResults);
     const randomResults = randomize(modifiedResults);
@@ -279,21 +271,21 @@ const [upLoadMessage, setUploadMessage] = useState("");
 
   // our first get method that uses our backend api to
   // fetch data from our data base
- const getDataFromDb = () => {
+  const getDataFromDb = () => {
     if (fetch) {
       axios
         .get("/api/items")
         .then((res) => {
           setData(res.data);
           setFetch(false);
-         })
+        })
         .finally(() => {
           setFinalPublicTableCheck(true);
-         });
+        });
     }
   };
 
- const deletePersonalItem = (result) => {
+  const deletePersonalItem = (result) => {
     //  const config = tokenConfig();
     //  const body = JSON.stringify({ name, email, password });
     let config = tokenConfig();
@@ -311,13 +303,12 @@ const [upLoadMessage, setUploadMessage] = useState("");
     });
   };
 
- const handleDelete = (result) => {
-    setIdToDelete(result._id)
-     deleteFromDB(result._id)
-    
+  const handleDelete = (result) => {
+    setIdToDelete(result._id);
+    deleteFromDB(result._id);
   };
 
- const deleteFromDB = (idTodelete) => {
+  const deleteFromDB = (idTodelete) => {
     parseInt(idTodelete);
 
     let objIdToDelete = null;
@@ -329,18 +320,18 @@ const [upLoadMessage, setUploadMessage] = useState("");
     axios
       .delete(`/api/items/${idTodelete}`)
       .then(() => {
-        setFetch(true); 
+        setFetch(true);
       })
       .catch(() => {
-        setFetch(true); 
+        setFetch(true);
       });
   };
 
   // Being passed to SearchBar
- const changeFetchedResults = (result) => {
+  const changeFetchedResults = (result) => {
     var modifiedResult = modifyResult(result);
     setFetchedResults(modifiedResult);
-    setFinalFetchedCheck(true); 
+    setFinalFetchedCheck(true);
   };
 
   function findUtility(utility) {
@@ -374,7 +365,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
     } else {
       tempLimitItems[item].pageNumber = num;
     }
-    setLimitItems(tempLimitItems); 
+    setLimitItems(tempLimitItems);
   }
   const clearTablePage = () => {
     let tempLimitItems = [...limitItems];
@@ -387,7 +378,6 @@ const [upLoadMessage, setUploadMessage] = useState("");
     tempLimitItems[item].rowItems = value.value;
     tempLimitItems[item].pageNumber = 0;
     setLimitItems(tempLimitItems);
-
   }
 
   function sortToggle(column, utility) {
@@ -404,7 +394,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
     } else {
       updatedSort[item].sortDirection = "descending";
     }
-    setSort(updatedSort); 
+    setSort(updatedSort);
   }
 
   const userLogin = () => {
@@ -430,7 +420,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
       user: res.user,
     };
     localStorage.setItem("token", res.token);
-    setAuth(authUpdate); 
+   // setAuth(authUpdate);
     clearErrors();
     //  loadItems();
     //  clearSearchBarTable();
@@ -438,7 +428,7 @@ const [upLoadMessage, setUploadMessage] = useState("");
     // searchBarElement.current.handleClearButtonClick();
   };
 
-const  loginSuccess = (res) => {
+  const loginSuccess = (res) => {
     let authUpdate = {
       token: res.token,
       isAuthorized: true,
@@ -446,7 +436,8 @@ const  loginSuccess = (res) => {
       user: res.user,
     };
     localStorage.setItem("token", res.token);
-    setAuth(authUpdate);     clearErrors();
+    //setAuth(authUpdate);
+    clearErrors();
     if (resetToken) {
       window.location.replace("http://floradetails.com/");
     }
@@ -457,12 +448,12 @@ const  loginSuccess = (res) => {
     // searchBarElement.current.handleClearButtonClick();
   };
 
-const  clearSearchBarTable = () => {
+  const clearSearchBarTable = () => {
     let emptyArray = [];
-    setFetchedResults(emptyArray) 
+    setFetchedResults(emptyArray);
   };
 
- const userRegister = () => {
+  const userRegister = () => {
     let name = regName;
     let email = regEmail;
     let password = regPass;
@@ -480,22 +471,23 @@ const  clearSearchBarTable = () => {
       });
   };
 
- const userLoaded = (res) => {
+  const userLoaded = (res) => {
     let authUpdate = {
       token: localStorage.getItem("token"),
       isAuthorized: true,
       isLoading: false,
       user: res.data,
     };
-
-    setAuth(authUpdate); 
+    dispatch(setAuthAction(authUpdate))
+    //setAuth(authUpdate);
 
     clearErrors();
   };
 
- const loadUser = () => {
+  const loadUser = () => {
     let authUpdate = { ...auth, isLoading: true };
-    setAuth(authUpdate); 
+    //setAuth(authUpdate);
+    dispatch(setAuthAction(authUpdate))
     const config = tokenConfig();
     axios
       .get("api/auth/user", config)
@@ -507,7 +499,7 @@ const  clearSearchBarTable = () => {
       })
       .finally(() => {
         setFinalCheck(true);
-       });
+      });
   };
 
   const clearErrors = () => {
@@ -517,30 +509,28 @@ const  clearSearchBarTable = () => {
       id: null,
     };
     setError(errorUpdate);
-   };
+  };
 
- const updatePassError = (err, id) => {
+  const updatePassError = (err, id) => {
     if (err && err.response) {
       let passErrorUpdate = {
         msg: err.response.data,
         status: err.response.status,
         id: id,
       };
-      setPassError(passErrorUpdate)
-
+      setPassError(passErrorUpdate);
     }
   };
 
-const clearPassError = () => {
+  const clearPassError = () => {
     let passErrorUpdate = {
       msg: null,
       status: null,
       id: null,
     };
-    setPassError(passErrorUpdate)
-
+    setPassError(passErrorUpdate);
   };
- const updateError = (err, id) => {
+  const updateError = (err, id) => {
     if (err.response) {
       clearAuth();
       let errorUpdate = {
@@ -551,7 +541,7 @@ const clearPassError = () => {
       setError(errorUpdate);
     }
   };
- const clearAuth = () => {
+  const clearAuth = () => {
     localStorage.removeItem("token");
     let authUpdate = {
       token: localStorage.getItem("token"),
@@ -559,11 +549,11 @@ const clearPassError = () => {
       isLoading: false,
       user: null,
     };
-    setAuth(authUpdate);
-  
+    dispatch(setAuthAction(authUpdate))
+   // setAuth(authUpdate);
   };
 
- const logout = () => {
+  const logout = () => {
     clearAuth();
     // clearSearchBarTable();
     //  loadItems();
@@ -589,7 +579,7 @@ const clearPassError = () => {
     return config;
   };
 
- const resetTokenConfig = () => {
+  const resetTokenConfig = () => {
     const token = resetToken;
 
     // Headers
@@ -607,68 +597,59 @@ const clearPassError = () => {
     return config;
   };
 
- const handlePassReset = () => {
+  const handlePassReset = () => {
     setResetPassword(true);
 
-    
-      clearErrors();
-    
+    clearErrors();
   };
 
   //function to send reset email
- const handlePassResetEmailSubmit = () => {
+  const handlePassResetEmailSubmit = () => {
     setShowResetLoader(true);
 
-     
-      let email = passReset;
-      const config = tokenConfig();
-      const body = JSON.stringify({ email });
-      axios
-        .post("api/reset", body, config)
-        .then((res) => {
-          handleResetEmailSentSuccess(res.data);
-        })
-        .catch((err) => {
-          updateError(err, "RESET_FAIL");
-        })
-        .finally(() => {
-          setShowResetLoader(false);
-           
-        });
-    
+    let email = passReset;
+    const config = tokenConfig();
+    const body = JSON.stringify({ email });
+    axios
+      .post("api/reset", body, config)
+      .then((res) => {
+        handleResetEmailSentSuccess(res.data);
+      })
+      .catch((err) => {
+        updateError(err, "RESET_FAIL");
+      })
+      .finally(() => {
+        setShowResetLoader(false);
+      });
   };
 
   // reset email success
- const handleResetEmailSentSuccess = (res) => {
+  const handleResetEmailSentSuccess = (res) => {
     setResetPasswordEmailSent(true);
- 
+
     clearPassError();
     //enter code to remove state for showing reset here
   };
 
- const toggleRegModal = () => {
+  const toggleRegModal = () => {
     setRegName("");
     setRegEmail("");
     setRegPass("");
-    setRegModal(!regModal); 
+    setRegModal(!regModal);
     clearErrors();
   };
 
- const toggleResetModal = () => {
+  const toggleResetModal = () => {
     if (resetModal === true) {
       setResetModal(!resetModal);
-
-       
-        clearPassError();
-        window.location.replace("http://floradetails.com/");
-    
+      clearPassError();
+      window.location.replace("http://floradetails.com/");
     }
     setResetModal(!resetModal);
-
   };
 
   // new password submit
- const onResetSubmit = () => {
+  const onResetSubmit = () => {
     let password = resetPass;
     const config = resetTokenConfig();
     const body = JSON.stringify({ password });
@@ -682,43 +663,43 @@ const clearPassError = () => {
         updatePassError(err, "RESET_FAIL_FINAL");
       });
   };
- 
+
   const handlePassResetSuccess = (res) => {
     setPassResetSuccess(true);
   };
 
-  const  handlePassResetSuccessLogin = () => {
+  const handlePassResetSuccessLogin = () => {
     setPassResetSuccess(false);
 
-     toggleResetModal();
+    toggleResetModal();
     toggleLogModal();
     clearPassError();
   };
 
- const toggleLogModal = () => {
+  const toggleLogModal = () => {
     setLogName("");
     setLogEmail("");
     setLogPass("");
     setLogModal(!logModal);
-    setResetPassword(false);  clearErrors();
+    setResetPassword(false);
+    clearErrors();
     setResetPasswordEmailSent(false);
   };
 
-//  const onChange = (e) => {
-//     setState({ [e.target.name]: e.target.value });
-//   };
+  //  const onChange = (e) => {
+  //     setState({ [e.target.name]: e.target.value });
+  //   };
 
- const onRegSubmit = (e) => {
+  const onRegSubmit = (e) => {
     e.preventDefault();
     userRegister();
   };
 
- const handleProfilePic = () => {
-     setEditImage(true);
-
+  const handleProfilePic = () => {
+    setEditImage(true);
   };
 
- const submitFile = (event) => {
+  const submitFile = (event) => {
     setEditImageLoading(true);
 
     const token = auth.token;
@@ -743,385 +724,497 @@ const clearPassError = () => {
         })
         .catch((error) => {
           // handle your error
-          setUploadMessage("Please choose a valid image file")
-
+          setUploadMessage("Please choose a valid image file");
         })
         .finally(() => {
           setEditImageLoading(false);
           loadUser();
-          
         });
     } else {
       setUploadMessage("Please choose a file");
       setEditImageLoading(false);
-      
     }
   };
 
- const cancelUpload = () => {
+  const cancelUpload = () => {
     setEditImage(false);
     setUploadMessage(null);
   };
- const handleFileUpload = (event) => {
-    setFile(event.target.files)
-
+  const handleFileUpload = (event) => {
+    setFile(event.target.files);
   };
-
-
 
   //  const filterOptions = useSelector((state) => state.filterOptions);
 
-
   //  const tableData = modifyResult(allPlantData, filterOptions)
-    const authLinks = (
-      <>
-        <Nav.ItemLink active href="#" onClick={logout}>
-          <em>Logout</em>
-        </Nav.ItemLink>
-      </>
-    );
-    const guestLinks = (
-      <>
-        <Nav.ItemLink onClick={toggleRegModal} active href="#">
-          <em> Register</em>
-        </Nav.ItemLink>
-        <Nav.ItemLink onClick={toggleLogModal} href="#">
-          <em>Login</em>
-        </Nav.ItemLink>
-      </>
-    );
+  const authLinks = (
+    <>
+      <Nav.ItemLink active href="#" onClick={logout}>
+        <em>Logout</em>
+      </Nav.ItemLink>
+    </>
+  );
+  const guestLinks = (
+    <>
+      <Nav.ItemLink onClick={toggleRegModal} active href="#">
+        <em> Register</em>
+      </Nav.ItemLink>
+      <Nav.ItemLink onClick={toggleLogModal} href="#">
+        <em>Login</em>
+      </Nav.ItemLink>
+    </>
+  );
 
-   // const { data } = state;
+  // const { data } = state;
 
-    const addedItems = auth.user
+  const addedItems = auth.user
+    ? auth.user.items
       ? auth.user.items
-        ? auth.user.items
-        : null
-      : data;
+      : null
+    : data;
 
-    const publicTables = (
-      <>
-        {finalPublicTableCheck ? (
-          <>
-            {data.length > 0 ? (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  Public's Table.{" "}
-                  <a onClick={toggleRegModal} href="#">
-                    Register
-                  </a>{" "}
-                  or{" "}
-                  <a onClick={toggleLogModal} href="#">
-                    Login
-                  </a>{" "}
-                  to Manage Your Personal Table
-                </Display4>
-
-                <PlantTable
-                  tableData={data}
-                  handleAddorDelete={handleDelete}
-                  sortToggle={sortToggle}
-                  sortColumn={sort[1].sortColumn}
-                  sortDirection={sort[1].sortDirection}
-                  limitItems={limitItems[1]}
-                  itemChange={itemChange}
-                  rowItemChange={rowItemChange}
-                  utility="Delete"
-                />
-              </>
-            ) : (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  Public's Table is Empty, Use Search Results to Add Plants{" "}
-                </Display4>
-              </>
-            )}
-          </>
-        ) : (
-          <></>
-        )}
-      </>
-    );
-
-    const footer = (
-      <>
-        <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
-          <em>
-            {" "}
-            This web-app is developed by{" "}
-            <a target="_blank" href="http://www.iamsharma.com">
-              iamSharma
-            </a>{" "}
-            using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
-            authentication is implemented with JSON Web Tokens and Bcrypt JS,
-            and password reset emails are sent through NodeMailer. Checkout its
-            source code on GitHub:{" "}
-            <a target="_blank" href="https://github.com/oosharma/FloraDetails">
-              https://github.com/oosharma/FloraDetails
-            </a>
-          </em>
-        </p>
-      </>
-    );
-
-    const personalTables = (
-      <>
-        {auth.user && auth.user.items ? (
-          <>
-            {auth.user.items.length > 0 ? (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  {auth.user.name}'s Personal Table
-                </Display4>
-
-                <PlantTable
-                  tableData={auth.user.items}
-                  sortToggle={sortToggle}
-                  sortColumn={sort[2].sortColumn}
-                  sortDirection={sort[2].sortDirection}
-                  limitItems={limitItems[2]}
-                  itemChange={itemChange}
-                  rowItemChange={rowItemChange}
-                  handleAddorDelete={deletePersonalItem}
-                  utility="Personal Delete"
-                ></PlantTable>
-              </>
-            ) : (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  {auth.user.name}'s Personal Table is Empty, Use
-                  Search Table to Add Plants
-                </Display4>
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {auth.user ? (
-              <>
-                <Display4 className="mt-3 width-check">
-                  {auth.user.name}'s Personal Table is Empty, Use
-                  Search Results to Add Plants
-                </Display4>
-              </>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
-      </>
-    );
-
-    return (
-      <>
-        <Filters />
-        {finalCheck &&
-        finalPublicTableCheck &&
-        finalFetchedCheck ? (
-          <>
+  const publicTables = (
+    <>
+      {finalPublicTableCheck ? (
+        <>
+          {data.length > 0 ? (
             <>
-              <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2  p-4 ">
-                <Nav>
-                  <Nav.ItemLink className="pl-0" disabled href="/">
-                    <em>Flora Details</em>
-                  </Nav.ItemLink>
-                  {auth.isAuthorized === true
-                    ? authLinks
-                    : guestLinks}
-                </Nav>
+              <Display4 className={`mt-3 width-check`}>
+                Public's Table.{" "}
+                <a onClick={toggleRegModal} href="#">
+                  Register
+                </a>{" "}
+                or{" "}
+                <a onClick={toggleLogModal} href="#">
+                  Login
+                </a>{" "}
+                to Manage Your Personal Table
+              </Display4>
 
-                <Modal
-                  visible={resetModal}
-                  onClickBackdrop={toggleResetModal}
-                >
-                  <div className="modal-header">
-                    <h5 className="modal-title">Reset Password</h5>
-                  </div>
-                  <div className="modal-body">
-                    {passError && passError.msg && (
-                      <>
-                        {passError.id === "RESET_FAIL_FINAL" ? (
-                          <Alert danger>
-                            {" "}
-                            <p>{passError.msg.msg}</p>{" "}
-                          </Alert>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    )}
-                    {passResetSuccess ? (
-                      <>
-                        <Alert primary>
+              <PlantTable
+                tableData={data}
+                handleAddorDelete={handleDelete}
+                sortToggle={sortToggle}
+                sortColumn={sort[1].sortColumn}
+                sortDirection={sort[1].sortDirection}
+                limitItems={limitItems[1]}
+                itemChange={itemChange}
+                rowItemChange={rowItemChange}
+                utility="Delete"
+              />
+            </>
+          ) : (
+            <>
+              <Display4 className={`mt-3 width-check`}>
+                Public's Table is Empty, Use Search Results to Add Plants{" "}
+              </Display4>
+            </>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+
+  const footer = (
+    <>
+      <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
+        <em>
+          {" "}
+          This web-app is developed by{" "}
+          <a target="_blank" href="http://www.iamsharma.com">
+            iamSharma
+          </a>{" "}
+          using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
+          authentication is implemented with JSON Web Tokens and Bcrypt JS, and
+          password reset emails are sent through NodeMailer. Checkout its source
+          code on GitHub:{" "}
+          <a target="_blank" href="https://github.com/oosharma/FloraDetails">
+            https://github.com/oosharma/FloraDetails
+          </a>
+        </em>
+      </p>
+    </>
+  );
+
+  const personalTables = (
+    <>
+      {auth.user && auth.user.items ? (
+        <>
+          {auth.user.items.length > 0 ? (
+            <>
+              <Display4 className={`mt-3 width-check`}>
+                {auth.user.name}'s Personal Table
+              </Display4>
+
+              <PlantTable
+                tableData={auth.user.items}
+                sortToggle={sortToggle}
+                sortColumn={sort[2].sortColumn}
+                sortDirection={sort[2].sortDirection}
+                limitItems={limitItems[2]}
+                itemChange={itemChange}
+                rowItemChange={rowItemChange}
+                handleAddorDelete={deletePersonalItem}
+                utility="Personal Delete"
+              ></PlantTable>
+            </>
+          ) : (
+            <>
+              <Display4 className={`mt-3 width-check`}>
+                {auth.user.name}'s Personal Table is Empty, Use Search Table to
+                Add Plants
+              </Display4>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {auth.user ? (
+            <>
+              <Display4 className="mt-3 width-check">
+                {auth.user.name}'s Personal Table is Empty, Use Search Results
+                to Add Plants
+              </Display4>
+            </>
+          ) : (
+            <></>
+          )}
+        </>
+      )}
+    </>
+  );
+
+  return (
+    <>
+      <Filters />
+      {finalCheck && finalPublicTableCheck && finalFetchedCheck ? (
+        <>
+          <>
+            <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2 p-4 ">
+              <Nav>
+                <Nav.ItemLink className="pl-0" disabled href="/">
+                  <em>Flora Details</em>
+                </Nav.ItemLink>
+                {auth.isAuthorized === true ? authLinks : guestLinks}
+              </Nav>
+
+              <Modal visible={resetModal} onClickBackdrop={toggleResetModal}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Reset Password</h5>
+                </div>
+                <div className="modal-body">
+                  {passError && passError.msg && (
+                    <>
+                      {passError.id === "RESET_FAIL_FINAL" ? (
+                        <Alert danger>
                           {" "}
-                          <p>Password successfully reset</p>{" "}
+                          <p>{passError.msg.msg}</p>{" "}
                         </Alert>
-                        {/* <a onClick={handlePassResetSuccessLogin} href="#">
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  )}
+                  {passResetSuccess ? (
+                    <>
+                      <Alert primary>
+                        {" "}
+                        <p>Password successfully reset</p>{" "}
+                      </Alert>
+                      {/* <a onClick={handlePassResetSuccessLogin} href="#">
                           Login
                         </a>{" "} */}
-                      </>
-                    ) : (
-                      <>
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="resetPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="resetPass"
-                              name="resetPass"
-                              placeholder="Password"
-                              value={resetPass}
-                              onChange={(e) => {setResetPass(e.target.value)}}
-                            />
-                          </Form.Group>
-                          <Form.Group className="empty-form-group">
-                            <label htmlFor="resetPass">N/A</label>
-                            <Form.Input />
-                          </Form.Group>
-                        </Form>
-                      </>
-                    )}
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={toggleResetModal}>
-                      Close
-                    </Button>
-                    {passResetSuccess ? (
-                      <></>
-                    ) : (
-                      <>
-                        <Button primary onClick={onResetSubmit}>
-                          Submit
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </Modal>
-
-                <Modal
-                  visible={regModal}
-                  onClickBackdrop={toggleRegModal}
-                >
-                  <div className="modal-header">
-                    <h5 className="modal-title">Register</h5>
-                  </div>
-                  <div className="modal-body">
-                    {error.msg && error.msg.msg && (
-                      <Alert danger>
-                        {error.id === "REGISTER_FAIL" ||
-                        error.id === "LOGIN_FAIL" ? (
-                          <p>{error.msg.msg}</p>
-                        ) : (
-                          <></>
-                        )}
-                      </Alert>
-                    )}
-                    <Form>
-                      <Form.Group>
-                        <label htmlFor="regName">Name</label>
-                        <Form.Input
-                          type="text"
-                          id="regName"
-                          name="regName"
-                          placeholder="Enter name"
-                          value={regName}
-                          onChange={(e) => {setRegName(e.target.value)}}
-                          />
-                      </Form.Group>
-                      <Form.Group>
-                        <label htmlFor="regEmail">Email address</label>
-                        <Form.Input
-                          type="email"
-                          id="regEmail"
-                          name="regEmail"
-                          value={regEmail}
-                          placeholder="Enter email"
-                          onChange={(e) => {setRegEmail(e.target.value)}}
-                        />
-                        <Form.Text text="muted">
-                          We'll never share your email with anyone else.
-                        </Form.Text>
-                      </Form.Group>
-                      <Form.Group>
-                        <label htmlFor="regPass">Password</label>
-                        <Form.Input
-                          type="password"
-                          id="regPass"
-                          name="regPass"
-                          placeholder="Password"
-                          value={regPass}
-                          onChange={(e) => {setRegPass(e.target.value)}}
-                        />
-                      </Form.Group>
-                    </Form>
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={toggleRegModal}>
-                      Close
-                    </Button>
-                    <Button primary onClick={onRegSubmit}>
-                      Register
-                    </Button>
-                  </div>
-                </Modal>
-
-                <Modal
-                  visible={logModal}
-                  onClickBackdrop={toggleLogModal}
-                >
-                  {resetPassword ? (
+                    </>
+                  ) : (
                     <>
-                      <>
-                        <div className="modal-header">
-                          <h5 className="modal-title">Reset Password</h5>
-                        </div>
-                        {resetPasswordEmailSent ? (
-                          <>
-                            <div className="modal-body">
-                              <Alert success>
-                                <p>Reset link sent to your email</p>
-                              </Alert>
-                            </div>
-                            <div className="modal-footer">
-                              <Button secondary onClick={toggleLogModal}>
-                                Close
-                              </Button>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="modal-body">
-                              {error.msg &&
-                                error.msg.msg && (
-                                  <Alert danger>
-                                    {error.id === "RESET_FAIL" ? (
-                                      <p>{error.msg.msg}</p>
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </Alert>
+                      <Form>
+                        <Form.Group>
+                          <label htmlFor="resetPass">Password</label>
+                          <Form.Input
+                            type="password"
+                            id="resetPass"
+                            name="resetPass"
+                            placeholder="Password"
+                            value={resetPass}
+                            onChange={(e) => {
+                              setResetPass(e.target.value);
+                            }}
+                          />
+                        </Form.Group>
+                        <Form.Group className="empty-form-group">
+                          <label htmlFor="resetPass">N/A</label>
+                          <Form.Input />
+                        </Form.Group>
+                      </Form>
+                    </>
+                  )}
+                </div>
+                <div className="modal-footer">
+                  <Button secondary onClick={toggleResetModal}>
+                    Close
+                  </Button>
+                  {passResetSuccess ? (
+                    <></>
+                  ) : (
+                    <>
+                      <Button primary onClick={onResetSubmit}>
+                        Submit
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </Modal>
+
+              <Modal visible={regModal} onClickBackdrop={toggleRegModal}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Register</h5>
+                </div>
+                <div className="modal-body">
+                  {error.msg && error.msg.msg && (
+                    <Alert danger>
+                      {error.id === "REGISTER_FAIL" ||
+                      error.id === "LOGIN_FAIL" ? (
+                        <p>{error.msg.msg}</p>
+                      ) : (
+                        <></>
+                      )}
+                    </Alert>
+                  )}
+                  <Form>
+                    <Form.Group>
+                      <label htmlFor="regName">Name</label>
+                      <Form.Input
+                        type="text"
+                        id="regName"
+                        name="regName"
+                        placeholder="Enter name"
+                        value={regName}
+                        onChange={(e) => {
+                          setRegName(e.target.value);
+                        }}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <label htmlFor="regEmail">Email address</label>
+                      <Form.Input
+                        type="email"
+                        id="regEmail"
+                        name="regEmail"
+                        value={regEmail}
+                        placeholder="Enter email"
+                        onChange={(e) => {
+                          setRegEmail(e.target.value);
+                        }}
+                      />
+                      <Form.Text text="muted">
+                        We'll never share your email with anyone else.
+                      </Form.Text>
+                    </Form.Group>
+                    <Form.Group>
+                      <label htmlFor="regPass">Password</label>
+                      <Form.Input
+                        type="password"
+                        id="regPass"
+                        name="regPass"
+                        placeholder="Password"
+                        value={regPass}
+                        onChange={(e) => {
+                          setRegPass(e.target.value);
+                        }}
+                      />
+                    </Form.Group>
+                  </Form>
+                </div>
+                <div className="modal-footer">
+                  <Button secondary onClick={toggleRegModal}>
+                    Close
+                  </Button>
+                  <Button primary onClick={onRegSubmit}>
+                    Register
+                  </Button>
+                </div>
+              </Modal>
+
+              <Modal visible={logModal} onClickBackdrop={toggleLogModal}>
+                {resetPassword ? (
+                  <>
+                    <>
+                      <div className="modal-header">
+                        <h5 className="modal-title">Reset Password</h5>
+                      </div>
+                      {resetPasswordEmailSent ? (
+                        <>
+                          <div className="modal-body">
+                            <Alert success>
+                              <p>Reset link sent to your email</p>
+                            </Alert>
+                          </div>
+                          <div className="modal-footer">
+                            <Button secondary onClick={toggleLogModal}>
+                              Close
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="modal-body">
+                            {error.msg && error.msg.msg && (
+                              <Alert danger>
+                                {error.id === "RESET_FAIL" ? (
+                                  <p>{error.msg.msg}</p>
+                                ) : (
+                                  <></>
                                 )}
-                              <Form>
-                                <Form.Group>
-                                  <label htmlFor="logEmail">
-                                    Email address
-                                  </label>
-                                  <Form.Input
-                                    type="email"
-                                    id="passReset"
-                                    name="passReset"
-                                    placeholder="Enter email"
-                                    value={passReset}
-                                    onChange={(e) => {setPassReset(e.target.value)}}
-                                    />
-                                </Form.Group>
-                              </Form>
-                            </div>
-                            <div className="modal-footer">
-                              <Button secondary onClick={toggleLogModal}>
-                                Close
-                              </Button>
-                              {showResetLoader ? (
+                              </Alert>
+                            )}
+                            <Form>
+                              <Form.Group>
+                                <label htmlFor="logEmail">Email address</label>
+                                <Form.Input
+                                  type="email"
+                                  id="passReset"
+                                  name="passReset"
+                                  placeholder="Enter email"
+                                  value={passReset}
+                                  onChange={(e) => {
+                                    setPassReset(e.target.value);
+                                  }}
+                                />
+                              </Form.Group>
+                            </Form>
+                          </div>
+                          <div className="modal-footer">
+                            <Button secondary onClick={toggleLogModal}>
+                              Close
+                            </Button>
+                            {showResetLoader ? (
+                              <>
+                                <Button primary className="loader-button">
+                                  <Loader
+                                    type="Puff"
+                                    color="#00BFFF"
+                                    height={25}
+                                    width={25}
+                                    // timeout={1000} //3 secs
+                                  />{" "}
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  primary
+                                  onClick={handlePassResetEmailSubmit}
+                                >
+                                  Send Email
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </>
+                  </>
+                ) : (
+                  <>
+                    <div className="modal-header">
+                      <h5 className="modal-title">Login</h5>
+                    </div>
+                    <div className="modal-body">
+                      {error.msg && error.msg.msg && (
+                        <Alert danger>
+                          {error.id === "REGISTER_FAIL" ||
+                          error.id === "LOGIN_FAIL" ? (
+                            <p>{error.msg.msg}</p>
+                          ) : (
+                            <></>
+                          )}
+                        </Alert>
+                      )}
+                      <Form>
+                        <Form.Group>
+                          <label htmlFor="logEmail">Email address</label>
+                          <Form.Input
+                            type="email"
+                            id="logEmail"
+                            name="logEmail"
+                            placeholder="Enter email"
+                            value={logEmail}
+                            onChange={(e) => {
+                              setLogEmail(e.target.value);
+                            }}
+                          />
+                        </Form.Group>
+                        <Form.Group>
+                          <label htmlFor="logPass">Password</label>
+                          <Form.Input
+                            type="password"
+                            id="logPass"
+                            name="logPass"
+                            placeholder="Password"
+                            value={logPass}
+                            onChange={(e) => {
+                              setLogPass(e.target.value);
+                            }}
+                          />
+                        </Form.Group>
+                      </Form>
+                      <a onClick={handlePassReset} href="#">
+                        Reset Password
+                      </a>{" "}
+                    </div>
+                    <div className="modal-footer">
+                      <Button secondary onClick={toggleLogModal}>
+                        Close
+                      </Button>
+                      <Button primary onClick={userLogin}>
+                        Login
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </Modal>
+              {auth.user ? (
+                <>
+                  <>
+                    <div className="profile-pic-div">
+                      <img
+                        title="edit image"
+                        alt="not available"
+                        // onError={() => {
+                        //   console.log("errrrrrrrr");
+                        // }}
+                        class={`pic-img`}
+                        onClick={handleProfilePic}
+                        src={
+                          auth.user.profile_pic
+                            ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
+                                auth.user.pic_uri
+                              }?=${Date.now()}`
+                            : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
+                        }
+                      ></img>
+                    </div>
+
+                    {editImage && (
+                      <>
+                        {" "}
+                        <>
+                          <div className={`editImage`}>
+                            {uploadMessage && (
+                              <p className={`mt-1 mb-1 editImageWarning`}>
+                                {uploadMessage}
+                              </p>
+                            )}
+                            <form class={`mt-1 mb-1`} onSubmit={submitFile}>
+                              <input
+                                class={`imageInput`}
+                                label="upload file"
+                                type="file"
+                                onChange={handleFileUpload}
+                              />
+                              {editImageLoading ? (
                                 <>
                                   <Button primary className="loader-button">
                                     <Loader
@@ -1136,191 +1229,66 @@ const clearPassError = () => {
                               ) : (
                                 <>
                                   <Button
-                                    primary
-                                    onClick={handlePassResetEmailSubmit}
+                                    className={`btn btn-primary imageInputBtn`}
+                                    type="submit"
                                   >
-                                    Send Email
+                                    Upload
                                   </Button>
                                 </>
                               )}
-                            </div>
-                          </>
-                        )}
-                      </>
-                    </>
-                  ) : (
-                    <>
-                      <div className="modal-header">
-                        <h5 className="modal-title">Login</h5>
-                      </div>
-                      <div className="modal-body">
-                        {error.msg && error.msg.msg && (
-                          <Alert danger>
-                            {error.id === "REGISTER_FAIL" ||
-                            error.id === "LOGIN_FAIL" ? (
-                              <p>{error.msg.msg}</p>
-                            ) : (
-                              <></>
-                            )}
-                          </Alert>
-                        )}
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="logEmail">Email address</label>
-                            <Form.Input
-                              type="email"
-                              id="logEmail"
-                              name="logEmail"
-                              placeholder="Enter email"
-                              value={logEmail}
-                              onChange={(e) => {setLogEmail(e.target.value)}}
-                              />
-                          </Form.Group>
-                          <Form.Group>
-                            <label htmlFor="logPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="logPass"
-                              name="logPass"
-                              placeholder="Password"
-                              value={logPass}
-                              onChange={(e) => {setLogPass(e.target.value)}}
-                              />
-                          </Form.Group>
-                        </Form>
-                        <a onClick={handlePassReset} href="#">
-                          Reset Password
-                        </a>{" "}
-                      </div>
-                      <div className="modal-footer">
-                        <Button secondary onClick={toggleLogModal}>
-                          Close
-                        </Button>
-                        <Button primary onClick={userLogin}>
-                          Login
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </Modal>
-                {auth.user ? (
-                  <>
-                    <>
-                      <div className="profile-pic-div">
-                        <img
-                          title="edit image"
-                          alt="not available"
-                          // onError={() => {
-                          //   console.log("errrrrrrrr");
-                          // }}
-                          class={`pic-img`}
-                          onClick={handleProfilePic}
-                          src={
-                            auth.user.profile_pic
-                              ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${auth.user.pic_uri}?=${Date.now()}`
-                              : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
-                          }
-                        ></img>
-                      </div>
 
-                      {editImage && (
-                        <>
-                          {" "}
-                          <>
-                            <div className={`editImage`}>
-                              {uploadMessage && (
-                                <p className={`mt-1 mb-1 editImageWarning`}>
-                                  {uploadMessage}
-                                </p>
-                              )}
-                              <form
-                                class={`mt-1 mb-1`}
-                                onSubmit={submitFile}
+                              <Button
+                                className={`btn btn-secondary imageInputBtn ml-3`}
+                                onClick={cancelUpload}
                               >
-                                <input
-                                  class={`imageInput`}
-                                  label="upload file"
-                                  type="file"
-                                  onChange={handleFileUpload}
-                                />
-                                {editImageLoading ? (
-                                  <>
-                                    <Button primary className="loader-button">
-                                      <Loader
-                                        type="Puff"
-                                        color="#00BFFF"
-                                        height={25}
-                                        width={25}
-                                        // timeout={1000} //3 secs
-                                      />{" "}
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Button
-                                      className={`btn btn-primary imageInputBtn`}
-                                      type="submit"
-                                    >
-                                      Upload
-                                    </Button>
-                                  </>
-                                )}
-
-                                <Button
-                                  className={`btn btn-secondary imageInputBtn ml-3`}
-                                  onClick={cancelUpload}
-                                >
-                                  Cancel
-                                </Button>
-                              </form>
-                            </div>
-                          </>
+                                Cancel
+                              </Button>
+                            </form>
+                          </div>
                         </>
-                      )}
-                      <p className="mb-0 mt-1 width-check">
-                        <em> Welcome {auth.user.name},</em>
-                      </p>
-                    </>
+                      </>
+                    )}
+                    <p className="mb-0 mt-1 width-check">
+                      <em> Welcome {auth.user.name},</em>
+                    </p>
                   </>
-                ) : null}
+                </>
+              ) : null}
 
-                <SearchBar
-                  ref={searchBarElement}
-                  tableItems={fetchedResults}
-                  changeFetchedResults={changeFetchedResults}
-                  clearTablePage={clearTablePage}
+              <SearchBar
+                ref={searchBarElement}
+                tableItems={fetchedResults}
+                changeFetchedResults={changeFetchedResults}
+                clearTablePage={clearTablePage}
+              />
+              {fetchedResults && (
+                <PlantTable
+                  addedItems={addedItems}
+                  tableData={modifyResult(allPlantData)}
+                  sortToggle={sortToggle}
+                  sortColumn={sort[0].sortColumn}
+                  sortDirection={sort[0].sortDirection}
+                  limitItems={limitItems[0]}
+                  itemChange={itemChange}
+                  rowItemChange={rowItemChange}
+                  handleAddorDelete={changeAddItem}
+                  isAuthorized={auth.isAuthorized}
+                  utility="Add"
                 />
-                {fetchedResults && (
-                  <PlantTable
-                    addedItems={addedItems}
-                    tableData={modifyResult(allPlantData)}
-                    sortToggle={sortToggle}
-                    sortColumn={sort[0].sortColumn}
-                    sortDirection={sort[0].sortDirection}
-                    limitItems={limitItems[0]}
-                    itemChange={itemChange}
-                    rowItemChange={rowItemChange}
-                    handleAddorDelete={changeAddItem}
-                    isAuthorized = {auth.isAuthorized}
-                    utility="Add"
-                  />
-                )}
+              )}
 
-                {auth.isAuthorized === true
-                  ? personalTables
-                  : publicTables}
+              {auth.isAuthorized === true ? personalTables : publicTables}
 
-                {footer}
-                {/* {secondFooter} */}
-              </Container>
-            </>
+              {footer}
+              {/* {secondFooter} */}
+            </Container>
           </>
-        ) : (
-          <></>
-        )}
-      </>
-    );
-  }
-
+        </>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+}
 
 export default App2;

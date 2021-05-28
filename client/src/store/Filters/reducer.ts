@@ -4,7 +4,7 @@ const initialState: FilterState = {
   filterOptions: [],
 };
 
-const reducer = (
+export const reducer = (
   state: FilterState = initialState,
   action: FilterAction
 ): FilterState => {
@@ -29,4 +29,4 @@ const reducer = (
   return state;
 };
 
-export default reducer;
+ 

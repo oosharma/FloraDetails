@@ -2,7 +2,7 @@ import * as React from "react";
 import "./FilterItem.css";
 import { Dispatch } from "redux"
 import { useDispatch, useSelector } from "react-redux"
-import { toggleFilter } from "../../../store/actionCreators";
+import { toggleFilter } from "../../../store/Filters/actionCreators";
 
 interface FilterItemProps {
   title: string;
