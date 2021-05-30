@@ -26,7 +26,7 @@ import {
 import Modal from "react-bootstrap4-modal";
 
 import { useDispatch, useSelector } from "react-redux";
-import {setAuthAction} from './store/Auth/actionCreators'
+import { setAuthAction } from "./store/Auth/actionCreators";
 
 import style from "./App.css";
 
@@ -123,7 +123,7 @@ function App2({ query }) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-   // setAuth(authRed);
+    // setAuth(authRed);
   }, []);
 
   const searchBarElement = React.createRef();
@@ -420,7 +420,9 @@ function App2({ query }) {
       user: res.user,
     };
     localStorage.setItem("token", res.token);
-   // setAuth(authUpdate);
+    // setAuth(authUpdate);
+    dispatch(setAuthAction(authUpdate));
+
     clearErrors();
     //  loadItems();
     //  clearSearchBarTable();
@@ -437,6 +439,8 @@ function App2({ query }) {
     };
     localStorage.setItem("token", res.token);
     //setAuth(authUpdate);
+    dispatch(setAuthAction(authUpdate));
+
     clearErrors();
     if (resetToken) {
       window.location.replace("http://floradetails.com/");
@@ -478,7 +482,7 @@ function App2({ query }) {
       isLoading: false,
       user: res.data,
     };
-    dispatch(setAuthAction(authUpdate))
+    dispatch(setAuthAction(authUpdate));
     //setAuth(authUpdate);
 
     clearErrors();
@@ -487,7 +491,7 @@ function App2({ query }) {
   const loadUser = () => {
     let authUpdate = { ...auth, isLoading: true };
     //setAuth(authUpdate);
-    dispatch(setAuthAction(authUpdate))
+    dispatch(setAuthAction(authUpdate));
     const config = tokenConfig();
     axios
       .get("api/auth/user", config)
@@ -549,8 +553,8 @@ function App2({ query }) {
       isLoading: false,
       user: null,
     };
-    dispatch(setAuthAction(authUpdate))
-   // setAuth(authUpdate);
+    dispatch(setAuthAction(authUpdate));
+    // setAuth(authUpdate);
   };
 
   const logout = () => {

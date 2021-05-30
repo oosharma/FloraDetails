@@ -26,11 +26,7 @@ function Login() {
     <>
       <div className="Container">
         <h1>Login</h1>
-        <div className="Nav">
-          <button className="m-3">Register</button>
-          <button className="m-3">Login</button>
-          <button className="m-3">Guest</button>
-        </div>
+       
         <Register/>
       </div>
     </>

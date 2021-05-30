@@ -15,23 +15,29 @@ import {
 import Modal from "react-bootstrap4-modal";
 
 import { useDispatch, useSelector } from "react-redux";
-import {setAuthAction} from '../../store/Auth/actionCreators'
+import { setAuthAction } from "../../store/Auth/actionCreators";
 import style from "./Login.css";
- import {
-  BrowserRouter as Router,Redirect, 
+import {
+  BrowserRouter as Router,
+  Redirect,
   Link,
   Route,
-  useParams,useHistory
+  useParams,
+  useHistory,
 } from "react-router-dom";
 
-
-
 function Register() {
-  const [auth, setAuth] = useState("");
-  const [regName, setRegName] = useState("");
-  const [regEmail, setRegEmail] = useState("");
-  const [regPass, setRegPass] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(false);
+  const [isResetPasswordMode, setResetPasswordMode] = useState(false);
+  const [resetPasswordEmailSent, setResetPasswordEmailSent] = useState(false);
+
+  const [resetPassword, setResetPassword] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+
   // const [auth, setAuth] = useState({
   //   token: localStorage.getItem("token"),
   //   isAuthorized: null,
@@ -45,26 +51,71 @@ function Register() {
   });
 
   const dispatch = useDispatch();
-  const authRedux = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
 
-  const onRegSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    console.log(regName);
     const config = tokenConfig();
-    const body = JSON.stringify({ name: regName, email: regEmail, password: regPass });
-    console.log(body);
-    axios
-      .post("api/users", body, config)
+
+    if (isLoginMode) {
+      const config = tokenConfig();
+    const body = JSON.stringify({ email, password: pass  });
+     axios
+      .post("api/auth", body, config)
       .then((res) => {
-        registerSuccess(res.data);
+        console.log('here');
+        loginSuccess(res.data);
       })
       .catch((err) => {
-          console.log('erdr')
-          console.log(err);
-        updateError(err, "REGISTER_FAIL");
+        console.log('here');
+        updateError(err, "LOGIN_FAIL");
       });
+    } else if (isResetPasswordMode) {
+      setShowLoader(true);
+ 
+    const body = JSON.stringify({ email });
+    axios
+      .post("api/reset", body, config)
+      .then((res) => {
+        handleResetEmailSentSuccess(res.data);
+      })
+      .catch((err) => {
+        updateError(err, "RESET_FAIL");
+      })
+      .finally(() => {
+        setShowLoader(false);
+      });
+    } else {
+      const body = JSON.stringify({
+        name: name,
+        email: email,
+        password: pass,
+      });
+      console.log(body);
+      axios
+        .post("api/users", body, config)
+        .then((res) => {
+          registerSuccess(res.data);
+        })
+        .catch((err) => {
+          console.log("erdr");
+          console.log(err);
+          updateError(err, "REGISTER_FAIL");
+        });
+    }
   };
 
+  const handlePassReset = () => {
+    setResetPasswordMode(true);
+    setIsLoginMode(false);
+    clearErrors();
+  };
+  const handleResetEmailSentSuccess = (res) => {
+    setResetPasswordEmailSent(true);
+
+    clearErrors();
+    //enter code to remove state for showing reset here
+  };
   const registerSuccess = (res) => {
     let authUpdate = {
       token: res.token,
@@ -74,22 +125,38 @@ function Register() {
     };
     console.log(authUpdate);
     localStorage.setItem("token", res.token);
-    dispatch(setAuthAction(authUpdate))
+    dispatch(setAuthAction(authUpdate));
 
-   // setAuth(authUpdate); 
+    // setAuth(authUpdate);
     //console.log(auth);
     clearErrors();
-  
-   
 
-      //const history = useHistory();
-    
-      setLoggedIn(true);
-      
-     
+    //const history = useHistory();
+
+    setLoggedIn(true);
+
     //  loadItems();
     //  clearSearchBarTable();
-   // toggleRegModal();
+    // toggleRegModal();
+    // searchBarElement.current.handleClearButtonClick();
+  };
+
+  const loginSuccess = (res) => {
+    let authUpdate = {
+      token: res.token,
+      isAuthorized: true,
+      isLoading: false,
+      user: res.user,
+    };
+    localStorage.setItem("token", res.token);
+    dispatch(setAuthAction(authUpdate));
+    clearErrors();
+   
+    setLoggedIn(true);
+
+    // loadItems();
+    //clearSearchBarTable();
+     
     // searchBarElement.current.handleClearButtonClick();
   };
 
@@ -100,9 +167,9 @@ function Register() {
       id: null,
     };
     setError(errorUpdate);
-   };
-   
-   const clearAuth = () => {
+  };
+
+  const clearAuth = () => {
     localStorage.removeItem("token");
     let authUpdate = {
       token: localStorage.getItem("token"),
@@ -110,10 +177,10 @@ function Register() {
       isLoading: false,
       user: null,
     };
-    setAuth(authUpdate);
+    dispatch(setAuthAction(authUpdate));
   };
 
-   const updateError = (err, id) => {
+  const updateError = (err, id) => {
     if (err.response) {
       clearAuth();
       let errorUpdate = {
@@ -143,61 +210,145 @@ function Register() {
     return config;
   };
 
-
   return (
-    <>          
-    {loggedIn ?   <Redirect to="/" /> : null}
-    {JSON.stringify(authRedux)}
-        <div className="Form">
-          <Form>
+    <>
+      {loggedIn ? <Redirect to="/" /> : null}
+
+      {JSON.stringify(auth)}
+
+      <div className="Nav">
+          <button className="m-3" onClick = {() =>{setIsLoginMode(false);     clearErrors();
+}}>Register</button>
+          <button className="m-3" onClick = {() =>{setIsLoginMode(true); setResetPasswordMode(false);console.log('clicked');     clearErrors();
+}}>Login</button>
+          <button className="m-3" >Guest</button>
+        </div>
+      {error.msg && error.msg.msg && (
+        <Alert danger>
+          {error.id === "REGISTER_FAIL" || error.id === "LOGIN_FAIL" ? (
+            <p>{error.msg.msg}</p>
+          ) : (
+            <></>
+          )}
+        </Alert>
+      )}
+      <div className="Form">
+        <Form>
+          {!( isLoginMode ||  isResetPasswordMode) &&
+             (
+              <Form.Group>
+                <label htmlFor="name">Name</label>
+                <Form.Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </Form.Group>
+            )}
+
+          <Form.Group>
+            <label htmlFor="email">Email address</label>
+            <Form.Input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              placeholder="Enter email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <Form.Text text="muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+          {!isResetPasswordMode && (
             <Form.Group>
-              <label htmlFor="regName">Name</label>
-              <Form.Input
-                type="text"
-                id="regName"
-                name="regName"
-                placeholder="Enter name"
-                value={regName}
-                onChange={(e) => {
-                  setRegName(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group>
-              <label htmlFor="regEmail">Email address</label>
-              <Form.Input
-                type="email"
-                id="regEmail"
-                name="regEmail"
-                value={regEmail}
-                placeholder="Enter email"
-                onChange={(e) => {
-                  setRegEmail(e.target.value);
-                }}
-              />
-              <Form.Text text="muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-            <Form.Group>
-              <label htmlFor="regPass">Password</label>
+              <label htmlFor="pass">Password</label>
               <Form.Input
                 type="password"
-                id="regPass"
-                name="regPass"
+                id="pass"
+                name="pass"
                 placeholder="Password"
-                value={regPass}
+                value={pass}
                 onChange={(e) => {
-                  setRegPass(e.target.value);
+                  setPass(e.target.value);
                 }}
               />
             </Form.Group>
-            <Button primary onClick={onRegSubmit}>
+          )}
+
+          {isLoginMode && (
+            <a onClick={handlePassReset} href="#">
+              Reset Password
+            </a>
+          )}
+
+          {isResetPasswordMode && (
+            <>
+              {resetPasswordEmailSent ? (
+                <>
+                  <div className="modal-body">
+                    <Alert success>
+                      <p>Reset link sent to your email</p>
+                    </Alert>
+                  </div>
+                  <div className="modal-footer">
+                    <Button secondary onClick={() => {setResetPasswordMode(false)}}>
+                      Close
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                   
+                    {error.msg && error.msg.msg && (
+                      <Alert danger>
+                        {error.id === "RESET_FAIL" ? (
+                          <p>{error.msg.msg}</p>
+                        ) : (
+                          <></>
+                        )}
+                      </Alert>
+                    )}
+  
+                    
+                     
+      
+                </>
+              )}
+            </>
+          )}
+
+          {showLoader ? (
+            <>
+              <Button primary className="loader-button">
+                <Loader
+                  type="Puff"
+                  color="#00BFFF"
+                  height={25}
+                  width={25}
+                  // timeout={1000} //3 secs
+                />{" "}
+              </Button>
+            </>
+          ) : (<>
+            <Button primary onClick={onSubmit}>
               Register
             </Button>
-          </Form>
-        </div>
-     
+            { isResetPasswordMode && (<Button secondary onClick={() => {setResetPasswordMode(false)}}> 
+            Close
+          </Button>)}
+          </>
+            
+          )}
+        </Form>
+      </div>
     </>
   );
 }
