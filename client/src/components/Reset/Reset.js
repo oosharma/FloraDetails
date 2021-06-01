@@ -12,6 +12,7 @@ import {
   Button,
   Alert,
 } from "bootstrap-4-react";
+import { useAuth } from "../../hooks/useAuth";
 import Modal from "react-bootstrap4-modal";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -33,11 +34,19 @@ function Reset() {
 
   const [pass, setPass] = useState("");
   const [passSetComplete, setPassSetComplete] = useState(false);
+  const buttonText = "Reset";
+  const { search } = useLocation();
+
+  const { token } = queryString.parse(search);
+  const [error, clearErrors, updateError, tokenConfig] = useAuth(token);
+
+
 
   const onSubmit = (e) => {
     e.preventDefault();
     let password = pass;
-    const config = resetTokenConfig();
+    const config = tokenConfig(token);
+    console.log(config);
     const body = JSON.stringify({ password });
     clearErrors();
     axios
@@ -50,76 +59,23 @@ function Reset() {
       });
   };
 
-  const {search} = useLocation();
-
-  const { token } = queryString.parse(search);
   const handlePassResetSuccess = (res) => {
     setPassSetComplete(true);
   };
 
-  const clearErrors = () => {
-    let errorUpdate = {
-      msg: null,
-      status: null,
-      id: null,
-    };
-    setError(errorUpdate);
-  };
   // const [auth, setAuth] = useState({
   //   token: localStorage.getItem("token"),
   //   isAuthorized: null,
   //   isLoading: false,
   //   user: null,
   // });
-  const [error, setError] = useState({
-    msg: null,
-    status: null,
-    id: null,
-  });
 
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
- 
-  const updateError = (err, id) => {
-    if (err.response) {
- 
-      let errorUpdate = {
-        msg: err.response.data,
-        status: err.response.status,
-        id: id,
-      };
-      setError(errorUpdate);
-    }
-  };
 
-  
-  const resetTokenConfig = () => {
-
-    // Headers
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
-
-    // If token, add to headers
-    if (token) {
-      config.headers["x-auth-token"] = token;
-    }
-
-    return config;
-  };
-
-
-  let buttonText = "Reset";
-
- 
-
-  console.log(3, token);
   return (
     <>
       {passSetComplete ? <Redirect to="/login" /> : null}
- 
       {error.msg && error.msg.msg && (
         <Alert danger>
           {error.id === "RESET_FAIL" ? <p>{error.msg.msg}</p> : <></>}
@@ -140,7 +96,6 @@ function Reset() {
               }}
             />
           </Form.Group>
-
           <>
             <Button primary className="mr-4" onClick={onSubmit}>
               {buttonText}
