@@ -23,10 +23,13 @@ import {
   Link,
   Route,
   useParams,
-  useHistory,
+  useHistory, useLocation
 } from "react-router-dom";
+import queryString from 'query-string'
+
 
 function Register() {
+  //const location = useLocation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -53,38 +56,43 @@ function Register() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
+ 
+  // const values = queryString.parse(search)
+  // console.log(11, values.filter) // "top"
+  // console.log(22, values.origin) // "im"
+
   const onSubmit = (e) => {
     e.preventDefault();
     const config = tokenConfig();
 
     if (isLoginMode) {
       const config = tokenConfig();
-    const body = JSON.stringify({ email, password: pass  });
-     axios
-      .post("api/auth", body, config)
-      .then((res) => {
-        console.log('here');
-        loginSuccess(res.data);
-      })
-      .catch((err) => {
-        console.log('here');
-        updateError(err, "LOGIN_FAIL");
-      });
+      const body = JSON.stringify({ email, password: pass });
+      axios
+        .post("api/auth", body, config)
+        .then((res) => {
+          console.log("here");
+          loginSuccess(res.data);
+        })
+        .catch((err) => {
+          console.log("here");
+          updateError(err, "LOGIN_FAIL");
+        });
     } else if (isResetPasswordMode) {
       setShowLoader(true);
- 
-    const body = JSON.stringify({ email });
-    axios
-      .post("api/reset", body, config)
-      .then((res) => {
-        handleResetEmailSentSuccess(res.data);
-      })
-      .catch((err) => {
-        updateError(err, "RESET_FAIL");
-      })
-      .finally(() => {
-        setShowLoader(false);
-      });
+
+      const body = JSON.stringify({ email });
+      axios
+        .post("api/reset", body, config)
+        .then((res) => {
+          handleResetEmailSentSuccess(res.data);
+        })
+        .catch((err) => {
+          updateError(err, "RESET_FAIL");
+        })
+        .finally(() => {
+          setShowLoader(false);
+        });
     } else {
       const body = JSON.stringify({
         name: name,
@@ -151,12 +159,12 @@ function Register() {
     localStorage.setItem("token", res.token);
     dispatch(setAuthAction(authUpdate));
     clearErrors();
-   
+
     setLoggedIn(true);
 
     // loadItems();
     //clearSearchBarTable();
-     
+
     // searchBarElement.current.handleClearButtonClick();
   };
 
@@ -210,6 +218,15 @@ function Register() {
     return config;
   };
 
+  let buttonText = isResetPasswordMode
+    ? "Reset"
+    : isLoginMode
+    ? "Login"
+    : "Register";
+
+    useEffect(() => {console.log('erer')})
+    const location = useLocation();
+    console.log(3, location);
   return (
     <>
       {loggedIn ? <Redirect to="/" /> : null}
@@ -217,12 +234,31 @@ function Register() {
       {JSON.stringify(auth)}
 
       <div className="Nav">
-          <button className="m-3" onClick = {() =>{setIsLoginMode(false);     clearErrors();
-}}>Register</button>
-          <button className="m-3" onClick = {() =>{setIsLoginMode(true); setResetPasswordMode(false);console.log('clicked');     clearErrors();
-}}>Login</button>
-          <button className="m-3" >Guest</button>
-        </div>
+        <button
+          className="m-3"
+          onClick={() => {
+            setIsLoginMode(false);
+            setResetPasswordMode(false);
+            setResetPasswordEmailSent(false);
+            clearErrors();
+          }}
+        >
+          Register
+        </button>
+        <button
+          className="m-3"
+          onClick={() => {
+            setIsLoginMode(true);
+            setResetPasswordMode(false);
+            console.log("clicked");
+            setResetPasswordEmailSent(false);
+            clearErrors();
+          }}
+        >
+          Login
+        </button>
+        <button className="m-3">Continue as Guest</button>
+      </div>
       {error.msg && error.msg.msg && (
         <Alert danger>
           {error.id === "REGISTER_FAIL" || error.id === "LOGIN_FAIL" ? (
@@ -234,22 +270,21 @@ function Register() {
       )}
       <div className="Form">
         <Form>
-          {!( isLoginMode ||  isResetPasswordMode) &&
-             (
-              <Form.Group>
-                <label htmlFor="name">Name</label>
-                <Form.Input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-              </Form.Group>
-            )}
+          {!(isLoginMode || isResetPasswordMode) && (
+            <Form.Group>
+              <label htmlFor="name">Name</label>
+              <Form.Input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+            </Form.Group>
+          )}
 
           <Form.Group>
             <label htmlFor="email">Email address</label>
@@ -283,43 +318,27 @@ function Register() {
             </Form.Group>
           )}
 
-          {isLoginMode && (
-            <a onClick={handlePassReset} href="#">
-              Reset Password
-            </a>
-          )}
+          
 
           {isResetPasswordMode && (
             <>
               {resetPasswordEmailSent ? (
                 <>
-                  <div className="modal-body">
-                    <Alert success>
-                      <p>Reset link sent to your email</p>
-                    </Alert>
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={() => {setResetPasswordMode(false)}}>
-                      Close
-                    </Button>
-                  </div>
+                  <Alert success>
+                    <p>Reset link sent to your email</p>
+                  </Alert>
                 </>
               ) : (
                 <>
-                   
-                    {error.msg && error.msg.msg && (
-                      <Alert danger>
-                        {error.id === "RESET_FAIL" ? (
-                          <p>{error.msg.msg}</p>
-                        ) : (
-                          <></>
-                        )}
-                      </Alert>
-                    )}
-  
-                    
-                     
-      
+                  {error.msg && error.msg.msg && (
+                    <Alert danger>
+                      {error.id === "RESET_FAIL" ? (
+                        <p>{error.msg.msg}</p>
+                      ) : (
+                        <></>
+                      )}
+                    </Alert>
+                  )}
                 </>
               )}
             </>
@@ -337,15 +356,29 @@ function Register() {
                 />{" "}
               </Button>
             </>
-          ) : (<>
-            <Button primary onClick={onSubmit}>
-              Register
-            </Button>
-            { isResetPasswordMode && (<Button secondary onClick={() => {setResetPasswordMode(false)}}> 
-            Close
-          </Button>)}
-          </>
-            
+          ) : (
+            <>
+              <Button primary className="mr-4" onClick={onSubmit}>
+              {buttonText}
+              </Button>
+              {isLoginMode && (
+            <a onClick={handlePassReset} href="#">
+              Reset Password
+            </a>
+          )}
+              {isResetPasswordMode && (
+                <Button
+                  secondary
+                  onClick={() => {
+                    setResetPasswordMode(false);
+                    setIsLoginMode(true);
+                    setResetPasswordEmailSent(false);
+                  }}
+                >
+                  Close
+                </Button>
+              )}
+            </>
           )}
         </Form>
       </div>

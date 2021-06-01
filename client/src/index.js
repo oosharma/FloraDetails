@@ -15,6 +15,7 @@ import {
 
 import App2 from "./App2";
 import Login from "./components/Login/Login";
+import Reset from "./components/Reset/Reset"
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -31,6 +32,9 @@ ReactDOM.render(
       </Route>
       <Route path="/login">
         <Login />
+      </Route>
+      <Route path="/reset">
+        <Reset />
       </Route>
     </Router>
   </Provider>,

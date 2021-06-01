@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
-import Register from './Register';
+import Register from "./Register";
 import axios from "axios";
 import {
   Nav,
@@ -18,19 +18,21 @@ import Modal from "react-bootstrap4-modal";
 import { useDispatch, useSelector } from "react-redux";
 
 import style from "./Login.css";
+import { useParams, useLocation } from 'react-router-dom';
+
+const Login = () => {
 
 
-
-function Login() {
   return (
+   
     <>
       <div className="Container">
         <h1>Login</h1>
-       
-        <Register/>
+
+        <Register />
       </div>
     </>
   );
-}
+};
 
 export default Login;
