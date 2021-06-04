@@ -25,7 +25,7 @@ export const useAuth = (token) => {
         "Content-type": "application/json",
       },
     };
-console.log({token});
+ 
     // If token, add to headers
     if (token) {
       config.headers["x-auth-token"] = token;
@@ -43,7 +43,6 @@ console.log({token});
     setError(errorUpdate);
   };
  
-
   const resArray = [error, clearErrors, updateError, tokenConfig];
   return React.useMemo(() => resArray, resArray);
 };

@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, Store, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { reducer as filters } from "./store/Filters/reducer";
-import {reducer as auth} from "./store/Auth/reducer";
+import { reducer as auth } from "./store/Auth/reducer";
 
 import {
   BrowserRouter as Router,
@@ -28,13 +28,19 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Route path="/" exact >
-        <App2 query={window.location.search} />
+        <Login />
       </Route>
       <Route path="/login">
         <Login />
       </Route>
+      <Route path="/register">
+        <Login />
+      </Route>
       <Route path="/reset">
         <Reset />
+      </Route>
+      <Route path="/dashboard">
+        <App2 query={window.location.search} />
       </Route>
     </Router>
   </Provider>,

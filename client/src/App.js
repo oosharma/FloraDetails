@@ -779,16 +779,16 @@ class App extends Component {
                 />
               </>
             ) : (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  Public's Table is Empty, Use Search Results to Add Plants{" "}
-                </Display4>
-              </>
-            )}
+                <>
+                  <Display4 className={`mt-3 width-check`}>
+                    Public's Table is Empty, Use Search Results to Add Plants{" "}
+                  </Display4>
+                </>
+              )}
           </>
         ) : (
-          <></>
-        )}
+            <></>
+          )}
       </>
     );
 
@@ -836,441 +836,441 @@ class App extends Component {
                 ></PlantTable>
               </>
             ) : (
-              <>
-                <Display4 className={`mt-3 width-check`}>
-                  {this.state.auth.user.name}'s Personal Table is Empty, Use
-                  Search Table to Add Plants
+                <>
+                  <Display4 className={`mt-3 width-check`}>
+                    {this.state.auth.user.name}'s Personal Table is Empty, Use
+                    Search Table to Add Plants
                 </Display4>
-              </>
-            )}
+                </>
+              )}
           </>
         ) : (
-          <>
-            {this.state.auth.user ? (
-              <>
-                <Display4 className="mt-3 width-check">
-                  {this.state.auth.user.name}'s Personal Table is Empty, Use
-                  Search Results to Add Plants
+            <>
+              {this.state.auth.user ? (
+                <>
+                  <Display4 className="mt-3 width-check">
+                    {this.state.auth.user.name}'s Personal Table is Empty, Use
+                    Search Results to Add Plants
                 </Display4>
-              </>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
+                </>
+              ) : (
+                  <></>
+                )}
+            </>
+          )}
       </>
     );
 
     return (
       <>
-      <Filters />
+        <Filters />
         {this.state.finalCheck &&
-        this.state.finalPublicTableCheck &&
-        this.state.finalFetchedCheck ? (
-          <>
+          this.state.finalPublicTableCheck &&
+          this.state.finalFetchedCheck ? (
             <>
-              <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2  p-4 ">
-                <Nav>
-                  <Nav.ItemLink className="pl-0" disabled href="/">
-                    <em>Flora Details</em>
-                  </Nav.ItemLink>
-                  {this.state.auth.isAuthorized === true
-                    ? authLinks
-                    : guestLinks}
-                </Nav>
+              <>
+                <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2  p-4 ">
+                  <Nav>
+                    <Nav.ItemLink className="pl-0" disabled href="/">
+                      <em>Flora Details</em>
+                    </Nav.ItemLink>
+                    {this.state.auth.isAuthorized === true
+                      ? authLinks
+                      : guestLinks}
+                  </Nav>
 
-                <Modal
-                  visible={this.state.resetModal}
-                  onClickBackdrop={this.toggleResetModal}
-                >
-                  <div className="modal-header">
-                    <h5 className="modal-title">Reset Password</h5>
-                  </div>
-                  <div className="modal-body">
-                    {this.state.passError && this.state.passError.msg && (
-                      <>
-                        {this.state.passError.id === "RESET_FAIL_FINAL" ? (
-                          <Alert danger>
+                  <Modal
+                    visible={this.state.resetModal}
+                    onClickBackdrop={this.toggleResetModal}
+                  >
+                    <div className="modal-header">
+                      <h5 className="modal-title">Reset Password</h5>
+                    </div>
+                    <div className="modal-body">
+                      {this.state.passError && this.state.passError.msg && (
+                        <>
+                          {this.state.passError.id === "RESET_FAIL_FINAL" ? (
+                            <Alert danger>
+                              {" "}
+                              <p>{this.state.passError.msg.msg}</p>{" "}
+                            </Alert>
+                          ) : (
+                              <></>
+                            )}
+                        </>
+                      )}
+                      {this.state.passResetSuccess ? (
+                        <>
+                          <Alert primary>
                             {" "}
-                            <p>{this.state.passError.msg.msg}</p>{" "}
+                            <p>Password successfully reset</p>{" "}
                           </Alert>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    )}
-                    {this.state.passResetSuccess ? (
-                      <>
-                        <Alert primary>
-                          {" "}
-                          <p>Password successfully reset</p>{" "}
-                        </Alert>
-                        {/* <a onClick={this.handlePassResetSuccessLogin} href="#">
+                          {/* <a onClick={this.handlePassResetSuccessLogin} href="#">
                           Login
                         </a>{" "} */}
-                      </>
-                    ) : (
-                      <>
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="resetPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="resetPass"
-                              name="resetPass"
-                              placeholder="Password"
-                              value={this.state.resetPass}
-                              onChange={this.onChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="empty-form-group">
-                            <label htmlFor="resetPass">N/A</label>
-                            <Form.Input />
-                          </Form.Group>
-                        </Form>
-                      </>
-                    )}
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={this.toggleResetModal}>
-                      Close
+                        </>
+                      ) : (
+                          <>
+                            <Form>
+                              <Form.Group>
+                                <label htmlFor="resetPass">Password</label>
+                                <Form.Input
+                                  type="password"
+                                  id="resetPass"
+                                  name="resetPass"
+                                  placeholder="Password"
+                                  value={this.state.resetPass}
+                                  onChange={this.onChange}
+                                />
+                              </Form.Group>
+                              <Form.Group className="empty-form-group">
+                                <label htmlFor="resetPass">N/A</label>
+                                <Form.Input />
+                              </Form.Group>
+                            </Form>
+                          </>
+                        )}
+                    </div>
+                    <div className="modal-footer">
+                      <Button secondary onClick={this.toggleResetModal}>
+                        Close
                     </Button>
-                    {this.state.passResetSuccess ? (
-                      <></>
-                    ) : (
-                      <>
-                        <Button primary onClick={this.onResetSubmit}>
-                          Submit
+                      {this.state.passResetSuccess ? (
+                        <></>
+                      ) : (
+                          <>
+                            <Button primary onClick={this.onResetSubmit}>
+                              Submit
                         </Button>
-                      </>
-                    )}
-                  </div>
-                </Modal>
-
-                <Modal
-                  visible={this.state.regModal}
-                  onClickBackdrop={this.toggleRegModal}
-                >
-                  <div className="modal-header">
-                    <h5 className="modal-title">Register</h5>
-                  </div>
-                  <div className="modal-body">
-                    {this.state.error.msg && this.state.error.msg.msg && (
-                      <Alert danger>
-                        {this.state.error.id === "REGISTER_FAIL" ||
-                        this.state.error.id === "LOGIN_FAIL" ? (
-                          <p>{this.state.error.msg.msg}</p>
-                        ) : (
-                          <></>
-                        )}
-                      </Alert>
-                    )}
-                    <Form>
-                      <Form.Group>
-                        <label htmlFor="regName">Name</label>
-                        <Form.Input
-                          type="text"
-                          id="regName"
-                          name="regName"
-                          placeholder="Enter name"
-                          value={this.state.regName}
-                          onChange={this.onChange}
-                        />
-                      </Form.Group>
-                      <Form.Group>
-                        <label htmlFor="regEmail">Email address</label>
-                        <Form.Input
-                          type="email"
-                          id="regEmail"
-                          name="regEmail"
-                          value={this.state.regEmail}
-                          placeholder="Enter email"
-                          onChange={this.onChange}
-                        />
-                        <Form.Text text="muted">
-                          We'll never share your email with anyone else.
-                        </Form.Text>
-                      </Form.Group>
-                      <Form.Group>
-                        <label htmlFor="regPass">Password</label>
-                        <Form.Input
-                          type="password"
-                          id="regPass"
-                          name="regPass"
-                          placeholder="Password"
-                          value={this.state.regPass}
-                          onChange={this.onChange}
-                        />
-                      </Form.Group>
-                    </Form>
-                  </div>
-                  <div className="modal-footer">
-                    <Button secondary onClick={this.toggleRegModal}>
-                      Close
-                    </Button>
-                    <Button primary onClick={this.onRegSubmit}>
-                      Register
-                    </Button>
-                  </div>
-                </Modal>
-
-                <Modal
-                  visible={this.state.logModal}
-                  onClickBackdrop={this.toggleLogModal}
-                >
-                  {this.state.resetPassword ? (
-                    <>
-                      <>
-                        <div className="modal-header">
-                          <h5 className="modal-title">Reset Password</h5>
-                        </div>
-                        {this.state.resetPasswordEmailSent ? (
-                          <>
-                            <div className="modal-body">
-                              <Alert success>
-                                <p>Reset link sent to your email</p>
-                              </Alert>
-                            </div>
-                            <div className="modal-footer">
-                              <Button secondary onClick={this.toggleLogModal}>
-                                Close
-                              </Button>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="modal-body">
-                              {this.state.error.msg &&
-                                this.state.error.msg.msg && (
-                                  <Alert danger>
-                                    {this.state.error.id === "RESET_FAIL" ? (
-                                      <p>{this.state.error.msg.msg}</p>
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </Alert>
-                                )}
-                              <Form>
-                                <Form.Group>
-                                  <label htmlFor="logEmail">
-                                    Email address
-                                  </label>
-                                  <Form.Input
-                                    type="email"
-                                    id="passReset"
-                                    name="passReset"
-                                    placeholder="Enter email"
-                                    value={this.state.passReset}
-                                    onChange={this.onChange}
-                                  />
-                                </Form.Group>
-                              </Form>
-                            </div>
-                            <div className="modal-footer">
-                              <Button secondary onClick={this.toggleLogModal}>
-                                Close
-                              </Button>
-                              {this.state.showResetLoader ? (
-                                <>
-                                  <Button primary className="loader-button">
-                                    <Loader
-                                      type="Puff"
-                                      color="#00BFFF"
-                                      height={25}
-                                      width={25}
-                                      // timeout={1000} //3 secs
-                                    />{" "}
-                                  </Button>
-                                </>
-                              ) : (
-                                <>
-                                  <Button
-                                    primary
-                                    onClick={this.handlePassResetEmailSubmit.bind(
-                                      this
-                                    )}
-                                  >
-                                    Send Email
-                                  </Button>
-                                </>
-                              )}
-                            </div>
                           </>
                         )}
-                      </>
-                    </>
-                  ) : (
-                    <>
-                      <div className="modal-header">
-                        <h5 className="modal-title">Login</h5>
-                      </div>
-                      <div className="modal-body">
-                        {this.state.error.msg && this.state.error.msg.msg && (
-                          <Alert danger>
-                            {this.state.error.id === "REGISTER_FAIL" ||
+                    </div>
+                  </Modal>
+
+                  <Modal
+                    visible={this.state.regModal}
+                    onClickBackdrop={this.toggleRegModal}
+                  >
+                    <div className="modal-header">
+                      <h5 className="modal-title">Register</h5>
+                    </div>
+                    <div className="modal-body">
+                      {this.state.error.msg && this.state.error.msg.msg && (
+                        <Alert danger>
+                          {this.state.error.id === "REGISTER_FAIL" ||
                             this.state.error.id === "LOGIN_FAIL" ? (
                               <p>{this.state.error.msg.msg}</p>
                             ) : (
                               <></>
                             )}
-                          </Alert>
-                        )}
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="logEmail">Email address</label>
-                            <Form.Input
-                              type="email"
-                              id="logEmail"
-                              name="logEmail"
-                              placeholder="Enter email"
-                              value={this.state.logEmail}
-                              onChange={this.onChange}
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <label htmlFor="logPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="logPass"
-                              name="logPass"
-                              placeholder="Password"
-                              value={this.state.logPass}
-                              onChange={this.onChange}
-                            />
-                          </Form.Group>
-                        </Form>
-                        <a onClick={this.handlePassReset} href="#">
-                          Reset Password
-                        </a>{" "}
-                      </div>
-                      <div className="modal-footer">
-                        <Button secondary onClick={this.toggleLogModal}>
-                          Close
-                        </Button>
-                        <Button primary onClick={this.userLogin.bind(this)}>
-                          Login
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </Modal>
-                {this.state.auth.user ? (
-                  <>
-                    <>
-                      <div className="profile-pic-div">
-                        <img
-                          title="edit image"
-                          alt="not available"
-                          // onError={() => {
-                          //   console.log("errrrrrrrr");
-                          // }}
-                          class={`pic-img`}
-                          onClick={this.handleProfilePic}
-                          src={
-                            this.state.auth.user.profile_pic
-                              ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${this.state.auth.user.pic_uri}`
-                              : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
-                          }
-                        ></img>
-                      </div>
+                        </Alert>
+                      )}
+                      <Form>
+                        <Form.Group>
+                          <label htmlFor="regName">Name</label>
+                          <Form.Input
+                            type="text"
+                            id="regName"
+                            name="regName"
+                            placeholder="Enter name"
+                            value={this.state.regName}
+                            onChange={this.onChange}
+                          />
+                        </Form.Group>
+                        <Form.Group>
+                          <label htmlFor="regEmail">Email address</label>
+                          <Form.Input
+                            type="email"
+                            id="regEmail"
+                            name="regEmail"
+                            value={this.state.regEmail}
+                            placeholder="Enter email"
+                            onChange={this.onChange}
+                          />
+                          <Form.Text text="muted">
+                            We'll never share your email with anyone else.
+                        </Form.Text>
+                        </Form.Group>
+                        <Form.Group>
+                          <label htmlFor="regPass">Password</label>
+                          <Form.Input
+                            type="password"
+                            id="regPass"
+                            name="regPass"
+                            placeholder="Password"
+                            value={this.state.regPass}
+                            onChange={this.onChange}
+                          />
+                        </Form.Group>
+                      </Form>
+                    </div>
+                    <div className="modal-footer">
+                      <Button secondary onClick={this.toggleRegModal}>
+                        Close
+                    </Button>
+                      <Button primary onClick={this.onRegSubmit}>
+                        Register
+                    </Button>
+                    </div>
+                  </Modal>
 
-                      {this.state.editImage && (
+                  <Modal
+                    visible={this.state.logModal}
+                    onClickBackdrop={this.toggleLogModal}
+                  >
+                    {this.state.resetPassword ? (
+                      <>
                         <>
-                          {" "}
-                          <>
-                            <div className={`editImage`}>
-                              {this.state.uploadMessage && (
-                                <p className={`mt-1 mb-1 editImageWarning`}>
-                                  {this.state.uploadMessage}
-                                </p>
-                              )}
-                              <form
-                                class={`mt-1 mb-1`}
-                                onSubmit={this.submitFile}
-                              >
-                                <input
-                                  class={`imageInput`}
-                                  label="upload file"
-                                  type="file"
-                                  onChange={this.handleFileUpload}
-                                />
-                                {this.state.editImageLoading ? (
-                                  <>
-                                    <Button primary className="loader-button">
-                                      <Loader
-                                        type="Puff"
-                                        color="#00BFFF"
-                                        height={25}
-                                        width={25}
+                          <div className="modal-header">
+                            <h5 className="modal-title">Reset Password</h5>
+                          </div>
+                          {this.state.resetPasswordEmailSent ? (
+                            <>
+                              <div className="modal-body">
+                                <Alert success>
+                                  <p>Reset link sent to your email</p>
+                                </Alert>
+                              </div>
+                              <div className="modal-footer">
+                                <Button secondary onClick={this.toggleLogModal}>
+                                  Close
+                              </Button>
+                              </div>
+                            </>
+                          ) : (
+                              <>
+                                <div className="modal-body">
+                                  {this.state.error.msg &&
+                                    this.state.error.msg.msg && (
+                                      <Alert danger>
+                                        {this.state.error.id === "RESET_FAIL" ? (
+                                          <p>{this.state.error.msg.msg}</p>
+                                        ) : (
+                                            <></>
+                                          )}
+                                      </Alert>
+                                    )}
+                                  <Form>
+                                    <Form.Group>
+                                      <label htmlFor="logEmail">
+                                        Email address
+                                  </label>
+                                      <Form.Input
+                                        type="email"
+                                        id="passReset"
+                                        name="passReset"
+                                        placeholder="Enter email"
+                                        value={this.state.passReset}
+                                        onChange={this.onChange}
+                                      />
+                                    </Form.Group>
+                                  </Form>
+                                </div>
+                                <div className="modal-footer">
+                                  <Button secondary onClick={this.toggleLogModal}>
+                                    Close
+                              </Button>
+                                  {this.state.showResetLoader ? (
+                                    <>
+                                      <Button primary className="loader-button">
+                                        <Loader
+                                          type="Puff"
+                                          color="#00BFFF"
+                                          height={25}
+                                          width={25}
                                         // timeout={1000} //3 secs
-                                      />{" "}
-                                    </Button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Button
-                                      className={`btn btn-primary imageInputBtn`}
-                                      type="submit"
-                                    >
-                                      Upload
-                                    </Button>
-                                  </>
-                                )}
-
-                                <Button
-                                  className={`btn btn-secondary imageInputBtn ml-3`}
-                                  onClick={this.cancelUpload}
-                                >
-                                  Cancel
-                                </Button>
-                              </form>
-                            </div>
-                          </>
+                                        />{" "}
+                                      </Button>
+                                    </>
+                                  ) : (
+                                      <>
+                                        <Button
+                                          primary
+                                          onClick={this.handlePassResetEmailSubmit.bind(
+                                            this
+                                          )}
+                                        >
+                                          Send Email
+                                  </Button>
+                                      </>
+                                    )}
+                                </div>
+                              </>
+                            )}
+                        </>
+                      </>
+                    ) : (
+                        <>
+                          <div className="modal-header">
+                            <h5 className="modal-title">Login</h5>
+                          </div>
+                          <div className="modal-body">
+                            {this.state.error.msg && this.state.error.msg.msg && (
+                              <Alert danger>
+                                {this.state.error.id === "REGISTER_FAIL" ||
+                                  this.state.error.id === "LOGIN_FAIL" ? (
+                                    <p>{this.state.error.msg.msg}</p>
+                                  ) : (
+                                    <></>
+                                  )}
+                              </Alert>
+                            )}
+                            <Form>
+                              <Form.Group>
+                                <label htmlFor="logEmail">Email address</label>
+                                <Form.Input
+                                  type="email"
+                                  id="logEmail"
+                                  name="logEmail"
+                                  placeholder="Enter email"
+                                  value={this.state.logEmail}
+                                  onChange={this.onChange}
+                                />
+                              </Form.Group>
+                              <Form.Group>
+                                <label htmlFor="logPass">Password</label>
+                                <Form.Input
+                                  type="password"
+                                  id="logPass"
+                                  name="logPass"
+                                  placeholder="Password"
+                                  value={this.state.logPass}
+                                  onChange={this.onChange}
+                                />
+                              </Form.Group>
+                            </Form>
+                            <a onClick={this.handlePassReset} href="#">
+                              Reset Password
+                        </a>{" "}
+                          </div>
+                          <div className="modal-footer">
+                            <Button secondary onClick={this.toggleLogModal}>
+                              Close
+                        </Button>
+                            <Button primary onClick={this.userLogin.bind(this)}>
+                              Login
+                        </Button>
+                          </div>
                         </>
                       )}
-                      <p className="mb-0 mt-1 width-check">
-                        <em> Welcome {this.state.auth.user.name},</em>
-                      </p>
+                  </Modal>
+                  {this.state.auth.user ? (
+                    <>
+                      <>
+                        <div className="profile-pic-div">
+                          <img
+                            title="edit image"
+                            alt="not available"
+                            // onError={() => {
+                            //   console.log("errrrrrrrr");
+                            // }}
+                            class={`pic-img`}
+                            onClick={this.handleProfilePic}
+                            src={
+                              this.state.auth.user.profile_pic
+                                ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${this.state.auth.user.pic_uri}`
+                                : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
+                            }
+                          ></img>
+                        </div>
+
+                        {this.state.editImage && (
+                          <>
+                            {" "}
+                            <>
+                              <div className={`editImage`}>
+                                {this.state.uploadMessage && (
+                                  <p className={`mt-1 mb-1 editImageWarning`}>
+                                    {this.state.uploadMessage}
+                                  </p>
+                                )}
+                                <form
+                                  class={`mt-1 mb-1`}
+                                  onSubmit={this.submitFile}
+                                >
+                                  <input
+                                    class={`imageInput`}
+                                    label="upload file"
+                                    type="file"
+                                    onChange={this.handleFileUpload}
+                                  />
+                                  {this.state.editImageLoading ? (
+                                    <>
+                                      <Button primary className="loader-button">
+                                        <Loader
+                                          type="Puff"
+                                          color="#00BFFF"
+                                          height={25}
+                                          width={25}
+                                        // timeout={1000} //3 secs
+                                        />{" "}
+                                      </Button>
+                                    </>
+                                  ) : (
+                                      <>
+                                        <Button
+                                          className={`btn btn-primary imageInputBtn`}
+                                          type="submit"
+                                        >
+                                          Upload
+                                    </Button>
+                                      </>
+                                    )}
+
+                                  <Button
+                                    className={`btn btn-secondary imageInputBtn ml-3`}
+                                    onClick={this.cancelUpload}
+                                  >
+                                    Cancel
+                                </Button>
+                                </form>
+                              </div>
+                            </>
+                          </>
+                        )}
+                        <p className="mb-0 mt-1 width-check">
+                          <em> Welcome {this.state.auth.user.name},</em>
+                        </p>
+                      </>
                     </>
-                  </>
-                ) : null}
+                  ) : null}
 
-                <SearchBar
-                  ref={this.searchBarElement}
-                  tableItems={this.state.fetchedResults}
-                  changeFetchedResults={this.changeFetchedResults.bind(this)}
-                  clearTablePage={this.clearTablePage.bind(this)}
-                />
-                {this.state.fetchedResults && (
-                  <PlantTable
-                    addedItems={addedItems}
-                    tableData={this.state.fetchedResults}
-                    sortToggle={this.sortToggle.bind(this)}
-                    sortColumn={this.state.sort[0].sortColumn}
-                    sortDirection={this.state.sort[0].sortDirection}
-                    limitItems={this.state.limitItems[0]}
-                    itemChange={this.itemChange.bind(this)}
-                    rowItemChange={this.rowItemChange.bind(this)}
-                    handleAddorDelete={this.changeAddItem.bind(
-                      this,
-                      this.state.auth.isAuthorized
-                    )}
-                    utility="Add"
+                  <SearchBar
+                    ref={this.searchBarElement}
+                    tableItems={this.state.fetchedResults}
+                    changeFetchedResults={this.changeFetchedResults.bind(this)}
+                    clearTablePage={this.clearTablePage.bind(this)}
                   />
-                )}
+                  {this.state.fetchedResults && (
+                    <PlantTable
+                      addedItems={addedItems}
+                      tableData={this.state.fetchedResults}
+                      sortToggle={this.sortToggle.bind(this)}
+                      sortColumn={this.state.sort[0].sortColumn}
+                      sortDirection={this.state.sort[0].sortDirection}
+                      limitItems={this.state.limitItems[0]}
+                      itemChange={this.itemChange.bind(this)}
+                      rowItemChange={this.rowItemChange.bind(this)}
+                      handleAddorDelete={this.changeAddItem.bind(
+                        this,
+                        this.state.auth.isAuthorized
+                      )}
+                      utility="Add"
+                    />
+                  )}
 
-                {this.state.auth.isAuthorized === true
-                  ? personalTables
-                  : publicTables}
+                  {this.state.auth.isAuthorized === true
+                    ? personalTables
+                    : publicTables}
 
-                {footer}
-                {/* {secondFooter} */}
-              </Container>
+                  {footer}
+                  {/* {secondFooter} */}
+                </Container>
+              </>
             </>
-          </>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+          )}
       </>
     );
   }

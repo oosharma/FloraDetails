@@ -11,6 +11,7 @@ const User = require("../../models/user");
 // @desc Register new user
 // @access public
 router.post("/", (req, res) => {
+  console.log('hereeee')
   const { name, email, password } = req.body;
 
   // Simple validation

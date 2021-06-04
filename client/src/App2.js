@@ -24,7 +24,15 @@ import {
   Alert,
 } from "bootstrap-4-react";
 import Modal from "react-bootstrap4-modal";
-
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Link,
+  Route,
+  useParams,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthAction } from "./store/Auth/actionCreators";
 
@@ -760,12 +768,9 @@ function App2({ query }) {
   );
   const guestLinks = (
     <>
-      <Nav.ItemLink onClick={toggleRegModal} active href="#">
-        <em> Register</em>
-      </Nav.ItemLink>
-      <Nav.ItemLink onClick={toggleLogModal} href="#">
-        <em>Login</em>
-      </Nav.ItemLink>
+      <Nav.ItemLink  > <Link to="/register">Register </Link></Nav.ItemLink>
+      <Nav.ItemLink  > <Link to="/login">Login </Link></Nav.ItemLink>
+
     </>
   );
 
@@ -808,16 +813,16 @@ function App2({ query }) {
               />
             </>
           ) : (
-            <>
-              <Display4 className={`mt-3 width-check`}>
-                Public's Table is Empty, Use Search Results to Add Plants{" "}
-              </Display4>
-            </>
-          )}
+              <>
+                <Display4 className={`mt-3 width-check`}>
+                  Public's Table is Empty, Use Search Results to Add Plants{" "}
+                </Display4>
+              </>
+            )}
         </>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </>
   );
 
@@ -865,28 +870,28 @@ function App2({ query }) {
               ></PlantTable>
             </>
           ) : (
-            <>
-              <Display4 className={`mt-3 width-check`}>
-                {auth.user.name}'s Personal Table is Empty, Use Search Table to
-                Add Plants
+              <>
+                <Display4 className={`mt-3 width-check`}>
+                  {auth.user.name}'s Personal Table is Empty, Use Search Table to
+                  Add Plants
               </Display4>
-            </>
-          )}
+              </>
+            )}
         </>
       ) : (
-        <>
-          {auth.user ? (
-            <>
-              <Display4 className="mt-3 width-check">
-                {auth.user.name}'s Personal Table is Empty, Use Search Results
-                to Add Plants
+          <>
+            {auth.user ? (
+              <>
+                <Display4 className="mt-3 width-check">
+                  {auth.user.name}'s Personal Table is Empty, Use Search Results
+                  to Add Plants
               </Display4>
-            </>
-          ) : (
-            <></>
-          )}
-        </>
-      )}
+              </>
+            ) : (
+                <></>
+              )}
+          </>
+        )}
     </>
   );
 
@@ -917,8 +922,8 @@ function App2({ query }) {
                           <p>{passError.msg.msg}</p>{" "}
                         </Alert>
                       ) : (
-                        <></>
-                      )}
+                          <></>
+                        )}
                     </>
                   )}
                   {passResetSuccess ? (
@@ -932,28 +937,28 @@ function App2({ query }) {
                         </a>{" "} */}
                     </>
                   ) : (
-                    <>
-                      <Form>
-                        <Form.Group>
-                          <label htmlFor="resetPass">Password</label>
-                          <Form.Input
-                            type="password"
-                            id="resetPass"
-                            name="resetPass"
-                            placeholder="Password"
-                            value={resetPass}
-                            onChange={(e) => {
-                              setResetPass(e.target.value);
-                            }}
-                          />
-                        </Form.Group>
-                        <Form.Group className="empty-form-group">
-                          <label htmlFor="resetPass">N/A</label>
-                          <Form.Input />
-                        </Form.Group>
-                      </Form>
-                    </>
-                  )}
+                      <>
+                        <Form>
+                          <Form.Group>
+                            <label htmlFor="resetPass">Password</label>
+                            <Form.Input
+                              type="password"
+                              id="resetPass"
+                              name="resetPass"
+                              placeholder="Password"
+                              value={resetPass}
+                              onChange={(e) => {
+                                setResetPass(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
+                          <Form.Group className="empty-form-group">
+                            <label htmlFor="resetPass">N/A</label>
+                            <Form.Input />
+                          </Form.Group>
+                        </Form>
+                      </>
+                    )}
                 </div>
                 <div className="modal-footer">
                   <Button secondary onClick={toggleResetModal}>
@@ -962,12 +967,12 @@ function App2({ query }) {
                   {passResetSuccess ? (
                     <></>
                   ) : (
-                    <>
-                      <Button primary onClick={onResetSubmit}>
-                        Submit
+                      <>
+                        <Button primary onClick={onResetSubmit}>
+                          Submit
                       </Button>
-                    </>
-                  )}
+                      </>
+                    )}
                 </div>
               </Modal>
 
@@ -979,11 +984,11 @@ function App2({ query }) {
                   {error.msg && error.msg.msg && (
                     <Alert danger>
                       {error.id === "REGISTER_FAIL" ||
-                      error.id === "LOGIN_FAIL" ? (
-                        <p>{error.msg.msg}</p>
-                      ) : (
-                        <></>
-                      )}
+                        error.id === "LOGIN_FAIL" ? (
+                          <p>{error.msg.msg}</p>
+                        ) : (
+                          <></>
+                        )}
                     </Alert>
                   )}
                   <Form>
@@ -1062,122 +1067,122 @@ function App2({ query }) {
                           </div>
                         </>
                       ) : (
-                        <>
-                          <div className="modal-body">
-                            {error.msg && error.msg.msg && (
-                              <Alert danger>
-                                {error.id === "RESET_FAIL" ? (
-                                  <p>{error.msg.msg}</p>
-                                ) : (
-                                  <></>
-                                )}
-                              </Alert>
-                            )}
-                            <Form>
-                              <Form.Group>
-                                <label htmlFor="logEmail">Email address</label>
-                                <Form.Input
-                                  type="email"
-                                  id="passReset"
-                                  name="passReset"
-                                  placeholder="Enter email"
-                                  value={passReset}
-                                  onChange={(e) => {
-                                    setPassReset(e.target.value);
-                                  }}
-                                />
-                              </Form.Group>
-                            </Form>
-                          </div>
-                          <div className="modal-footer">
-                            <Button secondary onClick={toggleLogModal}>
-                              Close
+                          <>
+                            <div className="modal-body">
+                              {error.msg && error.msg.msg && (
+                                <Alert danger>
+                                  {error.id === "RESET_FAIL" ? (
+                                    <p>{error.msg.msg}</p>
+                                  ) : (
+                                      <></>
+                                    )}
+                                </Alert>
+                              )}
+                              <Form>
+                                <Form.Group>
+                                  <label htmlFor="logEmail">Email address</label>
+                                  <Form.Input
+                                    type="email"
+                                    id="passReset"
+                                    name="passReset"
+                                    placeholder="Enter email"
+                                    value={passReset}
+                                    onChange={(e) => {
+                                      setPassReset(e.target.value);
+                                    }}
+                                  />
+                                </Form.Group>
+                              </Form>
+                            </div>
+                            <div className="modal-footer">
+                              <Button secondary onClick={toggleLogModal}>
+                                Close
                             </Button>
-                            {showResetLoader ? (
-                              <>
-                                <Button primary className="loader-button">
-                                  <Loader
-                                    type="Puff"
-                                    color="#00BFFF"
-                                    height={25}
-                                    width={25}
+                              {showResetLoader ? (
+                                <>
+                                  <Button primary className="loader-button">
+                                    <Loader
+                                      type="Puff"
+                                      color="#00BFFF"
+                                      height={25}
+                                      width={25}
                                     // timeout={1000} //3 secs
-                                  />{" "}
+                                    />{" "}
+                                  </Button>
+                                </>
+                              ) : (
+                                  <>
+                                    <Button
+                                      primary
+                                      onClick={handlePassResetEmailSubmit}
+                                    >
+                                      Send Email
                                 </Button>
-                              </>
-                            ) : (
-                              <>
-                                <Button
-                                  primary
-                                  onClick={handlePassResetEmailSubmit}
-                                >
-                                  Send Email
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </>
-                      )}
+                                  </>
+                                )}
+                            </div>
+                          </>
+                        )}
                     </>
                   </>
                 ) : (
-                  <>
-                    <div className="modal-header">
-                      <h5 className="modal-title">Login</h5>
-                    </div>
-                    <div className="modal-body">
-                      {error.msg && error.msg.msg && (
-                        <Alert danger>
-                          {error.id === "REGISTER_FAIL" ||
-                          error.id === "LOGIN_FAIL" ? (
-                            <p>{error.msg.msg}</p>
-                          ) : (
-                            <></>
-                          )}
-                        </Alert>
-                      )}
-                      <Form>
-                        <Form.Group>
-                          <label htmlFor="logEmail">Email address</label>
-                          <Form.Input
-                            type="email"
-                            id="logEmail"
-                            name="logEmail"
-                            placeholder="Enter email"
-                            value={logEmail}
-                            onChange={(e) => {
-                              setLogEmail(e.target.value);
-                            }}
-                          />
-                        </Form.Group>
-                        <Form.Group>
-                          <label htmlFor="logPass">Password</label>
-                          <Form.Input
-                            type="password"
-                            id="logPass"
-                            name="logPass"
-                            placeholder="Password"
-                            value={logPass}
-                            onChange={(e) => {
-                              setLogPass(e.target.value);
-                            }}
-                          />
-                        </Form.Group>
-                      </Form>
-                      <a onClick={handlePassReset} href="#">
-                        Reset Password
+                    <>
+                      <div className="modal-header">
+                        <h5 className="modal-title">Login</h5>
+                      </div>
+                      <div className="modal-body">
+                        {error.msg && error.msg.msg && (
+                          <Alert danger>
+                            {error.id === "REGISTER_FAIL" ||
+                              error.id === "LOGIN_FAIL" ? (
+                                <p>{error.msg.msg}</p>
+                              ) : (
+                                <></>
+                              )}
+                          </Alert>
+                        )}
+                        <Form>
+                          <Form.Group>
+                            <label htmlFor="logEmail">Email address</label>
+                            <Form.Input
+                              type="email"
+                              id="logEmail"
+                              name="logEmail"
+                              placeholder="Enter email"
+                              value={logEmail}
+                              onChange={(e) => {
+                                setLogEmail(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <label htmlFor="logPass">Password</label>
+                            <Form.Input
+                              type="password"
+                              id="logPass"
+                              name="logPass"
+                              placeholder="Password"
+                              value={logPass}
+                              onChange={(e) => {
+                                setLogPass(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
+                        </Form>
+                        <a onClick={handlePassReset} href="#">
+                          Reset Password
                       </a>{" "}
-                    </div>
-                    <div className="modal-footer">
-                      <Button secondary onClick={toggleLogModal}>
-                        Close
+                      </div>
+                      <div className="modal-footer">
+                        <Button secondary onClick={toggleLogModal}>
+                          Close
                       </Button>
-                      <Button primary onClick={userLogin}>
-                        Login
+                        <Button primary onClick={userLogin}>
+                          Login
                       </Button>
-                    </div>
-                  </>
-                )}
+                      </div>
+                    </>
+                  )}
               </Modal>
               {auth.user ? (
                 <>
@@ -1194,8 +1199,8 @@ function App2({ query }) {
                         src={
                           auth.user.profile_pic
                             ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
-                                auth.user.pic_uri
-                              }?=${Date.now()}`
+                            auth.user.pic_uri
+                            }?=${Date.now()}`
                             : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
                         }
                       ></img>
@@ -1226,20 +1231,20 @@ function App2({ query }) {
                                       color="#00BFFF"
                                       height={25}
                                       width={25}
-                                      // timeout={1000} //3 secs
+                                    // timeout={1000} //3 secs
                                     />{" "}
                                   </Button>
                                 </>
                               ) : (
-                                <>
-                                  <Button
-                                    className={`btn btn-primary imageInputBtn`}
-                                    type="submit"
-                                  >
-                                    Upload
+                                  <>
+                                    <Button
+                                      className={`btn btn-primary imageInputBtn`}
+                                      type="submit"
+                                    >
+                                      Upload
                                   </Button>
-                                </>
-                              )}
+                                  </>
+                                )}
 
                               <Button
                                 className={`btn btn-secondary imageInputBtn ml-3`}
@@ -1252,13 +1257,13 @@ function App2({ query }) {
                         </>
                       </>
                     )}
-                    <p className="mb-0 mt-1 width-check">
-                      <em> Welcome {auth.user.name},</em>
-                    </p>
+
                   </>
                 </>
               ) : null}
-
+              <p className="mb-0 mt-1 width-check">
+                <em> Welcome {auth ?.user ?.name ? auth.user.name : "Guest" },</em>
+              </p>
               <SearchBar
                 ref={searchBarElement}
                 tableItems={fetchedResults}
@@ -1289,8 +1294,8 @@ function App2({ query }) {
           </>
         </>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </>
   );
 }

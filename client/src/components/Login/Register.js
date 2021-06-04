@@ -16,6 +16,7 @@ import Modal from "react-bootstrap4-modal";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthAction } from "../../store/Auth/actionCreators";
+import { useAuth } from "../../hooks/useAuth";
 import style from "./Login.css";
 import {
   BrowserRouter as Router,
@@ -23,43 +24,31 @@ import {
   Link,
   Route,
   useParams,
-  useHistory, useLocation
+  useHistory,
+  useLocation,
 } from "react-router-dom";
-import queryString from 'query-string'
-
+import queryString from "query-string";
 
 function Register() {
   //const location = useLocation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [gotoDashboard, setGotoDashboard] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [isResetPasswordMode, setResetPasswordMode] = useState(false);
   const [resetPasswordEmailSent, setResetPasswordEmailSent] = useState(false);
-
-  const [resetPassword, setResetPassword] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
 
-  // const [auth, setAuth] = useState({
-  //   token: localStorage.getItem("token"),
-  //   isAuthorized: null,
-  //   isLoading: false,
-  //   user: null,
-  // });
-  const [error, setError] = useState({
-    msg: null,
-    status: null,
-    id: null,
-  });
-
-  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const [error, clearErrors, updateError, tokenConfig] = useAuth(auth.token);
+  const dispatch = useDispatch();
+  let location = useLocation();
+  console.log(location.pathname);
+  React.useEffect(() => {
 
- 
-  // const values = queryString.parse(search)
-  // console.log(11, values.filter) // "top"
-  // console.log(22, values.origin) // "im"
+    setIsLoginMode(location.pathname === "/login" ? true : false);
+  })
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -131,23 +120,31 @@ function Register() {
       isLoading: false,
       user: res.user,
     };
-    console.log(authUpdate);
     localStorage.setItem("token", res.token);
     dispatch(setAuthAction(authUpdate));
-
-    // setAuth(authUpdate);
-    //console.log(auth);
     clearErrors();
-
-    //const history = useHistory();
-
-    setLoggedIn(true);
-
-    //  loadItems();
-    //  clearSearchBarTable();
-    // toggleRegModal();
-    // searchBarElement.current.handleClearButtonClick();
+    setGotoDashboard(true);
   };
+
+  const handleLogin = () => {
+    setIsLoginMode(true);
+    setResetPasswordMode(false);
+    console.log("clicked");
+    setResetPasswordEmailSent(false);
+    clearErrors();
+  };
+
+  const handleRegister = () => {
+    setIsLoginMode(false);
+    setResetPasswordMode(false);
+    setResetPasswordEmailSent(false);
+    clearErrors();
+  }
+
+  const handleContinueAsGuest = () => {
+    setGotoDashboard(true);
+  }
+
 
   const loginSuccess = (res) => {
     let authUpdate = {
@@ -160,112 +157,66 @@ function Register() {
     dispatch(setAuthAction(authUpdate));
     clearErrors();
 
-    setLoggedIn(true);
-
-    // loadItems();
-    //clearSearchBarTable();
-
-    // searchBarElement.current.handleClearButtonClick();
+    setGotoDashboard(true);
   };
 
-  const clearErrors = () => {
-    let errorUpdate = {
-      msg: null,
-      status: null,
-      id: null,
-    };
-    setError(errorUpdate);
-  };
-
-  const clearAuth = () => {
-    localStorage.removeItem("token");
-    let authUpdate = {
-      token: localStorage.getItem("token"),
-      isAuthorized: null,
-      isLoading: false,
-      user: null,
-    };
-    dispatch(setAuthAction(authUpdate));
-  };
-
-  const updateError = (err, id) => {
-    if (err.response) {
-      clearAuth();
-      let errorUpdate = {
-        msg: err.response.data,
-        status: err.response.status,
-        id: id,
-      };
-      setError(errorUpdate);
-    }
-  };
-
-  const tokenConfig = () => {
-    // Get token from localstorage
-    const token = auth.token;
-
-    // Headers
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
-
-    // If token, add to headers
-    if (token) {
-      config.headers["x-auth-token"] = token;
-    }
-    return config;
-  };
+  const handleCloseReset = () => {
+    setResetPasswordMode(false);
+    setIsLoginMode(true);
+    setResetPasswordEmailSent(false);
+  }
 
   let buttonText = isResetPasswordMode
     ? "Reset"
     : isLoginMode
-    ? "Login"
-    : "Register";
+      ? "Login"
+      : "Register";
 
-    useEffect(() => {console.log('erer')})
-    const location = useLocation();
-    console.log(3, location);
+  useEffect(() => {
+    console.log("erer");
+  });
+
+
   return (
     <>
-      {loggedIn ? <Redirect to="/" /> : null}
+      {gotoDashboard ? <Redirect to="/dashboard" /> : null}
 
       {JSON.stringify(auth)}
 
       <div className="Nav">
-        <button
-          className="m-3"
-          onClick={() => {
-            setIsLoginMode(false);
-            setResetPasswordMode(false);
-            setResetPasswordEmailSent(false);
-            clearErrors();
-          }}
+        <Link to="/register">    <button
+        // className="m-3"
+        // onClick={() => {
+        //   handleRegister();
+        // }}
         >
           Register
-        </button>
-        <button
+        </button></Link>
+        {/* <button
           className="m-3"
           onClick={() => {
-            setIsLoginMode(true);
-            setResetPasswordMode(false);
-            console.log("clicked");
-            setResetPasswordEmailSent(false);
-            clearErrors();
+            handleLogin();
           }}
         >
           Login
-        </button>
-        <button className="m-3">Continue as Guest</button>
+        </button> */}
+        <Link to="/login">    <button
+        // className="m-3"
+        // onClick={() => {
+        //   handleRegister();
+        // }}
+        >
+          Login
+        </button></Link>
+        <Link to="/dashboard"> <button className="m-3" >Continue as Guest</button></Link>
       </div>
       {error.msg && error.msg.msg && (
         <Alert danger>
           {error.id === "REGISTER_FAIL" || error.id === "LOGIN_FAIL" ? (
             <p>{error.msg.msg}</p>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </Alert>
       )}
       <div className="Form">
@@ -302,6 +253,7 @@ function Register() {
               We'll never share your email with anyone else.
             </Form.Text>
           </Form.Group>
+
           {!isResetPasswordMode && (
             <Form.Group>
               <label htmlFor="pass">Password</label>
@@ -318,8 +270,6 @@ function Register() {
             </Form.Group>
           )}
 
-          
-
           {isResetPasswordMode && (
             <>
               {resetPasswordEmailSent ? (
@@ -329,18 +279,18 @@ function Register() {
                   </Alert>
                 </>
               ) : (
-                <>
-                  {error.msg && error.msg.msg && (
-                    <Alert danger>
-                      {error.id === "RESET_FAIL" ? (
-                        <p>{error.msg.msg}</p>
-                      ) : (
-                        <></>
-                      )}
-                    </Alert>
-                  )}
-                </>
-              )}
+                  <>
+                    {error.msg && error.msg.msg && (
+                      <Alert danger>
+                        {error.id === "RESET_FAIL" ? (
+                          <p>{error.msg.msg}</p>
+                        ) : (
+                            <></>
+                          )}
+                      </Alert>
+                    )}
+                  </>
+                )}
             </>
           )}
 
@@ -352,34 +302,32 @@ function Register() {
                   color="#00BFFF"
                   height={25}
                   width={25}
-                  // timeout={1000} //3 secs
+                // timeout={1000} //3 secs
                 />{" "}
               </Button>
             </>
           ) : (
-            <>
-              <Button primary className="mr-4" onClick={onSubmit}>
-              {buttonText}
-              </Button>
-              {isLoginMode && (
-            <a onClick={handlePassReset} href="#">
-              Reset Password
-            </a>
-          )}
-              {isResetPasswordMode && (
-                <Button
-                  secondary
-                  onClick={() => {
-                    setResetPasswordMode(false);
-                    setIsLoginMode(true);
-                    setResetPasswordEmailSent(false);
-                  }}
-                >
-                  Close
+              <>
+                <Button primary className="mr-4" onClick={onSubmit}>
+                  {buttonText}
                 </Button>
-              )}
-            </>
-          )}
+                {isLoginMode && !isResetPasswordMode && (
+                  <a onClick={handlePassReset} href="#">
+                    Reset Password
+                </a>
+                )}
+                {isResetPasswordMode && (
+                  <Button
+                    secondary
+                    onClick={() => {
+                      handleCloseReset();
+                    }}
+                  >
+                    Close
+                </Button>
+                )}
+              </>
+            )}
         </Form>
       </div>
     </>
