@@ -2,14 +2,18 @@ type FilterOption = string;
 
 type AuthItem = {
   token: String | null,
-      isAuthorized: boolean,
-      isLoading: boolean,
-      user: object
+  isAuthorized: boolean,
+  isLoading: boolean,
+  user: object
 }
 
+
+
 type FilterState = {
-  filterOptions: FilterOption[];
+  [filter: string]: string;
 };
+
+
 
 type AuthState = {
   token: String | null,
@@ -20,7 +24,7 @@ type AuthState = {
 
 type FilterAction = {
   type: string;
-  filterId: FilterOption;
+  filterId: string;
 };
 
 type AuthAction = {
@@ -29,3 +33,4 @@ type AuthAction = {
 };
 
 type DispatchType = (args: ArticleAction) => ArticleAction;
+

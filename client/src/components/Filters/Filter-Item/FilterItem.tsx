@@ -13,15 +13,14 @@ interface FilterItemProps {
 
 const FilterItem: React.FC<FilterItemProps> = ({ title, options }) => {
   const dispatch: Dispatch<any> = useDispatch()
-  const filterOptions: FilterOption[] = useSelector(
-    (state: FilterState) => state.filterOptions)
+  const filterOptions: FilterState = useSelector((state: any) => state.filters)
 
   const editOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.checked);
     // console.log(e.target.id);
-    const filterOption: string = e.target.id
+    const filterOption: string = e.target.id;
     dispatch(toggleFilter(filterOption))
-   }
+  }
 
   return (
     <>
@@ -31,15 +30,17 @@ const FilterItem: React.FC<FilterItemProps> = ({ title, options }) => {
         </div>
         <div className="Filter-Options">
           {options.map((option, index) => {
+            const filterKey = title.replace(/\s/g, "_").toLowerCase();
             return (
               <div className="Filter-Option">
-                <input type={"checkbox"} id={`${title.replace(/\s/g, "-")}-${option.replace(/\s/g, "-")}-${index}`}
-                  onChange={editOption} />
-                <label htmlFor={`${title.replace(/\s/g, "-")}-${option.replace(/\s/g, "-")}-${index}`}>{option}</label>
-               
+                <input type={"checkbox"} id={`${filterKey}:${option}`}
+                  onChange={editOption} checked={filterOptions[filterKey] === option ? true : false} />
+                <label htmlFor={`${filterKey}:${option}`}>{option}</label>
+
               </div>
             );
           })}
+
         </div>
       </div>
     </>

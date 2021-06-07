@@ -130,9 +130,76 @@ function App2({ query }) {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  const filterOptions = useSelector((state) => state.filters);
+
   React.useEffect(() => {
-    // setAuth(authRed);
-  }, []);
+    // console.log(1111, filterOptions);
+    const filteredResults = filterArr(items);
+    const modifiedResults = modifyResult(filteredResults);
+    //   console.log(1111, modifiedResults);
+    const finalArr = [];
+    let res = [...modifiedResults];
+    //  console.log(1111, res);
+
+    for (let item in filterOptions) {
+      if (filterOptions[item] === "null") {
+        continue;
+      }
+      res = [...res.filter((ele) => {
+        console.log(ele[item]);
+        console.log(ele);
+        return ele[item] ?.includes(filterOptions[item]);
+      })];
+    }
+    // if (filterOptions.filterOptions.length > 0) {
+
+    //   console.log('here')
+    //   //   let prev = filterOptions.filterOptions[0].split(":")[0];
+    //   let [key, value] = filterOptions.filterOptions[0].split(":");
+    //   let prev = key;
+    //   res = [...res.filter((item) => {
+    //     console.log(item);
+    //     return item[key] === value;
+    //   })];
+    //   console.log(key)
+    //   console.log(value)
+    //   for (let i = 1; i < filterOptions.filterOptions.length; i++) {
+    //     let startingItems = [...res];
+    //     let [key, value] = filterOptions.filterOptions[i].split(":");
+    //     // if (key === prev) {
+    //     res = [...startingItems, ...modifiedResults.filter((element) => {
+
+    //       return element[key] === value;
+    //     })]
+
+    //     console.log(1111, modifiedResults.filter((element) => {
+
+    //       return element[key] === value;
+    //     }));
+    //     // } else {
+    //     //   res = [...startingItems,...startingItems.filter((element) => {
+
+    //     //     return element[key] === value;
+    //     //   })]
+
+    //   }
+    //   prev = key;
+    //   // console.log(item);
+
+    //   // console.log(key);
+    //   // console.log(value);
+
+    //   //finalArr.push(...res);
+
+    //   // console.log(finalArr);
+
+
+
+    // }
+    console.log(1111, res);
+    setFetchedResults([...res]);
+
+  }, [filterOptions]);
 
   const searchBarElement = React.createRef();
 
@@ -756,7 +823,6 @@ function App2({ query }) {
     setFile(event.target.files);
   };
 
-  //  const filterOptions = useSelector((state) => state.filterOptions);
 
   //  const tableData = modifyResult(allPlantData, filterOptions)
   const authLinks = (
@@ -909,281 +975,6 @@ function App2({ query }) {
                 {auth.isAuthorized === true ? authLinks : guestLinks}
               </Nav>
 
-              <Modal visible={resetModal} onClickBackdrop={toggleResetModal}>
-                <div className="modal-header">
-                  <h5 className="modal-title">Reset Password</h5>
-                </div>
-                <div className="modal-body">
-                  {passError && passError.msg && (
-                    <>
-                      {passError.id === "RESET_FAIL_FINAL" ? (
-                        <Alert danger>
-                          {" "}
-                          <p>{passError.msg.msg}</p>{" "}
-                        </Alert>
-                      ) : (
-                          <></>
-                        )}
-                    </>
-                  )}
-                  {passResetSuccess ? (
-                    <>
-                      <Alert primary>
-                        {" "}
-                        <p>Password successfully reset</p>{" "}
-                      </Alert>
-                      {/* <a onClick={handlePassResetSuccessLogin} href="#">
-                          Login
-                        </a>{" "} */}
-                    </>
-                  ) : (
-                      <>
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="resetPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="resetPass"
-                              name="resetPass"
-                              placeholder="Password"
-                              value={resetPass}
-                              onChange={(e) => {
-                                setResetPass(e.target.value);
-                              }}
-                            />
-                          </Form.Group>
-                          <Form.Group className="empty-form-group">
-                            <label htmlFor="resetPass">N/A</label>
-                            <Form.Input />
-                          </Form.Group>
-                        </Form>
-                      </>
-                    )}
-                </div>
-                <div className="modal-footer">
-                  <Button secondary onClick={toggleResetModal}>
-                    Close
-                  </Button>
-                  {passResetSuccess ? (
-                    <></>
-                  ) : (
-                      <>
-                        <Button primary onClick={onResetSubmit}>
-                          Submit
-                      </Button>
-                      </>
-                    )}
-                </div>
-              </Modal>
-
-              <Modal visible={regModal} onClickBackdrop={toggleRegModal}>
-                <div className="modal-header">
-                  <h5 className="modal-title">Register</h5>
-                </div>
-                <div className="modal-body">
-                  {error.msg && error.msg.msg && (
-                    <Alert danger>
-                      {error.id === "REGISTER_FAIL" ||
-                        error.id === "LOGIN_FAIL" ? (
-                          <p>{error.msg.msg}</p>
-                        ) : (
-                          <></>
-                        )}
-                    </Alert>
-                  )}
-                  <Form>
-                    <Form.Group>
-                      <label htmlFor="regName">Name</label>
-                      <Form.Input
-                        type="text"
-                        id="regName"
-                        name="regName"
-                        placeholder="Enter name"
-                        value={regName}
-                        onChange={(e) => {
-                          setRegName(e.target.value);
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <label htmlFor="regEmail">Email address</label>
-                      <Form.Input
-                        type="email"
-                        id="regEmail"
-                        name="regEmail"
-                        value={regEmail}
-                        placeholder="Enter email"
-                        onChange={(e) => {
-                          setRegEmail(e.target.value);
-                        }}
-                      />
-                      <Form.Text text="muted">
-                        We'll never share your email with anyone else.
-                      </Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                      <label htmlFor="regPass">Password</label>
-                      <Form.Input
-                        type="password"
-                        id="regPass"
-                        name="regPass"
-                        placeholder="Password"
-                        value={regPass}
-                        onChange={(e) => {
-                          setRegPass(e.target.value);
-                        }}
-                      />
-                    </Form.Group>
-                  </Form>
-                </div>
-                <div className="modal-footer">
-                  <Button secondary onClick={toggleRegModal}>
-                    Close
-                  </Button>
-                  <Button primary onClick={onRegSubmit}>
-                    Register
-                  </Button>
-                </div>
-              </Modal>
-
-              <Modal visible={logModal} onClickBackdrop={toggleLogModal}>
-                {resetPassword ? (
-                  <>
-                    <>
-                      <div className="modal-header">
-                        <h5 className="modal-title">Reset Password</h5>
-                      </div>
-                      {resetPasswordEmailSent ? (
-                        <>
-                          <div className="modal-body">
-                            <Alert success>
-                              <p>Reset link sent to your email</p>
-                            </Alert>
-                          </div>
-                          <div className="modal-footer">
-                            <Button secondary onClick={toggleLogModal}>
-                              Close
-                            </Button>
-                          </div>
-                        </>
-                      ) : (
-                          <>
-                            <div className="modal-body">
-                              {error.msg && error.msg.msg && (
-                                <Alert danger>
-                                  {error.id === "RESET_FAIL" ? (
-                                    <p>{error.msg.msg}</p>
-                                  ) : (
-                                      <></>
-                                    )}
-                                </Alert>
-                              )}
-                              <Form>
-                                <Form.Group>
-                                  <label htmlFor="logEmail">Email address</label>
-                                  <Form.Input
-                                    type="email"
-                                    id="passReset"
-                                    name="passReset"
-                                    placeholder="Enter email"
-                                    value={passReset}
-                                    onChange={(e) => {
-                                      setPassReset(e.target.value);
-                                    }}
-                                  />
-                                </Form.Group>
-                              </Form>
-                            </div>
-                            <div className="modal-footer">
-                              <Button secondary onClick={toggleLogModal}>
-                                Close
-                            </Button>
-                              {showResetLoader ? (
-                                <>
-                                  <Button primary className="loader-button">
-                                    <Loader
-                                      type="Puff"
-                                      color="#00BFFF"
-                                      height={25}
-                                      width={25}
-                                    // timeout={1000} //3 secs
-                                    />{" "}
-                                  </Button>
-                                </>
-                              ) : (
-                                  <>
-                                    <Button
-                                      primary
-                                      onClick={handlePassResetEmailSubmit}
-                                    >
-                                      Send Email
-                                </Button>
-                                  </>
-                                )}
-                            </div>
-                          </>
-                        )}
-                    </>
-                  </>
-                ) : (
-                    <>
-                      <div className="modal-header">
-                        <h5 className="modal-title">Login</h5>
-                      </div>
-                      <div className="modal-body">
-                        {error.msg && error.msg.msg && (
-                          <Alert danger>
-                            {error.id === "REGISTER_FAIL" ||
-                              error.id === "LOGIN_FAIL" ? (
-                                <p>{error.msg.msg}</p>
-                              ) : (
-                                <></>
-                              )}
-                          </Alert>
-                        )}
-                        <Form>
-                          <Form.Group>
-                            <label htmlFor="logEmail">Email address</label>
-                            <Form.Input
-                              type="email"
-                              id="logEmail"
-                              name="logEmail"
-                              placeholder="Enter email"
-                              value={logEmail}
-                              onChange={(e) => {
-                                setLogEmail(e.target.value);
-                              }}
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <label htmlFor="logPass">Password</label>
-                            <Form.Input
-                              type="password"
-                              id="logPass"
-                              name="logPass"
-                              placeholder="Password"
-                              value={logPass}
-                              onChange={(e) => {
-                                setLogPass(e.target.value);
-                              }}
-                            />
-                          </Form.Group>
-                        </Form>
-                        <a onClick={handlePassReset} href="#">
-                          Reset Password
-                      </a>{" "}
-                      </div>
-                      <div className="modal-footer">
-                        <Button secondary onClick={toggleLogModal}>
-                          Close
-                      </Button>
-                        <Button primary onClick={userLogin}>
-                          Login
-                      </Button>
-                      </div>
-                    </>
-                  )}
-              </Modal>
               {auth.user ? (
                 <>
                   <>
@@ -1273,7 +1064,7 @@ function App2({ query }) {
               {fetchedResults && (
                 <PlantTable
                   addedItems={addedItems}
-                  tableData={modifyResult(allPlantData)}
+                  tableData={fetchedResults}
                   sortToggle={sortToggle}
                   sortColumn={sort[0].sortColumn}
                   sortDirection={sort[0].sortDirection}
@@ -1294,7 +1085,7 @@ function App2({ query }) {
           </>
         </>
       ) : (
-          <></>
+          <>Loading.....</>
         )}
     </>
   );
