@@ -1,8 +1,4 @@
-@media only screen and (min-width: 350px) {
-  .width-check {
-    width: 320px !important;
-  }
-}
+ 
 
 .rowOptionStyle {
   width: 90px;
@@ -61,10 +57,7 @@
 }
 
 @media only screen and (min-width: 550px) {
-  .width-check {
-    width: 468px !important;
-  }
-
+ 
   .shrink,
   .shrinkTableButtons,
   .shrinkButton {
@@ -84,31 +77,31 @@
 
 @media only screen and (min-width: 740px) {
   .width-check {
-    width: 614px !important;
+    width:100%;
   }
 }
 
 @media only screen and (min-width: 860px) {
   .width-check {
-    width: 758px !important;
+    width:100%;
   }
 }
 
 @media only screen and (min-width: 1170px) {
   .width-check {
-    width: 1065px !important;
+    width: 100%;
   }
 }
 
 @media only screen and (min-width: 1400px) {
   .width-check {
-    width: 1217px !important;
+    width: 100%;
   }
 }
 
 @media only screen and (min-width: 1550px) {
   .width-check {
-    width: 1423px !important;
+    width: 100%;
   }
 }
 
@@ -116,4 +109,8 @@
 .btn:focus {
   outline: 0;
   box-shadow: none;
+}
+
+.head-2{
+  width: 100%;
 }

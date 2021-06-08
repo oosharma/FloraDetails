@@ -29,11 +29,11 @@ class PlantTable extends Component {
   }
 
   handleAddorDelete = result => {
-    if(this.props.utility === "Add"){
-      this.props.handleAddorDelete( this.props.isAuthorized, result);
+    if (this.props.utility === "Add") {
+      this.props.handleAddorDelete(this.props.isAuthorized, result);
 
     } else {
-      this.props.handleAddorDelete(   result);
+      this.props.handleAddorDelete(result);
 
     }
   };
@@ -91,7 +91,7 @@ class PlantTable extends Component {
         <th
           style={{ minWidth: minWidth }}
           onClick={this.props.sortToggle.bind(this, item, this.props.utility)}
-          className="head-1"
+          className={`${item === "Suitable Site Conditions" ? "head-2" : "head-1"} `}
         >
           {item}
           {this.sortSwitch(item)}
@@ -399,11 +399,11 @@ class PlantTable extends Component {
               <em>All plants are native to San Francisco</em>
             </p>
           ) : (
-            <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
-          )}
+              <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
+            )}
           <BDiv className="width-check ">
             <Table
-              className={`table-primary-1 mt-1 mb-0 pr-2 table-responsive width-check `}
+              className={`table-primary-1 mt-1 mb-0 table-responsive width-check `}
               striped
               bordered
               hover
@@ -426,9 +426,9 @@ class PlantTable extends Component {
                             variant={`${this.state.btnVariant}`}
                             className={`${
                               this.state.btnClass
-                            } shrinkTableButtons default-button ${
+                              } shrinkTableButtons default-button ${
                               dataSet.has(result.commonName) ? "disabled" : ""
-                            }`}
+                              }`}
                             type="button"
                             onClick={() => {
                               this.handleAddorDelete(result);
@@ -441,8 +441,8 @@ class PlantTable extends Component {
                                   : "Add"}
                               </>
                             ) : (
-                              "Delete"
-                            )}
+                                "Delete"
+                              )}
                           </Button>
                         </BTd>
                         <BTd
@@ -458,11 +458,11 @@ class PlantTable extends Component {
                             src={
                               result && result.commonName
                                 ? `https://flora-details-images.s3-us-west-1.amazonaws.com/${result.commonName
-                                    .replace(/\s+/g, "")
-                                    .replace(/"/g, "")
-                                    .replace(/'/g, "")
-                                    .replace(/,/g, "")
-                                    .replace(/\//g, "")}01.jpg`
+                                  .replace(/\s+/g, "")
+                                  .replace(/"/g, "")
+                                  .replace(/'/g, "")
+                                  .replace(/,/g, "")
+                                  .replace(/\//g, "")}01.jpg`
                                 : ""
                             }
                           ></img>
@@ -471,44 +471,44 @@ class PlantTable extends Component {
                         {result.commonName ? (
                           <BTd align="middle">{result.commonName} </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
                         {result.bloomTime ? (
                           <BTd align="middle">{result.bloomTime} </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
                         {result.plantType ? (
                           <BTd align="middle">{result.plantType} </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
                         {result.waterNeeds ? (
                           <BTd align="middle">{result.waterNeeds} </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
 
                         {result.sizeAtMaturity ? (
                           <BTd align="middle">{result.sizeAtMaturity} </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
 
                         {result.appropriateLocation ? (
                           <BTd align="middle">
                             {result.appropriateLocation}{" "}
                           </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
                         {result.suitableSiteConditions ? (
                           <BTd align="middle">
                             {result.suitableSiteConditions}{" "}
                           </BTd>
                         ) : (
-                          <BTd align="middle">-</BTd>
-                        )}
+                            <BTd align="middle">-</BTd>
+                          )}
                       </tr>
                     </>
                   );
@@ -549,7 +549,7 @@ class PlantTable extends Component {
                   display="inline"
                   style={rowOptionsStyle}
                   value={rowItemsValue}
-                  // value={selectedConditionOption[index]}
+                // value={selectedConditionOption[index]}
                 />
                 Rows Per Page
               </Col>

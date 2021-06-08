@@ -36,7 +36,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthAction } from "./store/Auth/actionCreators";
 
-import style from "./App.css";
+import style from "./App2.css";
 
 function App2({ query }) {
   const [regName, setRegName] = useState("");
@@ -962,132 +962,139 @@ function App2({ query }) {
   );
 
   return (
-    <>
-      <Filters />
+    <Container fluid className="main-Container">
+
       {finalCheck && finalPublicTableCheck && finalFetchedCheck ? (
         <>
           <>
-            <Container className="p-sm-4 pl-md-3 ml-lg-5 m-xs-4 mt2 p-4 ">
-              <Nav>
-                <Nav.ItemLink className="pl-0" disabled href="/">
-                  <em>Flora Details</em>
-                </Nav.ItemLink>
-                {auth.isAuthorized === true ? authLinks : guestLinks}
-              </Nav>
 
-              {auth.user ? (
+            <Nav>
+              <Nav.ItemLink className="pl-0" disabled href="/">
+                <em>Flora Details</em>
+              </Nav.ItemLink>
+              {auth.isAuthorized === true ? authLinks : guestLinks}
+            </Nav>
+
+            {auth.user ? (
+              <>
                 <>
-                  <>
-                    <div className="profile-pic-div">
-                      <img
-                        title="edit image"
-                        alt="not available"
-                        // onError={() => {
-                        //   console.log("errrrrrrrr");
-                        // }}
-                        class={`pic-img`}
-                        onClick={handleProfilePic}
-                        src={
-                          auth.user.profile_pic
-                            ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
-                            auth.user.pic_uri
-                            }?=${Date.now()}`
-                            : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
-                        }
-                      ></img>
-                    </div>
+                  <div className="profile-pic-div">
+                    <img
+                      title="edit image"
+                      alt="not available"
+                      // onError={() => {
+                      //   console.log("errrrrrrrr");
+                      // }}
+                      class={`pic-img`}
+                      onClick={handleProfilePic}
+                      src={
+                        auth.user.profile_pic
+                          ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
+                          auth.user.pic_uri
+                          }?=${Date.now()}`
+                          : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
+                      }
+                    ></img>
+                  </div>
 
-                    {editImage && (
+                  {editImage && (
+                    <>
+                      {" "}
                       <>
-                        {" "}
-                        <>
-                          <div className={`editImage`}>
-                            {uploadMessage && (
-                              <p className={`mt-1 mb-1 editImageWarning`}>
-                                {uploadMessage}
-                              </p>
-                            )}
-                            <form class={`mt-1 mb-1`} onSubmit={submitFile}>
-                              <input
-                                class={`imageInput`}
-                                label="upload file"
-                                type="file"
-                                onChange={handleFileUpload}
-                              />
-                              {editImageLoading ? (
+                        <div className={`editImage`}>
+                          {uploadMessage && (
+                            <p className={`mt-1 mb-1 editImageWarning`}>
+                              {uploadMessage}
+                            </p>
+                          )}
+                          <form class={`mt-1 mb-1`} onSubmit={submitFile}>
+                            <input
+                              class={`imageInput`}
+                              label="upload file"
+                              type="file"
+                              onChange={handleFileUpload}
+                            />
+                            {editImageLoading ? (
+                              <>
+                                <Button primary className="loader-button">
+                                  <Loader
+                                    type="Puff"
+                                    color="#00BFFF"
+                                    height={25}
+                                    width={25}
+                                  // timeout={1000} //3 secs
+                                  />{" "}
+                                </Button>
+                              </>
+                            ) : (
                                 <>
-                                  <Button primary className="loader-button">
-                                    <Loader
-                                      type="Puff"
-                                      color="#00BFFF"
-                                      height={25}
-                                      width={25}
-                                    // timeout={1000} //3 secs
-                                    />{" "}
+                                  <Button
+                                    className={`btn btn-primary imageInputBtn`}
+                                    type="submit"
+                                  >
+                                    Upload
                                   </Button>
                                 </>
-                              ) : (
-                                  <>
-                                    <Button
-                                      className={`btn btn-primary imageInputBtn`}
-                                      type="submit"
-                                    >
-                                      Upload
-                                  </Button>
-                                  </>
-                                )}
+                              )}
 
-                              <Button
-                                className={`btn btn-secondary imageInputBtn ml-3`}
-                                onClick={cancelUpload}
-                              >
-                                Cancel
+                            <Button
+                              className={`btn btn-secondary imageInputBtn ml-3`}
+                              onClick={cancelUpload}
+                            >
+                              Cancel
                               </Button>
-                            </form>
-                          </div>
-                        </>
+                          </form>
+                        </div>
                       </>
-                    )}
+                    </>
+                  )}
 
-                  </>
                 </>
-              ) : null}
-              <p className="mb-0 mt-1 width-check">
-                <em> Welcome {auth ?.user ?.name ? auth.user.name : "Guest" },</em>
-              </p>
-              <SearchBar
-                ref={searchBarElement}
-                tableItems={fetchedResults}
-                changeFetchedResults={changeFetchedResults}
-                clearTablePage={clearTablePage}
-              />
-              {fetchedResults && (
-                <PlantTable
-                  addedItems={addedItems}
-                  tableData={fetchedResults}
-                  sortToggle={sortToggle}
-                  sortColumn={sort[0].sortColumn}
-                  sortDirection={sort[0].sortDirection}
-                  limitItems={limitItems[0]}
-                  itemChange={itemChange}
-                  rowItemChange={rowItemChange}
-                  handleAddorDelete={changeAddItem}
-                  isAuthorized={auth.isAuthorized}
-                  utility="Add"
-                />
-              )}
+              </>
+            ) : null}
+            <p className="mb-0 mt-1 width-check">
+              <em> Welcome {auth ?.user ?.name ? auth.user.name : "Guest" },</em>
+            </p>
+            <SearchBar
+              ref={searchBarElement}
+              tableItems={fetchedResults}
+              changeFetchedResults={changeFetchedResults}
+              clearTablePage={clearTablePage}
+            />
+            <div className="plant-area">
+              <Filters />
+              <div className="plant-tables">
+                {fetchedResults && (
+                  <PlantTable
+                    addedItems={addedItems}
+                    tableData={fetchedResults}
+                    sortToggle={sortToggle}
+                    sortColumn={sort[0].sortColumn}
+                    sortDirection={sort[0].sortDirection}
+                    limitItems={limitItems[0]}
+                    itemChange={itemChange}
+                    rowItemChange={rowItemChange}
+                    handleAddorDelete={changeAddItem}
+                    isAuthorized={auth.isAuthorized}
+                    utility="Add"
+                  />
+                )}
 
-              {auth.isAuthorized === true ? personalTables : publicTables}
+                {/* {auth.isAuthorized === true ? personalTables : publicTables} */}
+              </div>
 
-              {footer}
-              {/* {secondFooter} */}
-            </Container>
+            </div>
+
+
+            {footer}
+            {/* {secondFooter} */}
+
           </>
         </>
       ) : (
           <>Loading.....</>
         )}
-    </>
+    </Container>
   );
 }
 

@@ -1,0 +1,136 @@
+.over {
+  overflow: scroll;
+}
+
+.main-Container {
+  display: flex;
+  flex-direction: column
+}
+
+.plant-area {
+  display: flex;
+  /* flex-direction: column */
+  width:100%;
+}
+table 
+{
+    table-layout:fixed;
+    /* width:100%; */
+    word-break: break-word;
+}
+.plant-tables {
+  display: flex;width:100%;
+   flex-direction: column;
+   min-width: 0;
+}
+.table-responsive::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.table-responsive::-webkit-scrollbar:vertical {
+  width: 12px;
+}
+
+.table-responsive::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+@media screen and (max-width: 600px) {
+  h1.display-4 {
+    font-size: 2.5rem;
+  }
+}
+
+body {
+  background-color: #f8f9fb;
+}
+
+p {
+  font-size: 0.8rem;
+}
+
+@media only screen and (min-width: 400px) {
+  p {
+    font-size: 1rem;
+  }
+}
+
+.btn.focus,
+.btn:focus {
+  outline: 0;
+  box-shadow: 0;
+}
+.loader-button {
+  width: 106.1px;
+}
+
+.empty-form-group {
+  display: none;
+}
+
+.editImage {
+  background-color: white;
+  padding: 10px;
+  max-width: 400px;
+  border: solid 1px;
+  border-color: gray;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  margin-top: 9px;
+}
+.imageInputBtn {
+  margin: 2px 0px 1px 3px;
+  font-size: 0.8rem;
+}
+.editImageWarning {
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+.profile-pic-div {
+  max-width: 120px;
+  max-height: 120px;
+  overflow: hidden;
+}
+.pic-img {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: scale-down;
+  border: solid;
+
+  border-color: black;
+  border-radius: 5px;
+}
+.imageInput {
+  margin: 2px 0px 10px 3px;
+  max-width: 244px;
+  font-size: 0.8rem;
+  display: block;
+}
+
+@media screen and (min-width: 397px) {
+  .imageInput {
+    margin: 2px 0px 10px 3px;
+    max-width: 350px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .editImage,
+  .editImageWarning,
+  .imageInput,
+  .imageInputBtn {
+    font-size: 1rem;
+  }
+}
