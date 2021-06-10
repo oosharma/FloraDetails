@@ -134,3 +134,13 @@ p {
     font-size: 1rem;
   }
 }
+.Nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1rem 0;
+}
+
+.main-Container{
+  padding: 0rem 2rem;
+}

@@ -394,7 +394,7 @@ class PlantTable extends Component {
         <>
           {this.props.utility === "Add" ? (
             <p
-              className={`${this.state.classTable} mt-3 pb-0 mb-0 width-check`}
+              className={`${this.state.classTable}  pb-0 mb-0 width-check`}
             >
               <em>All plants are native to San Francisco</em>
             </p>

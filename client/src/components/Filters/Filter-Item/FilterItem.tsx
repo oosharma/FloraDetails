@@ -26,7 +26,7 @@ const FilterItem: React.FC<FilterItemProps> = ({ title, options }) => {
     <>
       <div className="Filter-Item">
         <div className="Filter-Head">
-          <h6>{title}</h6>
+          <b>{title}</b>
         </div>
         <div className="Filter-Options">
           {options.map((option, index) => {

@@ -827,15 +827,15 @@ function App2({ query }) {
   //  const tableData = modifyResult(allPlantData, filterOptions)
   const authLinks = (
     <>
-      <Nav.ItemLink active href="#" onClick={logout}>
+      <a active href="#" onClick={logout}>
         <em>Logout</em>
-      </Nav.ItemLink>
+      </a>
     </>
   );
   const guestLinks = (
     <>
-      <Nav.ItemLink  > <Link to="/register">Register </Link></Nav.ItemLink>
-      <Nav.ItemLink  > <Link to="/login">Login </Link></Nav.ItemLink>
+      <a  > <Link to="/register">Register </Link></a>
+      <a  > <Link to="/login">Login </Link></a>
 
     </>
   );
@@ -962,18 +962,24 @@ function App2({ query }) {
   );
 
   return (
-    <Container fluid className="main-Container">
+    <Container fluid className="main-Container" >
 
       {finalCheck && finalPublicTableCheck && finalFetchedCheck ? (
         <>
           <>
 
-            <Nav>
-              <Nav.ItemLink className="pl-0" disabled href="/">
+            <div className="Nav"  >
+              <a className="pl-0" disabled href="/">
                 <em>Flora Details</em>
-              </Nav.ItemLink>
+              </a>
+              <SearchBar
+                ref={searchBarElement}
+                tableItems={fetchedResults}
+                changeFetchedResults={changeFetchedResults}
+                clearTablePage={clearTablePage}
+              />
               {auth.isAuthorized === true ? authLinks : guestLinks}
-            </Nav>
+            </div>
 
             {auth.user ? (
               <>
@@ -1052,15 +1058,8 @@ function App2({ query }) {
                 </>
               </>
             ) : null}
-            <p className="mb-0 mt-1 width-check">
-              <em> Welcome {auth ?.user ?.name ? auth.user.name : "Guest" },</em>
-            </p>
-            <SearchBar
-              ref={searchBarElement}
-              tableItems={fetchedResults}
-              changeFetchedResults={changeFetchedResults}
-              clearTablePage={clearTablePage}
-            />
+
+
             <div className="plant-area">
               <Filters />
               <div className="plant-tables">

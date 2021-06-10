@@ -42,3 +42,16 @@ button.btn.btn-primary.default-button {
 .filter-button {
   width: 133px;
 }
+ 
+.search-bar{
+  display: flex;
+  flex-grow: 1;
+  margin: 0rem 10rem;
+
+}
+
+.search-box {
+  margin-right: 10px;
+  flex-grow: 1;
+
+}
