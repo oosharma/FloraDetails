@@ -826,10 +826,88 @@ function App2({ query }) {
 
   //  const tableData = modifyResult(allPlantData, filterOptions)
   const authLinks = (
-    <>
+    <><div className="auth-links">
+      {auth.user ? (
+        <>
+
+          <div className="profile-pic-div">
+            <img
+              title="edit image"
+              alt="not available"
+              // onError={() => {
+              //   console.log("errrrrrrrr");
+              // }}
+              class={`pic-img`}
+              onClick={handleProfilePic}
+              src={
+                auth.user.profile_pic
+                  ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
+                  auth.user.pic_uri
+                  }?=${Date.now()}`
+                  : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
+              }
+            ></img>
+          </div>
+
+          {editImage && (
+            <>
+              {" "}
+              <>
+                <div className={`editImage`}>
+                  {uploadMessage && (
+                    <p className={`mt-1 mb-1 editImageWarning`}>
+                      {uploadMessage}
+                    </p>
+                  )}
+                  <form class={`mt-1 mb-1`} onSubmit={submitFile}>
+                    <input
+                      class={`imageInput`}
+                      label="upload file"
+                      type="file"
+                      onChange={handleFileUpload}
+                    />
+                    {editImageLoading ? (
+                      <>
+                        <Button primary className="loader-button">
+                          <Loader
+                            type="Puff"
+                            color="#00BFFF"
+                            height={25}
+                            width={25}
+                          // timeout={1000} //3 secs
+                          />{" "}
+                        </Button>
+                      </>
+                    ) : (
+                        <>
+                          <Button
+                            className={`btn btn-primary imageInputBtn`}
+                            type="submit"
+                          >
+                            Upload
+                                  </Button>
+                        </>
+                      )}
+
+                    <Button
+                      className={`btn btn-secondary imageInputBtn ml-3`}
+                      onClick={cancelUpload}
+                    >
+                      Cancel
+                              </Button>
+                  </form>
+                </div>
+              </>
+            </>
+          )}
+
+        </>
+
+      ) : null}
       <a active href="#" onClick={logout}>
         <em>Logout</em>
       </a>
+    </div>
     </>
   );
   const guestLinks = (
@@ -970,7 +1048,7 @@ function App2({ query }) {
 
             <div className="Nav"  >
               <a className="pl-0" disabled href="/">
-                <em>Flora Details</em>
+                <h1>Flora Details</h1>
               </a>
               <SearchBar
                 ref={searchBarElement}
@@ -981,83 +1059,7 @@ function App2({ query }) {
               {auth.isAuthorized === true ? authLinks : guestLinks}
             </div>
 
-            {auth.user ? (
-              <>
-                <>
-                  <div className="profile-pic-div">
-                    <img
-                      title="edit image"
-                      alt="not available"
-                      // onError={() => {
-                      //   console.log("errrrrrrrr");
-                      // }}
-                      class={`pic-img`}
-                      onClick={handleProfilePic}
-                      src={
-                        auth.user.profile_pic
-                          ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
-                          auth.user.pic_uri
-                          }?=${Date.now()}`
-                          : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
-                      }
-                    ></img>
-                  </div>
 
-                  {editImage && (
-                    <>
-                      {" "}
-                      <>
-                        <div className={`editImage`}>
-                          {uploadMessage && (
-                            <p className={`mt-1 mb-1 editImageWarning`}>
-                              {uploadMessage}
-                            </p>
-                          )}
-                          <form class={`mt-1 mb-1`} onSubmit={submitFile}>
-                            <input
-                              class={`imageInput`}
-                              label="upload file"
-                              type="file"
-                              onChange={handleFileUpload}
-                            />
-                            {editImageLoading ? (
-                              <>
-                                <Button primary className="loader-button">
-                                  <Loader
-                                    type="Puff"
-                                    color="#00BFFF"
-                                    height={25}
-                                    width={25}
-                                  // timeout={1000} //3 secs
-                                  />{" "}
-                                </Button>
-                              </>
-                            ) : (
-                                <>
-                                  <Button
-                                    className={`btn btn-primary imageInputBtn`}
-                                    type="submit"
-                                  >
-                                    Upload
-                                  </Button>
-                                </>
-                              )}
-
-                            <Button
-                              className={`btn btn-secondary imageInputBtn ml-3`}
-                              onClick={cancelUpload}
-                            >
-                              Cancel
-                              </Button>
-                          </form>
-                        </div>
-                      </>
-                    </>
-                  )}
-
-                </>
-              </>
-            ) : null}
 
 
             <div className="plant-area">

@@ -40,7 +40,7 @@ const Filters: React.FC = () => {
 
   return (
     <div className="Filters-Section">
-      <h1>Filters</h1>
+      <h3>Filters</h3>
       <div className="Filters">
         {items.map((item, index) => {
           return <FilterItem title={item.name} options={item.options} />;
