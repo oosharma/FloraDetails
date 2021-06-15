@@ -3,6 +3,8 @@ import React, { Component, useEffect, useState } from "react";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Filters from "./components/Filters/Filters";
 import PlantTable from "./components/PlantTable/PlantTable";
+import Popover from "./components/Popover.js";
+
 import { filterArr, randomize, modifyResult } from "./helper.js";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
@@ -827,6 +829,7 @@ function App2({ query }) {
   //  const tableData = modifyResult(allPlantData, filterOptions)
   const authLinks = (
     <><div className="auth-links">
+
       {auth.user ? (
         <>
 
@@ -911,11 +914,12 @@ function App2({ query }) {
     </>
   );
   const guestLinks = (
-    <>
+    <div className="guestLinks">
       <a  > <Link to="/register">Register </Link></a>
+      /
       <a  > <Link to="/login">Login </Link></a>
 
-    </>
+    </div>
   );
 
   // const { data } = state;
@@ -1041,7 +1045,7 @@ function App2({ query }) {
 
   return (
     <Container fluid className="main-Container" >
-
+      {/* <Popover /> */}
       {finalCheck && finalPublicTableCheck && finalFetchedCheck ? (
         <>
           <>

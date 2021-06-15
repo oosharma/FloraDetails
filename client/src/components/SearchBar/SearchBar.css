@@ -45,13 +45,53 @@ button.btn.btn-primary.default-button {
  
 .search-bar{
   display: flex;
-  flex-grow: 1;
-  margin: 0rem 10rem;
-
+  /* flex-grow: 1;
+  flex-basis: 100%; */
+  margin: 0rem 0rem;
 }
 
 .search-box {
   margin-right: 10px;
   flex-grow: 1;
-
+  
 }
+
+.search-bar button.btn.btn-primary.default-button{
+  margin-right: 0
+}
+
+@media screen and (max-width: 800px){
+  .search-bar{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 100%;
+    /* margin: 0rem 0rem; */
+  }
+}
+
+@media screen and (min-width: 800px){
+   
+.search-bar{
+  display: flex;
+  flex-grow: 1;
+  margin: 0rem 3rem;
+}
+}
+
+@media screen and (min-width: 1200px){
+   
+  .search-bar{
+    display: flex;
+    flex-grow: 1;
+    margin: 0rem 7rem;
+  }
+  }
+
+  @media screen and (min-width: 1600px){
+   
+    .search-bar{
+      display: flex;
+      flex-grow: 1;
+      margin: 0rem 11rem;
+    }
+    }

@@ -16,7 +16,9 @@ function SearchBar(props) {
   const handleAdButtonClick = () => {
 
   };
+  const handleFilterButtonClick = () => {
 
+  };
   return (
     <div className="search-bar">
 
@@ -31,6 +33,17 @@ function SearchBar(props) {
       />
       <Button
         variant="primary"
+        className="btn-primary default-button filters-button"
+        type="button"
+        onClick={
+          handleFilterButtonClick()
+        }
+
+      >
+        Filters
+      </Button>
+      <Button
+        variant="primary"
         className="btn-primary default-button  "
         type="button"
         onClick={
@@ -38,8 +51,9 @@ function SearchBar(props) {
         }
 
       >
-        Filter
+        Search
       </Button>
+
     </div>
   );
 }

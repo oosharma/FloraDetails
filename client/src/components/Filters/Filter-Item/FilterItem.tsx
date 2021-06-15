@@ -4,6 +4,7 @@ import { Dispatch } from "redux"
 import { useDispatch, useSelector } from "react-redux"
 import { toggleFilter } from "../../../store/Filters/actionCreators";
 
+
 interface FilterItemProps {
   title: string;
   options: string[];

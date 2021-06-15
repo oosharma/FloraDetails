@@ -15,12 +15,12 @@
   display: flex;
   align-items: center;
 }
-.Filters-Section {
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* align-items: center; */
- 
+@media screen and (max-width: 800px){
+  .Filters-Section {
+    display: none;
+  }
 }
+
 
 .Filter-Option input {
   margin-right: 5px;
@@ -28,4 +28,14 @@
 
 .Filter-Option label {
   margin-bottom: 0;
+}
+
+button.btn.btn-primary.default-button.filters-button {
+  margin-left: .5rem;
+}
+
+@media screen and (min-width: 800px){
+  button.btn.btn-primary.default-button.filters-button {
+    display: none;
+  }
 }
