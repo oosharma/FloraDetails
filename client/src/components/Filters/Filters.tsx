@@ -2,9 +2,15 @@ import * as React from "react";
 import FilterItem from "./Filter-Item/FilterItem";
 import "./Filters.css";
 
-const Filters: React.FC = () => {
+interface FiltersProps {
+  type: string;
+
+}
+
+
+const Filters: React.FC<FiltersProps> = (props) => {
   const items = [
-    { name: "Bloom Time", options: ["Spring", "Summer", "Winter", "Fall"] },
+    { name: "Bloom Time", options: ["Spring", "Summer", "Winter", "Fall"] }, { name: "Water Needs", options: ["None", "Low", "Moderate"] }, { name: "Appropriate Location", options: ["Garden", "Sidewalk", "Roof"] },
     {
       name: "Plant Type",
       options: [
@@ -18,7 +24,7 @@ const Filters: React.FC = () => {
         "Palm",
       ],
     },
-    { name: "Water Needs", options: ["None", "Low", "Moderate"] },
+
     {
       name: "Size at Maturity",
       options: [
@@ -31,7 +37,7 @@ const Filters: React.FC = () => {
         "Varies",
       ],
     },
-    { name: "Appropriate Location", options: ["Garden", "Sidewalk", "Roof"] },
+
     {
       name: "Suitable Site Conditions",
       options: ["Sun", "Parte Shade", "Shade", "Fall"],
@@ -39,9 +45,9 @@ const Filters: React.FC = () => {
   ];
 
   return (
-    <div className="Filters-Section">
+    <div className={`Filters-Section-${props.type}`}>
       <h3>Filters</h3>
-      <div className="Filters">
+      <div className={`Filters-${props.type}`}>
         {items.map((item, index) => {
           return <FilterItem title={item.name} options={item.options} />;
         })}

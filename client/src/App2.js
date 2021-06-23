@@ -23,9 +23,9 @@ import {
   Display4,
   Row,
   Button,
-  Alert,
+  Alert, ListGroup, Tab, Col, Modal
 } from "bootstrap-4-react";
-import Modal from "react-bootstrap4-modal";
+// import Modal from "react-bootstrap4-modal";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -841,7 +841,8 @@ function App2({ query }) {
               //   console.log("errrrrrrrr");
               // }}
               class={`pic-img`}
-              onClick={handleProfilePic}
+              // onClick={handleProfilePic}
+              data-toggle="modal" data-target="#imageModal"
               src={
                 auth.user.profile_pic
                   ? `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/${
@@ -850,59 +851,74 @@ function App2({ query }) {
                   : `https://flora-details-profile-pics.s3-us-west-1.amazonaws.com/generic-dp.jpg`
               }
             ></img>
+
+            <Modal id="imageModal" fade>
+              <Modal.Dialog centered>
+                <Modal.Content>
+                  <Modal.Body>
+
+                    <>
+                      {" "}
+                      <>
+                        <div className={`editImage`}>
+                          {uploadMessage && (
+                            <p className={`mt-1 mb-1 editImageWarning`}>
+                              {uploadMessage}
+                            </p>
+                          )}
+                          <form class={`mt-1 mb-1`} onSubmit={submitFile}>
+                            <input
+                              class={`imageInput`}
+                              label="upload file"
+                              type="file"
+                              onChange={handleFileUpload}
+                            />
+                            {editImageLoading ? (
+                              <>
+                                <Button primary className="loader-button">
+                                  <Loader
+                                    type="Puff"
+                                    color="#00BFFF"
+                                    height={25}
+                                    width={25}
+                                  // timeout={1000} //3 secs
+                                  />{" "}
+                                </Button>
+                              </>
+                            ) : (
+                                <>
+                                  <Button
+                                    className={`btn btn-primary imageInputBtn`}
+                                    type="submit"
+                                  >
+                                    Upload
+                        </Button>
+                                </>
+                              )}
+
+                            <Button
+                              className={`btn btn-secondary imageInputBtn ml-3`}
+                              onClick={cancelUpload}
+                            >
+                              Cancel
+                    </Button>
+                          </form>
+                        </div>
+                      </>
+                    </>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button secondary data-dismiss="modal">Close</Button>
+                    <Button primary data-dismiss="modal">Save changes</Button>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal.Dialog>
+            </Modal>
           </div>
 
-          {editImage && (
-            <>
-              {" "}
-              <>
-                <div className={`editImage`}>
-                  {uploadMessage && (
-                    <p className={`mt-1 mb-1 editImageWarning`}>
-                      {uploadMessage}
-                    </p>
-                  )}
-                  <form class={`mt-1 mb-1`} onSubmit={submitFile}>
-                    <input
-                      class={`imageInput`}
-                      label="upload file"
-                      type="file"
-                      onChange={handleFileUpload}
-                    />
-                    {editImageLoading ? (
-                      <>
-                        <Button primary className="loader-button">
-                          <Loader
-                            type="Puff"
-                            color="#00BFFF"
-                            height={25}
-                            width={25}
-                          // timeout={1000} //3 secs
-                          />{" "}
-                        </Button>
-                      </>
-                    ) : (
-                        <>
-                          <Button
-                            className={`btn btn-primary imageInputBtn`}
-                            type="submit"
-                          >
-                            Upload
-                                  </Button>
-                        </>
-                      )}
 
-                    <Button
-                      className={`btn btn-secondary imageInputBtn ml-3`}
-                      onClick={cancelUpload}
-                    >
-                      Cancel
-                              </Button>
-                  </form>
-                </div>
-              </>
-            </>
-          )}
+
 
         </>
 
@@ -936,7 +952,7 @@ function App2({ query }) {
         <>
           {data.length > 0 ? (
             <>
-              <Display4 className={`mt-3 width-check`}>
+              <p className={`p-1 pl-3 width-check table-p`}>
                 Public's Table.{" "}
                 <a onClick={toggleRegModal} href="#">
                   Register
@@ -946,7 +962,7 @@ function App2({ query }) {
                   Login
                 </a>{" "}
                 to Manage Your Personal Table
-              </Display4>
+              </p>
 
               <PlantTable
                 tableData={data}
@@ -985,7 +1001,7 @@ function App2({ query }) {
           </a>{" "}
           using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
           authentication is implemented with JSON Web Tokens and Bcrypt JS, and
-          password reset emails are sent through NodeMailer. Checkout its source
+          password reset emails are sent through NodeMailer.<br></br> Checkout its source
           code on GitHub:{" "}
           <a target="_blank" href="https://github.com/oosharma/FloraDetails">
             https://github.com/oosharma/FloraDetails
@@ -1067,26 +1083,69 @@ function App2({ query }) {
 
 
             <div className="plant-area">
-              <Filters />
-              <div className="plant-tables">
-                {fetchedResults && (
-                  <PlantTable
-                    addedItems={addedItems}
-                    tableData={fetchedResults}
-                    sortToggle={sortToggle}
-                    sortColumn={sort[0].sortColumn}
-                    sortDirection={sort[0].sortDirection}
-                    limitItems={limitItems[0]}
-                    itemChange={itemChange}
-                    rowItemChange={rowItemChange}
-                    handleAddorDelete={changeAddItem}
-                    isAuthorized={auth.isAuthorized}
-                    utility="Add"
-                  />
-                )}
+              <Filters type={"side"} />
 
-                {/* {auth.isAuthorized === true ? personalTables : publicTables} */}
-              </div>
+              <Row className="tab-row">
+                <Col col="6 md-4" offset="3 md-4">
+                  <ListGroup as="div" id="list-tab" role="tablist">
+                    <ListGroup.Link
+                      id="list-home-link"
+                      data-toggle="list"
+                      href="#list-home"
+                      role="tab"
+                      aria-controls="home"
+                      active
+                    >
+                      All
+            </ListGroup.Link>
+                    <ListGroup.Link
+                      id="list-profile-link"
+                      data-toggle="list"
+                      href="#list-profile"
+                      role="tab"
+                      aria-controls="profile"
+                    >
+                      Saved
+            </ListGroup.Link>
+
+                  </ListGroup>
+                </Col>
+                <Col col="12">
+                  <Tab.Content id="nav-tabContent">
+                    <Tab.Pane fade show active id="list-home" aria-labelledby="list-home-link">
+                      <div className="plant-tables">
+                        {fetchedResults && (
+                          <PlantTable
+                            addedItems={addedItems}
+                            tableData={fetchedResults}
+                            sortToggle={sortToggle}
+                            sortColumn={sort[0].sortColumn}
+                            sortDirection={sort[0].sortDirection}
+                            limitItems={limitItems[0]}
+                            itemChange={itemChange}
+                            rowItemChange={rowItemChange}
+                            handleAddorDelete={changeAddItem}
+                            isAuthorized={auth.isAuthorized}
+                            utility="Add"
+                          />
+                        )}
+
+                      </div>
+                    </Tab.Pane>
+                    <Tab.Pane fade id="list-profile" aria-labelledby="list-profile-link">
+                      <div className="plant-tables">
+                        {auth.isAuthorized === true ? personalTables : publicTables}
+                      </div>
+                    </Tab.Pane>
+                    <div style={{ height: "70px" }} className="Footer">
+
+                    </div>
+                  </Tab.Content>
+                </Col>
+              </Row>
+
+
+
 
             </div>
 

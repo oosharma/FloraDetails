@@ -79,17 +79,29 @@ class PlantTable extends Component {
 
     let columns = items.map(item => {
       let minWidth;
+      let width;
       if (item.length >= 20) {
         minWidth = "250px";
+        width = "250px";
+
       } else if (item.length > 15) {
         minWidth = "200px";
+        width = "200px";
+
       } else {
         minWidth = "150px";
+        width = "150px";
+
+      }
+
+      if (item === "Name") {
+        minWidth = "200px";
+        width = "200px";
       }
 
       return (
         <th
-          style={{ minWidth: minWidth }}
+          style={{ minWidth: minWidth, width: width }}
           onClick={this.props.sortToggle.bind(this, item, this.props.utility)}
           className={`${item === "Suitable Site Conditions" ? "head-2" : "head-1"} `}
         >
@@ -394,18 +406,18 @@ class PlantTable extends Component {
         <>
           {this.props.utility === "Add" ? (
             <p
-              className={`${this.state.classTable}  pb-0 mb-0 width-check`}
+              className={`p-1 pl-3 width-check table-p`}
             >
-              <em>All plants are native to San Francisco</em>
+              All plants are native to San Francisco
             </p>
           ) : (
               <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
             )}
           <BDiv className="width-check ">
             <Table
-              className={`table-primary-1 mt-1 mb-0 table-responsive width-check `}
+              className={`table-primary-1 mt-0 mb-0 table-responsive width-check `}
               striped
-              bordered
+
               hover
             >
               <thead>
@@ -437,11 +449,11 @@ class PlantTable extends Component {
                             {this.props.utility === "Add" ? (
                               <>
                                 {dataSet.has(result.commonName)
-                                  ? "Added"
-                                  : "Add"}
+                                  ? "Saved"
+                                  : "Save"}
                               </>
                             ) : (
-                                "Delete"
+                                "Save"
                               )}
                           </Button>
                         </BTd>
@@ -576,9 +588,9 @@ class PlantTable extends Component {
       ) {
         return (
           <>
-            <Display4 className="mt-3 width-check">
+            <p className="width-check">
               Public Table Empty, Use Search Table to Add Plants
-            </Display4>
+            </p>
           </>
         );
       }

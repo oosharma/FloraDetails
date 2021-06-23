@@ -6,17 +6,30 @@
   display: flex;
   flex-direction: column;
 }
-.Filters {
+.Filters-side {
   display: flex;
   justify-content: space-around;
    flex-direction: column; 
+}
+.Filters-mobile {
+  display: flex;
+  justify-content: space-between;
+   flex-direction: row; 
+   flex-wrap: wrap;
 }
 .Filter-Option {
   display: flex;
   align-items: center;
 }
+
+.Filters-Section-side {
+  margin-top: 50px;
+  margin-right: 40px;
+
+}
+
 @media screen and (max-width: 800px){
-  .Filters-Section {
+  .Filters-Section-side {
     display: none;
   }
 }
