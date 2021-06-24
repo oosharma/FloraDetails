@@ -1,1 +1,2 @@
 export const TOGGLE_FILTER = "TOGGLE_FILTER"
+export const FILTER_BY_NAME = "FILTER_BY_NAME"

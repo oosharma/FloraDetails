@@ -422,8 +422,8 @@ class PlantTable extends Component {
             >
               <thead>
                 <tr>
-                  <th style={{ minWidth: "120px" }}>Action</th>
-                  <th style={{ minWidth: "120px" }}>Image</th>
+                  <th style={{ minWidth: "120px", width: "120px" }}>Action</th>
+                  <th style={{ minWidth: "120px", width: "120px" }}>Image</th>
 
                   {this.columnItems()}
                 </tr>

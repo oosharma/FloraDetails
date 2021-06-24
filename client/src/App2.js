@@ -138,21 +138,31 @@ function App2({ query }) {
     // console.log(1111, filterOptions);
     const filteredResults = filterArr(items);
     const modifiedResults = modifyResult(filteredResults);
+    const randomizedResults = randomize(modifiedResults)
     //   console.log(1111, modifiedResults);
     const finalArr = [];
-    let res = [...modifiedResults];
+    let res = [...randomizedResults];
     //  console.log(1111, res);
-
-    for (let item in filterOptions) {
-      if (filterOptions[item] === "null") {
-        continue;
-      }
+    console.log(33, filterOptions);
+    if (Object.keys(filterOptions).length === 1) {
       res = [...res.filter((ele) => {
-        console.log(ele[item]);
+
         console.log(ele);
-        return ele[item] ?.includes(filterOptions[item]);
+        return ele["commonName"] ?.includes(filterOptions['name']);
       })];
+    } else {
+      for (let item in filterOptions) {
+        if (filterOptions[item] === "null" || item === "name") {
+          continue;
+        }
+        res = [...res.filter((ele) => {
+          console.log(ele[item]);
+          console.log(ele);
+          return ele[item] ?.includes(filterOptions[item]);
+        })];
+      }
     }
+
     // if (filterOptions.filterOptions.length > 0) {
 
     //   console.log('here')
@@ -215,7 +225,7 @@ function App2({ query }) {
       setAddItem(addItem);
       addToPulicDB(addItem);
     }
-    loadItems();
+    // loadItems();
   };
 
   const addPersonalItem = (result) => {
@@ -335,6 +345,7 @@ function App2({ query }) {
     const randomResults = randomize(modifiedResults);
     setFetchedResults([...randomResults]);
     setFinalFetchedCheck(true);
+    console.log('called');
   };
 
   // never let a process live forever

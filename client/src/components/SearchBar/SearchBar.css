@@ -53,6 +53,7 @@ button.btn.btn-primary.default-button {
 .search-box {
   margin-right: 10px;
   flex-grow: 1;
+  z-index: 3;
   
 }
 
@@ -95,3 +96,5 @@ button.btn.btn-primary.default-button {
       margin: 0rem 11rem;
     }
     }
+
+    

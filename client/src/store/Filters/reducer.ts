@@ -27,6 +27,13 @@ export const reducer = (
       //  if (state[key] === null) {
       console.log(1234, { ...state, [key]: val });
       return { ...state, [key]: val };
+
+    case actionTypes.FILTER_BY_NAME:
+
+
+      //  if (state[key] === null) {
+
+      return { ["name"]: action.filterId };
     // }
 
     // const updatedFilterOptions: FilterOption[] = state.filterOptions.concat(
