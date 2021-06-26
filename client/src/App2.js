@@ -105,7 +105,7 @@ function App2({ query }) {
     { sortDirection: "none", sortColumn: "none" },
   ]);
   const [limitItems, setLimitItems] = useState([
-    { pageNumber: 0, rowItems: 5 },
+    { pageNumber: 0, rowItems: 10 },
     { pageNumber: 0, rowItems: 10 },
     { pageNumber: 0, rowItems: 10 },
   ]);
@@ -133,23 +133,19 @@ function App2({ query }) {
   const dispatch = useDispatch();
 
   const filterOptions = useSelector((state) => state.filters);
+  const filterResults = (res, filterOptions) => {
 
-  React.useEffect(() => {
-    // console.log(1111, filterOptions);
-    const filteredResults = filterArr(items);
-    const modifiedResults = modifyResult(filteredResults);
-    const randomizedResults = randomize(modifiedResults)
-    //   console.log(1111, modifiedResults);
-    const finalArr = [];
-    let res = [...randomizedResults];
-    //  console.log(1111, res);
-    console.log(33, filterOptions);
+    console.log('called')
     if (Object.keys(filterOptions).length === 1) {
-      res = [...res.filter((ele) => {
 
-        console.log(ele);
-        return ele["commonName"] ?.includes(filterOptions['name']);
-      })];
+      if (filterOptions['name']) {
+        res = [...res.filter((ele) => {
+
+          console.log(ele);
+
+          return ele["commonName"] ?.includes(filterOptions['name']);
+        })];
+      }
     } else {
       for (let item in filterOptions) {
         if (filterOptions[item] === "null" || item === "name") {
@@ -162,56 +158,21 @@ function App2({ query }) {
         })];
       }
     }
+    return res;
+  }
+  React.useEffect(() => {
+    // console.log(1111, filterOptions);
+    const filteredResults = filterArr(items);
+    const modifiedResults = modifyResult(filteredResults);
+    const randomizedResults = randomize(modifiedResults)
+    //   console.log(1111, modifiedResults);
+    const finalArr = [];
+    let res = [...randomizedResults];
+    res = filterResults(res, filterOptions);
 
-    // if (filterOptions.filterOptions.length > 0) {
-
-    //   console.log('here')
-    //   //   let prev = filterOptions.filterOptions[0].split(":")[0];
-    //   let [key, value] = filterOptions.filterOptions[0].split(":");
-    //   let prev = key;
-    //   res = [...res.filter((item) => {
-    //     console.log(item);
-    //     return item[key] === value;
-    //   })];
-    //   console.log(key)
-    //   console.log(value)
-    //   for (let i = 1; i < filterOptions.filterOptions.length; i++) {
-    //     let startingItems = [...res];
-    //     let [key, value] = filterOptions.filterOptions[i].split(":");
-    //     // if (key === prev) {
-    //     res = [...startingItems, ...modifiedResults.filter((element) => {
-
-    //       return element[key] === value;
-    //     })]
-
-    //     console.log(1111, modifiedResults.filter((element) => {
-
-    //       return element[key] === value;
-    //     }));
-    //     // } else {
-    //     //   res = [...startingItems,...startingItems.filter((element) => {
-
-    //     //     return element[key] === value;
-    //     //   })]
-
-    //   }
-    //   prev = key;
-    //   // console.log(item);
-
-    //   // console.log(key);
-    //   // console.log(value);
-
-    //   //finalArr.push(...res);
-
-    //   // console.log(finalArr);
-
-
-
-    // }
-    console.log(1111, res);
     setFetchedResults([...res]);
 
-  }, [filterOptions]);
+  }, [filterOptions,]);
 
   const searchBarElement = React.createRef();
 
@@ -364,6 +325,7 @@ function App2({ query }) {
       axios
         .get("/api/items")
         .then((res) => {
+
           setData(res.data);
           setFetch(false);
         })
@@ -964,15 +926,15 @@ function App2({ query }) {
           {data.length > 0 ? (
             <>
               <p className={`p-1 pl-3 width-check table-p`}>
-                Public's Table.{" "}
+                Displaying saved items by all users.{" "}
                 <a onClick={toggleRegModal} href="#">
                   Register
                 </a>{" "}
-                or{" "}
+                /{" "}
                 <a onClick={toggleLogModal} href="#">
                   Login
                 </a>{" "}
-                to Manage Your Personal Table
+                to Manage Your Personal Table.
               </p>
 
               <PlantTable
@@ -989,9 +951,9 @@ function App2({ query }) {
             </>
           ) : (
               <>
-                <Display4 className={`mt-3 width-check`}>
+                <p className={`m-3 width-check table-p`}>
                   Public's Table is Empty, Use Search Results to Add Plants{" "}
-                </Display4>
+                </p>
               </>
             )}
         </>
@@ -1012,7 +974,7 @@ function App2({ query }) {
           </a>{" "}
           using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
           authentication is implemented with JSON Web Tokens and Bcrypt JS, and
-          password reset emails are sent through NodeMailer.<br></br> Checkout its source
+          password reset emails are sent through NodeMailer. Checkout its source
           code on GitHub:{" "}
           <a target="_blank" href="https://github.com/oosharma/FloraDetails">
             https://github.com/oosharma/FloraDetails
@@ -1028,9 +990,9 @@ function App2({ query }) {
         <>
           {auth.user.items.length > 0 ? (
             <>
-              <Display4 className={`mt-3 width-check`}>
+              <p className={`p-1 mb-0 pl-3 width-check`}>
                 {auth.user.name}'s Personal Table
-              </Display4>
+              </p>
 
               <PlantTable
                 tableData={auth.user.items}

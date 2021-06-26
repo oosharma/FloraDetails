@@ -408,7 +408,7 @@ class PlantTable extends Component {
             <p
               className={`p-1 pl-3 width-check table-p`}
             >
-              All plants are native to San Francisco
+              All plants are native to San Francisco, CA.
             </p>
           ) : (
               <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
@@ -453,7 +453,7 @@ class PlantTable extends Component {
                                   : "Save"}
                               </>
                             ) : (
-                                "Save"
+                                "Delete"
                               )}
                           </Button>
                         </BTd>
@@ -588,13 +588,17 @@ class PlantTable extends Component {
       ) {
         return (
           <>
-            <p className="width-check">
-              Public Table Empty, Use Search Table to Add Plants
+            <p className="m-3 width-check table-p">
+              Public Table Empty, Use Search Table to Add Plants.
             </p>
           </>
         );
       }
-      return <></>;
+      return <>
+        <p className="m-3 width-check table-p">
+          No data to display, update filters to get better results.
+      </p>
+      </>;
     }
   }
 }

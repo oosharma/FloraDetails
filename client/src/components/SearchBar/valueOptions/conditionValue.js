@@ -4,16 +4,12 @@ const conditionValues = [
     label: "Sun"
   },
   {
-    value: "Parte Shade",
-    label: "Parte Shade"
+    value: "Part Shade",
+    label: "Part Shade"
   },
   {
     value: "Shade",
     label: "Shade"
-  },
-  {
-    value: "Fall",
-    label: "Fall"
   }
 ];
 

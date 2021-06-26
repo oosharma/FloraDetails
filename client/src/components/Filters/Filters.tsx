@@ -40,7 +40,7 @@ const Filters: React.FC<FiltersProps> = (props) => {
 
     {
       name: "Suitable Site Conditions",
-      options: ["Sun", "Parte Shade", "Shade", "Fall"],
+      options: ["Sun", "Part Shade", "Shade"],
     },
   ];
 

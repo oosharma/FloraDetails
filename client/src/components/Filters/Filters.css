@@ -17,6 +17,56 @@
    flex-direction: row; 
    flex-wrap: wrap;
 }
+
+.Filters-mobile .Filter-Item{
+  width: 200px;
+  /* font-size: .8rem; */
+
+}
+.Filters-mobile .Filter-Head{
+ margin-bottom:.2rem;
+}
+
+.Filters-Section-mobile h3{
+  margin-bottom: 0;
+
+}
+
+@media screen and (max-width:  450px){
+  .Filters-mobile input[type=checkbox] {
+    transform: scale(.8);
+  }
+  .Filters-mobile .Filter-Item{
+    width: 150px;
+    font-size: .8rem;
+  
+  }
+   
+  .Filters-Section-mobile h3{
+    font-size: 1.4rem;
+  }
+  .modal-footer .btn, .editImage .btn{
+    font-size: .8rem !important;
+  }
+  
+}
+@media screen and (max-width:  350px){
+  .Filters-mobile input[type=checkbox] {
+    transform: scale(.7);
+  }
+  .Filters-mobile .Filter-Item{
+    width: 120px;
+    font-size: .75rem;
+  
+  }
+  
+  .Filters-Section-mobile h3{
+    font-size: 1.3rem;
+  }
+  .modal-footer .btn{
+    font-size: .8rem !important;
+  }
+}
 .Filter-Option {
   display: flex;
   align-items: center;

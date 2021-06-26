@@ -13,6 +13,11 @@
  
   border-top: solid 1px #dee2e6;;
 }
+
+.table-p{
+  width: 1600px !important;
+max-width: 100%;
+}
 @media only screen and (min-width: 400px) {
   .t-footer {
     color: black;

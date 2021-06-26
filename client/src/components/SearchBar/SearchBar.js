@@ -24,7 +24,8 @@ function SearchBar(props) {
     console.log(selectedOption);
     console.log('here');
     setSelectedOption(selectedOption);
-    dispatch(filterByName(selectedOption.value))
+
+    dispatch(filterByName(selectedOption ?.value))
 
   };
   React.useEffect(() => {
