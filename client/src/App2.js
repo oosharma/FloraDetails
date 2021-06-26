@@ -125,6 +125,7 @@ function App2({ query }) {
   //   isLoading: false,
   //   user: null,
   // });
+  const [fetchCounter, setFetchCounter] = useState(0);
   const [file, setFile] = useState(null);
   const [editImage, setEditImage] = useState(false);
   const [uploadMessage, setupLoadMessage] = useState(null);
@@ -135,14 +136,10 @@ function App2({ query }) {
   const filterOptions = useSelector((state) => state.filters);
   const filterResults = (res, filterOptions) => {
 
-    console.log('called')
     if (Object.keys(filterOptions).length === 1) {
 
       if (filterOptions['name']) {
         res = [...res.filter((ele) => {
-
-          console.log(ele);
-
           return ele["commonName"] ?.includes(filterOptions['name']);
         })];
       }
@@ -152,14 +149,22 @@ function App2({ query }) {
           continue;
         }
         res = [...res.filter((ele) => {
-          console.log(ele[item]);
-          console.log(ele);
+          console.log(ele)
           return ele[item] ?.includes(filterOptions[item]);
         })];
       }
     }
     return res;
   }
+  const [publicData, setPublicData] = useState([])
+  React.useEffect(() => {
+    console.log(data);
+    console.log(filterOptions);
+    setPublicData([...filterResults(data, filterOptions)])
+
+
+  }, [filterOptions, data, fetchCounter]);
+
   React.useEffect(() => {
     // console.log(1111, filterOptions);
     const filteredResults = filterArr(items);
@@ -237,6 +242,8 @@ function App2({ query }) {
       };
       axios.post("api/userItem", body, config).then((res) => {
         loadUser();
+        setFetchCounter(fetchCounter + 1);
+
       });
     }
   };
@@ -268,6 +275,7 @@ function App2({ query }) {
         })
         .then((res) => {
           setFetch(true);
+          setFetchCounter(fetchCounter + 1);
         })
         .catch((err) => {
           setFetch(true);
@@ -278,15 +286,19 @@ function App2({ query }) {
   // when component mounts, first thing it does is fetch all existing data in our db
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
+
+  useEffect(() => {
+    getDataFromDb();
+  }, [fetchCounter])
   useEffect(() => {
     ReactGA.initialize("UA-147525205-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
 
     getDataFromDb();
-    if (!intervalIsSet) {
-      let interval = setInterval(getDataFromDb, 500);
-      setIntervalIsSet(interval);
-    }
+    // if (!intervalIsSet) {
+    //   let interval = setInterval(getDataFromDb, 500);
+    //   setIntervalIsSet(interval);
+    // }
     loadUser();
     loadItems();
     if (query && query.includes("token")) {
@@ -306,7 +318,7 @@ function App2({ query }) {
     const randomResults = randomize(modifiedResults);
     setFetchedResults([...randomResults]);
     setFinalFetchedCheck(true);
-    console.log('called');
+
   };
 
   // never let a process live forever
@@ -350,6 +362,7 @@ function App2({ query }) {
     };
     axios.post("api/userItem", body, config).then((res) => {
       loadUser();
+      setFetchCounter(fetchCounter + 1);
     });
   };
 
@@ -371,6 +384,8 @@ function App2({ query }) {
       .delete(`/api/items/${idTodelete}`)
       .then(() => {
         setFetch(true);
+        setFetchCounter(fetchCounter + 1);
+
       })
       .catch(() => {
         setFetch(true);
@@ -869,12 +884,7 @@ function App2({ query }) {
                                 </>
                               )}
 
-                            <Button
-                              className={`btn btn-secondary imageInputBtn ml-3`}
-                              onClick={cancelUpload}
-                            >
-                              Cancel
-                    </Button>
+
                           </form>
                         </div>
                       </>
@@ -925,7 +935,7 @@ function App2({ query }) {
         <>
           {data.length > 0 ? (
             <>
-              <p className={`p-1 pl-3 width-check table-p`}>
+              {publicData.length > 0 && <p className={`p-1 pl-3 width-check table-p`}>
                 Displaying saved items by all users.{" "}
                 <a onClick={toggleRegModal} href="#">
                   Register
@@ -935,10 +945,10 @@ function App2({ query }) {
                   Login
                 </a>{" "}
                 to Manage Your Personal Table.
-              </p>
+              </p>}
 
               <PlantTable
-                tableData={data}
+                tableData={publicData}
                 handleAddorDelete={handleDelete}
                 sortToggle={sortToggle}
                 sortColumn={sort[1].sortColumn}
@@ -995,7 +1005,7 @@ function App2({ query }) {
               </p>
 
               <PlantTable
-                tableData={auth.user.items}
+                tableData={filterResults(auth.user.items, filterOptions)}
                 sortToggle={sortToggle}
                 sortColumn={sort[2].sortColumn}
                 sortDirection={sort[2].sortDirection}
@@ -1010,7 +1020,7 @@ function App2({ query }) {
               <>
                 <Display4 className={`mt-3 width-check`}>
                   {auth.user.name}'s Personal Table is Empty, Use Search Table to
-                  Add Plants
+                  Save Plants
               </Display4>
               </>
             )}
@@ -1021,7 +1031,7 @@ function App2({ query }) {
               <>
                 <Display4 className="mt-3 width-check">
                   {auth.user.name}'s Personal Table is Empty, Use Search Results
-                  to Add Plants
+                  to Save Plants
               </Display4>
               </>
             ) : (

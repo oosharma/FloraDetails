@@ -589,7 +589,7 @@ class PlantTable extends Component {
         return (
           <>
             <p className="m-3 width-check table-p">
-              Public Table Empty, Use Search Table to Add Plants.
+              No data to display, update filters to get better results.
             </p>
           </>
         );

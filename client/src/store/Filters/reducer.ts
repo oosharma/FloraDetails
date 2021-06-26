@@ -2,12 +2,12 @@ import * as actionTypes from "./actionTypes";
 import { string } from "prop-types";
 
 const initialState: FilterState = {
-  "size_at_maturity": "null",
-  "appropriate_location": "null",
-  "plant_type": "null",
-  "water_needs": "null",
-  "bloom_time": "null",
-  "suitable_site_conditions": "null"
+  "sizeAtMaturity": "null",
+  "appropriateLocation": "null",
+  "plantType": "null",
+  "waterNeeds": "null",
+  "bloomTime": "null",
+  "suitableSiteConditions": "null"
 
 };
 
