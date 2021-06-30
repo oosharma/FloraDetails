@@ -72,7 +72,7 @@
     padding: .2rem;
   }
 
-  button, input {
+  .login-nav button {
     font-size: .8rem !important;
   }
 }
