@@ -440,7 +440,7 @@ class PlantTable extends Component {
                             variant={`${this.state.btnVariant}`}
                             className={`${
                               this.state.btnClass
-                              } shrinkTableButtons default-button ${
+                              } default-button ${
                               dataSet.has(result.commonName) ? "disabled" : ""
                               }`}
                             type="button"
