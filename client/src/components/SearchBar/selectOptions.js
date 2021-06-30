@@ -1320,8 +1320,8 @@ let nameValues = [
     label: "Geranium"
   },
   {
-    value: "Germander Sage  \n Germander Sage  \n Germander Sage",
-    label: "Germander Sage  \n Germander Sage  \n Germander Sage"
+    value: "Germander Sage",
+    label: "Germander Sage"
   },
   {
     value: "Ghost Plant",

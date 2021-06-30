@@ -35,39 +35,24 @@ function Register() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [gotoDashboard, setGotoDashboard] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
   const [isResetPasswordMode, setResetPasswordMode] = useState(false);
   const [resetPasswordEmailSent, setResetPasswordEmailSent] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-
   const auth = useSelector((state) => state.auth);
   const [error, clearErrors, updateError, tokenConfig] = useAuth(auth.token);
   const dispatch = useDispatch();
   let location = useLocation();
   console.log(location.pathname);
   React.useEffect(() => {
-
-    setIsLoginMode(location.pathname === "/login" ? true : false);
+    setIsLoginMode(location.pathname === "/register" ? false : true);
   })
 
   const onSubmit = (e) => {
     e.preventDefault();
     const config = tokenConfig();
 
-    if (isLoginMode) {
-      const config = tokenConfig();
-      const body = JSON.stringify({ email, password: pass });
-      axios
-        .post("api/auth", body, config)
-        .then((res) => {
-          console.log("here");
-          loginSuccess(res.data);
-        })
-        .catch((err) => {
-          console.log("here");
-          updateError(err, "LOGIN_FAIL");
-        });
-    } else if (isResetPasswordMode) {
+    if (isResetPasswordMode) {
       setShowLoader(true);
 
       const body = JSON.stringify({ email });
@@ -82,7 +67,22 @@ function Register() {
         .finally(() => {
           setShowLoader(false);
         });
-    } else {
+    } else if (isLoginMode) {
+      const config = tokenConfig();
+      const body = JSON.stringify({ email, password: pass });
+      axios
+        .post("api/auth", body, config)
+        .then((res) => {
+          console.log("here");
+          loginSuccess(res.data);
+        })
+        .catch((err) => {
+          console.log("here");
+          updateError(err, "LOGIN_FAIL");
+        });
+    }
+
+    else {
       const body = JSON.stringify({
         name: name,
         email: email,
@@ -105,6 +105,7 @@ function Register() {
   const handlePassReset = () => {
     setResetPasswordMode(true);
     setIsLoginMode(false);
+    console.log('eee')
     clearErrors();
   };
   const handleResetEmailSentSuccess = (res) => {
@@ -169,8 +170,8 @@ function Register() {
   let buttonText = isResetPasswordMode
     ? "Reset"
     : isLoginMode
-      ? "Login"
-      : "Register";
+      ? "Sign In"
+      : "Sign Up";
 
   useEffect(() => {
     console.log("erer");
@@ -181,45 +182,37 @@ function Register() {
     <>
       {gotoDashboard ? <Redirect to="/dashboard" /> : null}
 
-      {JSON.stringify(auth)}
-
-      <div className="Nav">
-        <Link to="/register">    <button
-        // className="m-3"
-        // onClick={() => {
-        //   handleRegister();
-        // }}
-        >
-          Register
-        </button></Link>
-        {/* <button
-          className="m-3"
-          onClick={() => {
-            handleLogin();
-          }}
-        >
-          Login
-        </button> */}
-        <Link to="/login">    <button
-        // className="m-3"
-        // onClick={() => {
-        //   handleRegister();
-        // }}
-        >
-          Login
-        </button></Link>
-        <Link to="/dashboard"> <button className="m-3" >Continue as Guest</button></Link>
+      <div className="login-nav">
+        <Link to="/login">
+          <Button primary className={` login-nav-btn ${location.pathname === "/login" || location.pathname === "/" ? "active" : ""}`}>
+            Login
+        </Button></Link>
+        <Link to="/register">
+          <Button primary className={` login-nav-btn ${location.pathname === "/register" ? "active" : ""}`}>
+            Register
+        </Button></Link>
+        <Link to="/dashboard"><Button primary className=" login-nav-btn">Continue as Guest</Button></Link>
       </div>
-      {error.msg && error.msg.msg && (
-        <Alert danger>
-          {error.id === "REGISTER_FAIL" || error.id === "LOGIN_FAIL" ? (
-            <p>{error.msg.msg}</p>
-          ) : (
-              <></>
-            )}
-        </Alert>
-      )}
-      <div className="Form">
+
+      {/* <div className="login-reg">
+        {isLoginMode && (
+          <>
+            <h4>
+              Login
+            </h4>
+            <p>
+              or  <Link to="/register"> Register</Link>
+            </p>
+            <p>
+              or     <Link to="/dashboard">Continue as Guest</Link>
+            </p>
+          </>
+        )}
+      </div> */}
+      <div className="auth-form">
+
+        <h2 className="m-3">{isLoginMode ? "Sign In" : "Sign Up"}</h2>
+
         <Form>
           {!(isLoginMode || isResetPasswordMode) && (
             <Form.Group>
@@ -269,7 +262,15 @@ function Register() {
               />
             </Form.Group>
           )}
-
+          {error.msg && error.msg.msg && (
+            <Alert danger>
+              {error.id === "REGISTER_FAIL" || error.id === "LOGIN_FAIL" ? (
+                <p>{error.msg.msg}</p>
+              ) : (
+                  <></>
+                )}
+            </Alert>
+          )}
           {isResetPasswordMode && (
             <>
               {resetPasswordEmailSent ? (
@@ -311,7 +312,7 @@ function Register() {
                 <Button primary className="mr-4" onClick={onSubmit}>
                   {buttonText}
                 </Button>
-                {isLoginMode && !isResetPasswordMode && (
+                {false && isLoginMode && !isResetPasswordMode && (
                   <a onClick={handlePassReset} href="#">
                     Reset Password
                 </a>
@@ -335,3 +336,4 @@ function Register() {
 }
 
 export default Register;
+

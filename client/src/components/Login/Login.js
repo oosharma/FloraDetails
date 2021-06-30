@@ -24,10 +24,10 @@ const Login = () => {
 
 
   return (
-   
+
     <>
-      <div className="Container">
-        <h1>Login</h1>
+      <div className="Container mt-5">
+        <h1 className="m-3 main-head" >Flora Details</h1>
 
         <Register />
       </div>

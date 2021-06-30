@@ -936,12 +936,12 @@ function App2({ query }) {
           {data.length > 0 ? (
             <>
               {publicData.length > 0 && <p className={`p-1 pl-3 width-check table-p`}>
-                Displaying saved items by all users.{" "}
-                <a onClick={toggleRegModal} href="#">
+                Showing {publicData.length} saved item{publicData.length > 1 ? "s" : ""}.{" "}
+                <a href="/register">
                   Register
                 </a>{" "}
                 /{" "}
-                <a onClick={toggleLogModal} href="#">
+                <a href="/login">
                   Login
                 </a>{" "}
                 to Manage Your Personal Table.
@@ -961,7 +961,7 @@ function App2({ query }) {
             </>
           ) : (
               <>
-                <p className={`m-3 width-check table-p`}>
+                <p className={`p-3 width-check table-p`}>
                   Public's Table is Empty, Use Search Results to Add Plants{" "}
                 </p>
               </>
@@ -975,12 +975,12 @@ function App2({ query }) {
 
   const footer = (
     <>
-      <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}>
+      <p className={`mt-4 pb-0 mb-0 pr-1 width-check`}>
         <em>
           {" "}
           This web-app is developed by{" "}
           <a target="_blank" href="http://www.iamsharma.com">
-            iamSharma
+            Abhishek Sharma
           </a>{" "}
           using the MERN stack (MongoDB, Express JS, React JS, Node JS). User
           authentication is implemented with JSON Web Tokens and Bcrypt JS, and
@@ -1000,9 +1000,12 @@ function App2({ query }) {
         <>
           {auth.user.items.length > 0 ? (
             <>
-              <p className={`p-1 mb-0 pl-3 width-check`}>
-                {auth.user.name}'s Personal Table
-              </p>
+              {
+                filterResults(auth.user.items, filterOptions).length > 0 && (<p className={`p-1 mb-0 pl-3 width-check table-p`}>
+                  Showing {filterResults(auth.user.items, filterOptions).length} item{filterResults(auth.user.items, filterOptions).length > 1 ? "s" : ""} in {auth.user.name}'s personal table.
+               </p>)
+              }
+
 
               <PlantTable
                 tableData={filterResults(auth.user.items, filterOptions)}
@@ -1018,10 +1021,11 @@ function App2({ query }) {
             </>
           ) : (
               <>
-                <Display4 className={`mt-3 width-check`}>
+                <p className={`p-3 width-check table-p`}>
+
                   {auth.user.name}'s Personal Table is Empty, Use Search Table to
                   Save Plants
-              </Display4>
+              </p>
               </>
             )}
         </>
@@ -1029,10 +1033,11 @@ function App2({ query }) {
           <>
             {auth.user ? (
               <>
-                <Display4 className="mt-3 width-check">
+                <p className={`p-3 width-check table-p`}>
+
                   {auth.user.name}'s Personal Table is Empty, Use Search Results
                   to Save Plants
-              </Display4>
+              </p>
               </>
             ) : (
                 <></>
@@ -1050,7 +1055,7 @@ function App2({ query }) {
           <>
 
             <div className="Nav"  >
-              <a className="pl-0" disabled href="/">
+              <a className="pl-0 logo-link" disabled href="/dashboard">
                 <h1>Flora Details</h1>
               </a>
               <SearchBar
@@ -1069,7 +1074,7 @@ function App2({ query }) {
               <Filters type={"side"} />
 
               <Row className="tab-row">
-                <Col col="6 md-4" offset="3 md-4">
+                <Col col="6 md-4" offset="3 md-4" >
                   <ListGroup as="div" id="list-tab" role="tablist">
                     <ListGroup.Link
                       id="list-home-link"
@@ -1080,7 +1085,7 @@ function App2({ query }) {
                       active
                     >
                       All
-            </ListGroup.Link>
+                    </ListGroup.Link>
                     <ListGroup.Link
                       id="list-profile-link"
                       data-toggle="list"
@@ -1093,7 +1098,7 @@ function App2({ query }) {
 
                   </ListGroup>
                 </Col>
-                <Col col="12">
+                <Col col="12" className=" plant-table-content">
                   <Tab.Content id="nav-tabContent">
                     <Tab.Pane fade show active id="list-home" aria-labelledby="list-home-link">
                       <div className="plant-tables">
@@ -1120,9 +1125,7 @@ function App2({ query }) {
                         {auth.isAuthorized === true ? personalTables : publicTables}
                       </div>
                     </Tab.Pane>
-                    <div style={{ height: "70px" }} className="Footer">
 
-                    </div>
                   </Tab.Content>
                 </Col>
               </Row>
@@ -1139,7 +1142,12 @@ function App2({ query }) {
           </>
         </>
       ) : (
-          <>Loading.....</>
+          <Container className={"loader"}>
+            {/* <Loader type="TailSpin" color="#007bff" /> */}
+            <h3>Loading...</h3>
+
+          </Container>
+
         )}
     </Container>
   );

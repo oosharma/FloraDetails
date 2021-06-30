@@ -56,7 +56,7 @@ function SearchBar(props) {
       >
         Filters
       </Button> */}
-      <Button primary className="btn-primary default-button filters-button"
+      <Button primary className="btn-primary default-button filters-button shrinkTableButtons"
         data-toggle="modal" data-target="#exampleModal">Filters</Button>
 
       {/* <Button

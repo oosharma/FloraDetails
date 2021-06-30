@@ -408,7 +408,9 @@ class PlantTable extends Component {
             <p
               className={`p-1 pl-3 width-check table-p`}
             >
-              All plants are native to San Francisco, CA.
+              Showing {tableData.length} item{tableData.length > 1 ? "s" : ""}.
+
+              {tableData.length === 683 ? " Use filters to update your search." : ""}
             </p>
           ) : (
               <p className={`mt-0 pb-0 mb-0 pr-1 width-check`}></p>
@@ -422,8 +424,8 @@ class PlantTable extends Component {
             >
               <thead>
                 <tr>
-                  <th style={{ minWidth: "120px", width: "120px" }}>Action</th>
-                  <th style={{ minWidth: "120px", width: "120px" }}>Image</th>
+                  <th className={"plant-table-col"} >Action</th>
+                  <th className={"plant-table-col"} >Image</th>
 
                   {this.columnItems()}
                 </tr>
@@ -459,7 +461,7 @@ class PlantTable extends Component {
                         </BTd>
                         <BTd
                           align="middle center"
-                          style={{ textAlign: "center", height: "108px" }}
+                          style={{ height: "108px" }}
                         >
                           <img
                             width="80"
@@ -588,14 +590,14 @@ class PlantTable extends Component {
       ) {
         return (
           <>
-            <p className="m-3 width-check table-p">
+            <p className="p-3 width-check table-p">
               No data to display, update filters to get better results.
             </p>
           </>
         );
       }
       return <>
-        <p className="m-3 width-check table-p">
+        <p className="p-3 width-check table-p">
           No data to display, update filters to get better results.
       </p>
       </>;
