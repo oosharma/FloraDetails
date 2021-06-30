@@ -80,13 +80,22 @@
 
 
 .login-nav-btn{
-  background-color: white;
-  color: #007bff;
+  background-color: white !important;
+  color: #007bff !important;
 }
 .login-nav-btn:hover {
-  background-color: #0062cc;
-  color:  white;
+  background-color: #0062cc !important;
+  color:  white !important;
 }
+.login-nav-btn.active{
+  background-color: #0062cc !important;
+  color: white !important;
+}
+.login-nav-btn.active:hover {
+  background-color: #0062cc !important;
+  color:  white !important;
+}
+
 
 .login-nav a:hover {
   text-decoration: none;
@@ -105,6 +114,4 @@
   color: #007bff;
 }
 
-.active {
-  cursor: none;
-}
+ 

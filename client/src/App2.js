@@ -975,7 +975,7 @@ function App2({ query }) {
 
   const footer = (
     <>
-      <p className={`mt-4 pb-0 mb-0 pr-1 width-check`}>
+      <p className={`mt-4 mb-3 pb-0 mb-0 pr-1 width-check`}>
         <em>
           {" "}
           This web-app is developed by{" "}

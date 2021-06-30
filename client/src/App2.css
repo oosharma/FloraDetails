@@ -148,7 +148,7 @@ margin-bottom: .3rem;
 
  
 .main-Container{
-  padding: 0rem 2rem;
+  padding: 0rem 2rem !important;
 }
 
 .auth-links{
@@ -178,7 +178,7 @@ margin-bottom: .3rem;
 }
 
 .list-group{
-  flex-direction: row;
+  flex-direction: row !important;
 }
 .list-group-item {
   margin-bottom: 0px;

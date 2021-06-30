@@ -531,7 +531,7 @@ class PlantTable extends Component {
             </Table>
             <Row
               alignItems="top"
-              className="mb-4 mb-lg-5 p-3 t-footer width-check m-0 "
+              className="p-3 t-footer width-check m-0 "
             >
               <Col
                 order="2 md-1"
