@@ -1,7 +1,20 @@
 .Filter-Item {
   display: inline;
   margin: .5rem 0 ;
-  line-height: 20px;
+  line-height: 14px;
+}
+
+@media screen and (max-width: 800px){
+  .Filter-Options  {
+ 
+    margin-top: .5rem;
+  }
+}
+@media screen and (min-width: 800px){
+  .Filter-Item {
+ 
+    line-height: 20px;
+  }
 }
 .Filter-Items {
   display: flex;
